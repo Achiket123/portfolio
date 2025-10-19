@@ -5,6 +5,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:portfolio/loading_widget.dart';
+import 'package:typing_text/typing_text.dart';
+import 'package:portfolio/rope_skill_widget.dart';
 
 class _StaticBlurOverlay extends StatelessWidget {
   final double sigmaX;
@@ -36,6 +38,20 @@ class ScrollVideoPage extends StatefulWidget {
 }
 
 class _ScrollVideoPageState extends State<ScrollVideoPage> {
+  final List<String> _skills = const [
+    "Flutter",
+    "Dart",
+    "GoLang",
+    "Node.js",
+    "REST APIs",
+    "Firebase",
+    "Docker",
+    "Microservices",
+    "UI/UX",
+    "Git",
+    "State Management",
+    "Web Sockets",
+  ];
   final ScrollController _scrollController = ScrollController();
   final ValueNotifier<int> _currentFrameNotifier = ValueNotifier<int>(0);
   final ValueNotifier<double> _loadProgressNotifier = ValueNotifier<double>(
@@ -218,34 +234,156 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
-                              Transform.translate(
-                                offset: Offset(
-                                  0,
-                                  ui.lerpDouble(0, -screenHeight / 2.5, nameT)!,
-                                ),
-                                child: Transform.scale(
-                                  scale: ui.lerpDouble(1.0, 0.7, nameT)!,
-                                  child: const Text(
-                                    "ACHIKET KUMAR",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 60,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 2,
+                              Transform(
+                                transform:
+                                    Matrix4.identity()..translate(
+                                      0.0,
+                                      ui.lerpDouble(
+                                        0,
+                                        -screenHeight / 5,
+                                        nameT.clamp(0.0, 1.0),
+                                      )!,
                                     ),
-                                  ),
-                                ),
-                              ),
-                              Opacity(
-                                opacity: Curves.easeInOut.transform(projectsT),
-                                child: const Text(
-                                  "PROJECTS",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 2,
-                                  ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    // 🔹 Name: moves upward smoothly
+                                    Transform.scale(
+                                      scale:
+                                          ui.lerpDouble(
+                                            1.0,
+                                            0.9,
+                                            nameT.clamp(0.0, 1.0),
+                                          )!,
+                                      child: Text(
+                                        "ACHIKET KUMAR",
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 60,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 2,
+                                        ),
+                                      ),
+                                    ),
+
+                                    const SizedBox(height: 16),
+
+                                    // 🔹 About Me: fades & slides up away
+                                    Opacity(
+                                      opacity:
+                                          ui.lerpDouble(
+                                            1.0,
+                                            0.0,
+                                            nameT.clamp(0.0, 1.0),
+                                          )!,
+                                      child: Transform.translate(
+                                        offset: Offset(
+                                          0,
+                                          ui.lerpDouble(
+                                            0,
+                                            -80,
+                                            nameT.clamp(0.0, 1.0),
+                                          )!,
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            // --- First line with TypingText ---
+                                            Center(
+                                              child: RichText(
+                                                textAlign: TextAlign.center,
+                                                text: TextSpan(
+                                                  style: TextStyle(
+                                                    color: Colors.white
+                                                        .withOpacity(0.85),
+                                                    fontSize: 22,
+                                                    fontWeight: FontWeight.w400,
+                                                    letterSpacing: 1.2,
+                                                  ),
+                                                  children: [
+                                                    const TextSpan(
+                                                      text: "A passionate ",
+                                                    ),
+                                                    WidgetSpan(
+                                                      alignment:
+                                                          PlaceholderAlignment
+                                                              .middle,
+                                                      child: IntrinsicWidth(
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: TypingText(
+                                                            words: const [
+                                                              "Flutter Dev",
+                                                              "Go Dev",
+                                                              "Blogger",
+                                                            ],
+                                                            // speed: Duration(milliseconds: 100),
+                                                            // cursor: true,
+                                                            style: TextStyle(
+                                                              color: Colors
+                                                                  .white
+                                                                  .withOpacity(
+                                                                    0.85,
+                                                                  ),
+                                                              fontSize: 22,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              letterSpacing:
+                                                                  1.2,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+
+                                            const SizedBox(
+                                              height: 16,
+                                            ), // spacing below typing text
+                                            // --- Description below typing text ---
+                                            SizedBox(
+                                              width:
+                                                  500, // optional: limit width for readability
+                                              child: Text(
+                                                "I am Achiket Kumar, a highly motivated and skilled Full Stack Developer, with a passion for building robust, scalable applications. My experience is centered around the Flutter framework for mobile and web development, complemented by a strong backend foundation in Node.js and emerging proficiency in GoLang, which I proactively sought to learn for microservice development.",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.75),
+                                                  fontSize: 16,
+                                                  height: 1.4, // line height
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+
+                                    Opacity(
+                                      opacity: Curves.easeInOut.transform(
+                                        projectsT,
+                                      ),
+                                      child: const Text(
+                                        "PROJECTS",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 50,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 2,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -268,7 +406,7 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                     },
                   ),
 
-                  // 5️⃣ Tan Path Widgets Right
+                  //  Tan Path Widgets Right
                   ValueListenableBuilder<double>(
                     valueListenable: _scrollProgress,
                     builder: (context, progress, _) {
@@ -280,8 +418,34 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                       );
                     },
                   ),
+                  if (screenWidth > 650)
+                    ValueListenableBuilder<double>(
+                      valueListenable: _scrollProgress,
+                      builder: (context, progress, _) {
+                        return _buildRopeAndSkills(
+                          // Changed function name
+                          screenWidth: screenWidth,
+                          screenHeight: screenHeight,
+                          progress: progress,
+                          isLeftSide: true,
+                        );
+                      },
+                    ),
+                  if (screenWidth > 650)
+                    ValueListenableBuilder<double>(
+                      valueListenable: _scrollProgress,
+                      builder: (context, progress, _) {
+                        return _buildRopeAndSkills(
+                          // Changed function name
+                          screenWidth: screenWidth,
+                          screenHeight: screenHeight,
+                          progress: progress,
+                          isLeftSide: false,
+                        );
+                      },
+                    ),
 
-                  // 6️⃣ Transparent scroll area
+                  //  Transparent scroll area
                   NotificationListener<ScrollNotification>(
                     onNotification: (_) => true,
                     child: SingleChildScrollView(
@@ -664,6 +828,136 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildRopeAndSkills({
+    required double screenWidth,
+    required double screenHeight,
+    required double progress,
+    required bool isLeftSide,
+  }) {
+    // 🔹 Visual Constants
+    // The line will be perfectly straight, so we only need a fixed horizontal position.
+    const double ropeOffsetFromEdge = 155.0;
+
+    // FIXED X-COORDINATE
+    final double fixedX =
+        isLeftSide ? ropeOffsetFromEdge : screenWidth - ropeOffsetFromEdge;
+
+    final double startY = screenHeight * 0.1;
+
+    // 🔹 Calculate Required Length for "Infinite" Scroll
+    final double fullScrollLength = screenHeight * 10;
+
+    final allSkills = _skills;
+    final skillsToDisplay =
+        isLeftSide
+            ? allSkills.where((s) => allSkills.indexOf(s) % 2 == 0).toList()
+            : allSkills.where((s) => allSkills.indexOf(s) % 2 != 0).toList();
+
+    final int skillCount = skillsToDisplay.length;
+
+    const double viewportAllowance = 1.0;
+    final double verticalContentLength =
+        fullScrollLength - (screenHeight * viewportAllowance);
+
+    final double buttonSpacing =
+        skillCount > 1 ? verticalContentLength / (skillCount - 1) : 0.0;
+
+    final double verticalDistance = verticalContentLength;
+
+    // 🔹 1. Rope Point Calculation (Straight Line)
+    final List<Offset> ropePoints = [];
+    const int ropeSegments = 10; // Fewer segments needed for a straight line
+    final double ropeVerticalScrollOffset = progress * fullScrollLength;
+
+    for (int i = 0; i <= ropeSegments; i++) {
+      double t =
+          i / ropeSegments; // progress along the vertical segment (0 to 1)
+
+      // The X-coordinate is fixed.
+      final currentX = fixedX;
+
+      // The Y-coordinate moves linearly down the rope's length, adjusted by scroll.
+      final currentY =
+          startY + (t * verticalDistance) - ropeVerticalScrollOffset;
+
+      ropePoints.add(Offset(currentX, currentY));
+    }
+
+    // 🔹 2. Button Positioning (Straight Line)
+    List<Widget> skillWidgets = [];
+
+    // Estimated button width for centering (adjust if necessary)
+    const double buttonWidthEstimate = 200.0;
+
+    for (int i = 0; i < skillCount; i++) {
+      final targetVerticalOffset = startY + (i * buttonSpacing);
+
+      // Final Y position: target offset minus the scroll offset
+      final buttonYFinal = targetVerticalOffset - progress * fullScrollLength;
+
+      // Check if the button is visible
+      final bool buttonIsVisible =
+          buttonYFinal > -200 && buttonYFinal < screenHeight + 200;
+
+      if (!buttonIsVisible) continue;
+
+      // X position is fixed
+      final buttonX = fixedX;
+
+      // Opacity calculation (same logic as before for fade in/out)
+      final double viewportBottom = screenHeight * 0.9;
+      final double viewportTop = screenHeight * 0.1;
+
+      double opacityT;
+      if (buttonYFinal > viewportBottom) {
+        opacityT =
+            (screenHeight - buttonYFinal) / (screenHeight - viewportBottom);
+      } else if (buttonYFinal < viewportTop) {
+        opacityT = buttonYFinal / viewportTop;
+      } else {
+        opacityT = 1.0;
+      }
+      final double opacity = Curves.easeOut.transform(opacityT.clamp(0.0, 1.0));
+      final double horizontalOffset =
+          isLeftSide
+              ? 10.0 // Small gap to the right of the line
+              : -buttonWidthEstimate +
+                  120; // Button width + small gap to the left of the line
+      skillWidgets.add(
+        Positioned(
+          // Anchor the Positioned widget at the fixed X point.
+          left: buttonX,
+
+          top: buttonYFinal,
+          child: Transform.translate(
+            // Shift the button left by half its width to center it on the fixedX line.
+            offset: Offset(horizontalOffset, 0),
+            child: SkillButton(
+              // Using SkillButton without the leading underscore if you changed it
+              text: skillsToDisplay[i],
+              opacity: opacity,
+              scale: 1.0,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Stack(
+      children: [
+        // 1. Draw the Rope (which is now straight)
+        CustomPaint(
+          size: Size(screenWidth, screenHeight),
+          // Ensure you are using the correct class name (RopePainter)
+          painter: RopePainter(ropePoints, isLeftSide),
+        ),
+
+        // 2. Draw the Skill Buttons
+        ...skillWidgets,
+      ],
     );
   }
 }
