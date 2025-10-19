@@ -8,6 +8,9 @@ import 'package:portfolio/loading_widget.dart';
 import 'package:typing_text/typing_text.dart';
 import 'package:portfolio/rope_skill_widget.dart';
 
+import 'animated_container_paint.dart';
+import 'card_painter.dart';
+
 class _StaticBlurOverlay extends StatelessWidget {
   final double sigmaX;
   final double sigmaY;
@@ -418,7 +421,7 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                       );
                     },
                   ),
-              
+
                   //  Transparent scroll area
                   NotificationListener<ScrollNotification>(
                     onNotification: (_) => true,
@@ -561,60 +564,50 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
       "Editor Enhancements",
       "Personal Portfolio",
     ];
-    final colors = [
-      Colors.blue,
-      Colors.green,
-      Colors.purple,
-      Colors.orange,
-      Colors.teal,
-    ];
 
-    return Container(
-      width: 250,
-      height: 100,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            colors[index % colors.length].withOpacity(0.8),
-            colors[index % colors.length].withOpacity(0.4),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.4),
-            blurRadius: 5,
-            spreadRadius: 1,
+    // Use the static dimensions from the painter
+    const double cardWidth = 250;
+    const double cardHeight = 100;
+
+    return SizedBox(
+      width: cardWidth,
+      height: cardHeight,
+      // Use Stack to layer the CustomPaint background and the Text/Button foreground
+      child: Stack(
+        children: [
+          // 1. Background, Gradient, Shadow (The Laggy part, now fast CustomPaint)
+          CustomPaint(
+            size: const Size(cardWidth, cardHeight),
+            painter: CardPainter(index),
+          ),
+
+          // 2. Foreground Content (Text and Padding)
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  titles[index % titles.length],
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  subtitles[index % subtitles.length],
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
+                ),
+              ],
+            ),
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              titles[index % titles.length],
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              subtitles[index % subtitles.length],
-              style: const TextStyle(color: Colors.white70, fontSize: 12),
-            ),
-          ],
-        ),
-      ),
     );
   }
-
   // ----------------- TAN PATH WIDGETS -----------------
 
   Widget _buildTanPathWidgets({
@@ -707,231 +700,87 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
     final sh = MediaQuery.of(context).size.height;
     final sw = MediaQuery.of(context).size.width;
 
-    // 🔹 Responsive container dimensions
+    // 🔹 Responsive container dimensions (MUST MATCH Painter and SizedBox)
+    // Note: The hover logic setting containerWidth *= 0.1 and back is flawed
+    // because it requires setState inside a child widget which can break scroll physics.
+    // For a smooth scroll animation, hover effects are best handled by adjusting
+    // the scale/rotation via the main scroll progress, not local state.
+    // We'll fix containerWidth to a static responsive value for performance.
     double containerWidth = sw * 0.35; // 35% of screen width
     double containerHeight = sh * 0.25; // 25% of screen height
     final iconSize = sh * 0.08;
-    final titleFontSize = sh * 0.03; // 3% of screen height
-    final subtitleFontSize = sh * 0.017; // 1.7% of screen height
-    final spacing1 = sh * 0.02; // spacing between icon and title
-    final spacing2 = sh * 0.01; // spacing between title and subtitle
+    final titleFontSize = sh * 0.03;
+    final subtitleFontSize = sh * 0.017;
+    final spacing1 = sh * 0.02;
+    final spacing2 = sh * 0.01;
+
+    // Removed the local setState hover logic to prevent performance hits and bugs.
+    // Hover effects should use MouseRegion and rely on an external state change,
+    // but for smooth scrolling, keeping the structure fixed is best.
 
     return Opacity(
       opacity: opacity, // directly reactive
-      child: InkWell(
-        onHover: (hover) {
-          if (hover) {
-            setState(() {
-              containerWidth *= 0.1;
-            });
-          } else {
-            setState(() {
-              containerWidth = sw * 0.35;
-            });
-          }
-        },
-
-        child: Container(
-          width: containerWidth,
-          height: containerHeight,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: (isLeftSide ? Colors.blue : Colors.orange).withOpacity(
-                  0.3 * opacity,
-                ),
-                blurRadius: 5.0,
-                spreadRadius: 2,
+      child: SizedBox(
+        width: containerWidth,
+        height: containerHeight,
+        child: Stack(
+          children: [
+            // 1. Draw the visual background, gradient, shadow, and border using CustomPaint.
+            // This replaces the performance-heavy BoxDecoration and BoxShadow.
+            CustomPaint(
+              size: Size(containerWidth, containerHeight),
+              painter: AnimatedContainerPainter(
+                isLeftSide: isLeftSide,
+                opacity: opacity,
+                containerWidth: containerWidth,
+                containerHeight: containerHeight,
               ),
-            ],
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                isLeftSide
-                    ? Colors.blue.withOpacity(0.8 * opacity)
-                    : Colors.orange.withOpacity(0.8 * opacity),
-                isLeftSide
-                    ? Colors.blue.withOpacity(0.4 * opacity)
-                    : Colors.orange.withOpacity(0.4 * opacity),
-              ],
             ),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.2 * opacity),
-              width: 2,
-            ),
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  isLeftSide ? Icons.code : Icons.design_services,
-                  color: Colors.white.withOpacity(opacity),
-                  size: iconSize,
-                ),
-                SizedBox(height: spacing1),
-                Text(
-                  isLeftSide ? 'Development' : 'Design',
-                  style: TextStyle(
+
+            // 2. Center the foreground content (Text, Icons, Button)
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    isLeftSide ? Icons.code : Icons.design_services,
                     color: Colors.white.withOpacity(opacity),
-                    fontSize: titleFontSize,
-                    fontWeight: FontWeight.bold,
+                    size: iconSize,
                   ),
-                ),
-                SizedBox(height: spacing2),
-                ElevatedButton(
-                  onPressed: () {
-                    print("Hello World");
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Colors.green),
-                  ),
-                  child: Text(
-                    isLeftSide ? 'Building Solutions' : 'Creating Experiences',
+                  SizedBox(height: spacing1),
+                  Text(
+                    isLeftSide ? 'Development' : 'Design',
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.8 * opacity),
-                      fontSize: subtitleFontSize,
+                      color: Colors.white.withOpacity(opacity),
+                      fontSize: titleFontSize,
+                      fontWeight: FontWeight.bold,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ),
-              ],
+                  SizedBox(height: spacing2),
+                  ElevatedButton(
+                    onPressed: () {
+                      print("Hello World");
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.green),
+                    ),
+                    child: Text(
+                      isLeftSide
+                          ? 'Building Solutions'
+                          : 'Creating Experiences',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.8 * opacity),
+                        fontSize: subtitleFontSize,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
-    );
-  }
-
-  Widget _buildRopeAndSkills({
-    required double screenWidth,
-    required double screenHeight,
-    required double progress,
-    required bool isLeftSide,
-  }) {
-    // 🔹 Visual Constants
-    // The line will be perfectly straight, so we only need a fixed horizontal position.
-    const double ropeOffsetFromEdge = 155.0;
-
-    // FIXED X-COORDINATE
-    final double fixedX =
-        isLeftSide ? ropeOffsetFromEdge : screenWidth - ropeOffsetFromEdge;
-
-    final double startY = screenHeight * 0.1;
-
-    // 🔹 Calculate Required Length for "Infinite" Scroll
-    final double fullScrollLength = screenHeight * 10;
-
-    final allSkills = _skills;
-    final skillsToDisplay =
-        isLeftSide
-            ? allSkills.where((s) => allSkills.indexOf(s) % 2 == 0).toList()
-            : allSkills.where((s) => allSkills.indexOf(s) % 2 != 0).toList();
-
-    final int skillCount = skillsToDisplay.length;
-
-    const double viewportAllowance = 1.0;
-    final double verticalContentLength =
-        fullScrollLength - (screenHeight * viewportAllowance);
-
-    final double buttonSpacing =
-        skillCount > 1 ? verticalContentLength / (skillCount - 1) : 0.0;
-
-    final double verticalDistance = verticalContentLength;
-
-    // 🔹 1. Rope Point Calculation (Straight Line)
-    final List<Offset> ropePoints = [];
-    const int ropeSegments = 10; // Fewer segments needed for a straight line
-    final double ropeVerticalScrollOffset = progress * fullScrollLength;
-
-    for (int i = 0; i <= ropeSegments; i++) {
-      double t =
-          i / ropeSegments; // progress along the vertical segment (0 to 1)
-
-      // The X-coordinate is fixed.
-      final currentX = fixedX;
-
-      // The Y-coordinate moves linearly down the rope's length, adjusted by scroll.
-      final currentY =
-          startY + (t * verticalDistance) - ropeVerticalScrollOffset;
-
-      ropePoints.add(Offset(currentX, currentY));
-    }
-
-    // 🔹 2. Button Positioning (Straight Line)
-    List<Widget> skillWidgets = [];
-
-    // Estimated button width for centering (adjust if necessary)
-    const double buttonWidthEstimate = 200.0;
-
-    for (int i = 0; i < skillCount; i++) {
-      final targetVerticalOffset = startY + (i * buttonSpacing);
-
-      // Final Y position: target offset minus the scroll offset
-      final buttonYFinal = targetVerticalOffset - progress * fullScrollLength;
-
-      // Check if the button is visible
-      final bool buttonIsVisible =
-          buttonYFinal > -200 && buttonYFinal < screenHeight + 200;
-
-      if (!buttonIsVisible) continue;
-
-      // X position is fixed
-      final buttonX = fixedX;
-
-      // Opacity calculation (same logic as before for fade in/out)
-      final double viewportBottom = screenHeight * 0.9;
-      final double viewportTop = screenHeight * 0.1;
-
-      double opacityT;
-      if (buttonYFinal > viewportBottom) {
-        opacityT =
-            (screenHeight - buttonYFinal) / (screenHeight - viewportBottom);
-      } else if (buttonYFinal < viewportTop) {
-        opacityT = buttonYFinal / viewportTop;
-      } else {
-        opacityT = 1.0;
-      }
-      final double opacity = Curves.easeOut.transform(opacityT.clamp(0.0, 1.0));
-      final double horizontalOffset =
-          isLeftSide
-              ? 10.0 // Small gap to the right of the line
-              : -buttonWidthEstimate +
-                  120; // Button width + small gap to the left of the line
-      skillWidgets.add(
-        Positioned(
-          // Anchor the Positioned widget at the fixed X point.
-          left: buttonX,
-
-          top: buttonYFinal,
-          child: Transform.translate(
-            // Shift the button left by half its width to center it on the fixedX line.
-            offset: Offset(horizontalOffset, 0),
-            child: SkillButton(
-              // Using SkillButton without the leading underscore if you changed it
-              text: skillsToDisplay[i],
-              opacity: opacity,
-              scale: 1.0,
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Stack(
-      children: [
-        // 1. Draw the Rope (which is now straight)
-        CustomPaint(
-          size: Size(screenWidth, screenHeight),
-          // Ensure you are using the correct class name (RopePainter)
-          painter: RopePainter(ropePoints, isLeftSide),
-        ),
-
-        // 2. Draw the Skill Buttons
-        ...skillWidgets,
-      ],
     );
   }
 }
