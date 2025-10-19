@@ -421,6 +421,31 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                       );
                     },
                   ),
+                  ValueListenableBuilder<double>(
+                    valueListenable: _scrollProgress,
+                    builder: (context, progress, _) {
+                      // Define the scroll range for the fade effect
+                      const double fadeStart =
+                          0.90; // Start fading to black at 80% scroll
+                      const double fadeEnd = 1; // Fully black by 90% scroll
+
+                      // Calculate 'fade progress' (0.0 to 1.0)
+                      final double fadeT = (progress - fadeStart) / (fadeEnd - fadeStart);
+                          final double opacity = fadeT.clamp(0.0, 1.0);
+                      return IgnorePointer(
+                        ignoring: true, // Don't block user scroll interaction
+                        child: Opacity(
+                          opacity: opacity,
+                          child: Container(
+                            color:
+                                Colors.black, // Solid black color for the fade
+                            width: screenWidth,
+                            height: screenHeight,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
 
                   //  Transparent scroll area
                   NotificationListener<ScrollNotification>(
@@ -469,75 +494,81 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                         final double cardSpacing =
                             20.0; // spacing between cards
 
-                        return Container(
-                          decoration: BoxDecoration(color: Colors.black),
-                          alignment: Alignment.center,
-                          transform: transform,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Icon + Title moving up (waking up effect)
-                              Transform.translate(
-                                offset: Offset(0, -t * 150),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const [
-                                    Icon(
-                                      Icons.rocket_launch,
-                                      color: Colors.white,
-                                      size: 80,
-                                    ),
-                                    SizedBox(height: 16),
-                                    Text(
-                                      "OPEN SOURCE CONTRIBUTIONS",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              const SizedBox(height: 40),
-
-                              // Contribution cards coming from right → left
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                physics: const NeverScrollableScrollPhysics(),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: List.generate(5, (index) {
-                                    final cardT = ((progress - 0.82) * 5 -
-                                            index * 0.1)
-                                        .clamp(0.0, 1.0);
-                                    final dx = cardStartOffset * (1 - cardT);
-                                    final opacity = Curves.easeInOut.transform(
-                                      cardT,
-                                    );
-                                    final scale =
-                                        ui.lerpDouble(0.8, 1.0, cardT)!;
-
-                                    return Transform.translate(
-                                      offset: Offset(dx, 0),
-                                      child: Opacity(
-                                        opacity: opacity,
-                                        child: Transform.scale(
-                                          scale: scale,
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                              right: cardSpacing,
-                                            ),
-                                            child: _buildOpenSourceCard(index),
+                        return SizedBox.expand(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Transform(
+                              transform: transform,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // Icon + Title moving up (waking up effect)
+                                  Transform.translate(
+                                    offset: Offset(0, -t * 150),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: const [
+                                        Icon(
+                                          Icons.rocket_launch,
+                                          color: Colors.white,
+                                          size: 80,
+                                        ),
+                                        SizedBox(height: 16),
+                                        Text(
+                                          "OPEN SOURCE CONTRIBUTIONS",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 26,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  }),
-                                ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 40),
+
+                                  // Contribution cards coming from right → left
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: List.generate(5, (index) {
+                                        final cardT = ((progress - 0.82) * 5 -
+                                                index * 0.1)
+                                            .clamp(0.0, 1.0);
+                                        final dx =
+                                            cardStartOffset * (1 - cardT);
+                                        final opacity = Curves.easeInOut
+                                            .transform(cardT);
+                                        final scale =
+                                            ui.lerpDouble(0.8, 1.0, cardT)!;
+
+                                        return Transform.translate(
+                                          offset: Offset(dx, 0),
+                                          child: Opacity(
+                                            opacity: opacity,
+                                            child: Transform.scale(
+                                              scale: scale,
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                  right: cardSpacing,
+                                                ),
+                                                child: _buildOpenSourceCard(
+                                                  index,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         );
                       },
