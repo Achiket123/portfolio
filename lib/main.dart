@@ -418,33 +418,7 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                       );
                     },
                   ),
-                  if (screenWidth > 650)
-                    ValueListenableBuilder<double>(
-                      valueListenable: _scrollProgress,
-                      builder: (context, progress, _) {
-                        return _buildRopeAndSkills(
-                          // Changed function name
-                          screenWidth: screenWidth,
-                          screenHeight: screenHeight,
-                          progress: progress,
-                          isLeftSide: true,
-                        );
-                      },
-                    ),
-                  if (screenWidth > 650)
-                    ValueListenableBuilder<double>(
-                      valueListenable: _scrollProgress,
-                      builder: (context, progress, _) {
-                        return _buildRopeAndSkills(
-                          // Changed function name
-                          screenWidth: screenWidth,
-                          screenHeight: screenHeight,
-                          progress: progress,
-                          isLeftSide: false,
-                        );
-                      },
-                    ),
-
+              
                   //  Transparent scroll area
                   NotificationListener<ScrollNotification>(
                     onNotification: (_) => true,
