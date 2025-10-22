@@ -4,9 +4,12 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:portfolio/data/contribution_class.dart';
+import 'package:portfolio/data/project_class.dart';
 import 'package:portfolio/loading_widget.dart';
 import 'package:typing_text/typing_text.dart';
-import 'package:portfolio/rope_skill_widget.dart';
+import 'package:flutter/gestures.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'animated_container_paint.dart';
 import 'card_painter.dart';
@@ -41,6 +44,83 @@ class ScrollVideoPage extends StatefulWidget {
 }
 
 class _ScrollVideoPageState extends State<ScrollVideoPage> {
+  final List<Project> pinnedProjects = [
+    const Project(
+      title: 'dost',
+      description:
+          'An autonomous AI agent for streamlining software development workflows.',
+      github: 'https://github.com/Achiket123/dost',
+      deployedUrl: '',
+    ),
+    const Project(
+      title: 'mushin',
+      description:
+          'A productivity app promoting digital wellness by controlling app access.',
+      github: 'https://github.com/Achiket123/mushin',
+      deployedUrl: '',
+    ),
+    const Project(
+      title: 'shazam',
+      description:
+          'A lightweight Go backend for music recognition, inspired by Shazam.',
+      github: 'https://github.com/Achiket123/shazam',
+      deployedUrl: '',
+    ),
+    const Project(
+      title: 'soundsalike',
+      description:
+          'An open-source backend for music recognition using audio fingerprinting.',
+      github: 'https://github.com/Achiket123/soundsalike',
+      deployedUrl: '',
+    ),
+    const Project(
+      title: 'chatbot',
+      description:
+          'A Flutter chatbot application integrated with the Gemini API.',
+      github: 'https://github.com/Achiket123/chatbot',
+      deployedUrl: '',
+    ),
+    const Project(
+      title: 'c-text-editor',
+      description:
+          'A terminal-based text editor built from scratch in C, inspired by Vim.',
+      github: 'https://github.com/Achiket123/c-text-editor',
+      deployedUrl: '',
+    ),
+  ];
+
+  final List<ContributionClass> openSourceContributions = [
+    const ContributionClass(
+      repoName: 'theopenlane/riverboat',
+      repoUrl: 'https://github.com/theopenlane/riverboat',
+      description: 'Add Slack job integration and worker',
+      prLink:
+          'https://github.com/theopenlane/riverboat/pulls/Achiket123', // NOTE: Using a general PR link as the specific number isn't visible
+    ),
+    const ContributionClass(
+      repoName: 'sysadminsmedia/homebox',
+      repoUrl: 'https://github.com/sysadminsmedia/homebox',
+      description:
+          'fix(i18n): fallback to English for missing or empty translations',
+      prLink:
+          'https://github.com/sysadminsmedia/homebox/pull/864', // PR number #864 is visible
+    ),
+    const ContributionClass(
+      repoName: 'AzureAD/microsoft-authentication-library-for-go',
+      repoUrl:
+          'https://github.com/AzureAD/microsoft-authentication-library-for-go',
+      description: 'Contributed to authentication library for Go',
+      prLink:
+          'https://github.com/AzureAD/microsoft-authentication-library-for-go/pulls/Achiket123',
+    ),
+    const ContributionClass(
+      repoName: 'Prateek9876/NagarVikas',
+      repoUrl: 'https://github.com/Prateek9876/NagarVikas',
+      description: 'Created issue for Localization Feature',
+      prLink:
+          'https://github.com/Prateek9876/NagarVikas/issues', // This was an issue, linking to issues page
+    ),
+  ];
   final List<String> _skills = const [
     "Flutter",
     "Dart",
@@ -107,6 +187,14 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
       }
     }
     if (mounted) setState(() => _isFullyLoaded = true);
+  }
+
+  Future<void> _launchURL(String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      debugPrint('Could not launch $url');
+    }
   }
 
   Future<void> _loadSingleFrame(int index) async {
@@ -192,618 +280,458 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
       backgroundColor: Colors.black,
       body:
           _isInitialLoadComplete
-              ? Stack(
-                children: [
-                  // 1️⃣ Canvas-based frame rendering
-                  ValueListenableBuilder<int>(
-                    valueListenable: _currentFrameNotifier,
-                    builder: (context, frameIndex, _) {
-                      return CustomPaint(
-                        size: Size(screenWidth, screenHeight),
-                        painter: FramePainter(_decodedFrames, frameIndex),
-                      );
-                    },
-                  ),
-
-                  // 2️⃣ Blur overlay
-                  const _StaticBlurOverlay(sigmaX: 5, sigmaY: 5),
-
-                  // 3️⃣ Gradient & Titles remain widgets (efficient)
-                  ValueListenableBuilder<double>(
-                    valueListenable: _scrollProgress,
-                    builder: (context, progress, _) {
-                      final nameT = ((progress - 0.2) / 0.3).clamp(0.0, 1.0);
-                      final projectsT = ((progress - 0.45) / 0.25).clamp(
+              ? Listener(
+                onPointerSignal: (event) {
+                  if (event is PointerScrollEvent) {
+                    // Manually scroll the background scroll view
+                    _scrollController.jumpTo(
+                      (_scrollController.offset + event.scrollDelta.dy).clamp(
                         0.0,
-                        1.0,
-                      );
-
-                      return IgnorePointer(
-                        ignoring: true,
+                        _scrollController.position.maxScrollExtent,
+                      ),
+                    );
+                  }
+                },
+                behavior: HitTestBehavior.translucent,
+                child: Stack(
+                  children: [
+                    // This scroll view MUST be at the bottom of the stack to receive
+                    // gestures that pass through the layers above it.
+                    NotificationListener<ScrollNotification>(
+                      onNotification: (_) => false,
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        physics: const AlwaysScrollableScrollPhysics(),
                         child: Container(
-                          height: screenHeight,
-                          width: screenWidth,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.black.withOpacity(0.6),
-                                Colors.black.withOpacity(0.4),
-                                Colors.black.withOpacity(0.6),
-                              ],
+                          height: screenHeight * 10,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                    ),
+
+                    // ✅ FIX: Wrap the purely visual background layers in IgnorePointer.
+                    // This allows scroll and tap gestures to pass through them to the
+                    // widgets underneath (the scroll view and the interactive cards).
+                    IgnorePointer(
+                      child: ValueListenableBuilder<int>(
+                        valueListenable: _currentFrameNotifier,
+                        builder: (context, frameIndex, _) {
+                          return CustomPaint(
+                            size: Size(screenWidth, screenHeight),
+                            painter: FramePainter(_decodedFrames, frameIndex),
+                          );
+                        },
+                      ),
+                    ),
+
+                    // The blur overlay is already correctly wrapped in IgnorePointer.
+                    const _StaticBlurOverlay(sigmaX: 5, sigmaY: 5),
+
+                    // This text/title overlay is also correctly wrapped in IgnorePointer.
+                    ValueListenableBuilder<double>(
+                      valueListenable: _scrollProgress,
+                      builder: (context, progress, _) {
+                        final nameT = ((progress - 0.2) / 0.3).clamp(0.0, 1.0);
+                        final projectsT = ((progress - 0.45) / 0.25).clamp(
+                          0.0,
+                          1.0,
+                        );
+
+                        return IgnorePointer(
+                          ignoring: true,
+                          child: Container(
+                            height: screenHeight,
+                            width: screenWidth,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.black.withOpacity(0.6),
+                                  Colors.black.withOpacity(0.4),
+                                  Colors.black.withOpacity(0.6),
+                                ],
+                              ),
                             ),
-                          ),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Transform(
-                                transform:
-                                    Matrix4.identity()..translate(
-                                      0.0,
-                                      ui.lerpDouble(
-                                        0,
-                                        -screenHeight / 5,
-                                        nameT.clamp(0.0, 1.0),
-                                      )!,
-                                    ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    // 🔹 Name: moves upward smoothly
-                                    Transform.scale(
-                                      scale:
-                                          ui.lerpDouble(
-                                            1.0,
-                                            0.9,
-                                            nameT.clamp(0.0, 1.0),
-                                          )!,
-                                      child: Text(
-                                        "ACHIKET KUMAR",
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 60,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 2,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Transform(
+                                  transform:
+                                      Matrix4.identity()..translate(
+                                        0.0,
+                                        ui.lerpDouble(
+                                          0,
+                                          -screenHeight / 5,
+                                          nameT.clamp(0.0, 1.0),
+                                        )!,
+                                      ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Transform.scale(
+                                        scale:
+                                            ui.lerpDouble(
+                                              1.0,
+                                              0.9,
+                                              nameT.clamp(0.0, 1.0),
+                                            )!,
+                                        child: Text(
+                                          "ACHIKET KUMAR",
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 60,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 2,
+                                          ),
                                         ),
                                       ),
-                                    ),
-
-                                    const SizedBox(height: 16),
-
-                                    // 🔹 About Me: fades & slides up away
-                                    Opacity(
-                                      opacity:
-                                          ui.lerpDouble(
-                                            1.0,
-                                            0.0,
-                                            nameT.clamp(0.0, 1.0),
-                                          )!,
-                                      child: Transform.translate(
-                                        offset: Offset(
-                                          0,
-                                          ui.lerpDouble(
+                                      const SizedBox(height: 16),
+                                      Opacity(
+                                        opacity:
+                                            ui.lerpDouble(
+                                              1.0,
+                                              0.0,
+                                              nameT.clamp(0.0, 1.0),
+                                            )!,
+                                        child: Transform.translate(
+                                          offset: Offset(
                                             0,
-                                            -80,
-                                            nameT.clamp(0.0, 1.0),
-                                          )!,
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            // --- First line with TypingText ---
-                                            Center(
-                                              child: RichText(
-                                                textAlign: TextAlign.center,
-                                                text: TextSpan(
-                                                  style: TextStyle(
-                                                    color: Colors.white
-                                                        .withOpacity(0.85),
-                                                    fontSize: 22,
-                                                    fontWeight: FontWeight.w400,
-                                                    letterSpacing: 1.2,
-                                                  ),
-                                                  children: [
-                                                    const TextSpan(
-                                                      text: "A passionate ",
+                                            ui.lerpDouble(
+                                              0,
+                                              -80,
+                                              nameT.clamp(0.0, 1.0),
+                                            )!,
+                                          ),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Center(
+                                                child: RichText(
+                                                  textAlign: TextAlign.center,
+                                                  text: TextSpan(
+                                                    style: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.85),
+                                                      fontSize: 22,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      letterSpacing: 1.2,
                                                     ),
-                                                    WidgetSpan(
-                                                      alignment:
-                                                          PlaceholderAlignment
-                                                              .middle,
-                                                      child: IntrinsicWidth(
-                                                        child: Align(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: TypingText(
-                                                            words: const [
-                                                              "Flutter Dev",
-                                                              "Go Dev",
-                                                              "Blogger",
-                                                            ],
-                                                            // speed: Duration(milliseconds: 100),
-                                                            // cursor: true,
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .white
-                                                                  .withOpacity(
-                                                                    0.85,
-                                                                  ),
-                                                              fontSize: 22,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              letterSpacing:
-                                                                  1.2,
+                                                    children: [
+                                                      const TextSpan(
+                                                        text: "A passionate ",
+                                                      ),
+                                                      WidgetSpan(
+                                                        alignment:
+                                                            PlaceholderAlignment
+                                                                .middle,
+                                                        child: IntrinsicWidth(
+                                                          child: Align(
+                                                            alignment:
+                                                                Alignment
+                                                                    .center,
+                                                            child: TypingText(
+                                                              words: const [
+                                                                "Flutter Dev",
+                                                                "Go Dev",
+                                                                "Blogger",
+                                                              ],
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white
+                                                                    .withOpacity(
+                                                                      0.85,
+                                                                    ),
+                                                                fontSize: 22,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                letterSpacing:
+                                                                    1.2,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-
-                                            const SizedBox(
-                                              height: 16,
-                                            ), // spacing below typing text
-                                            // --- Description below typing text ---
-                                            SizedBox(
-                                              width:
-                                                  500, // optional: limit width for readability
-                                              child: Text(
-                                                "I am Achiket Kumar, a highly motivated and skilled Full Stack Developer, with a passion for building robust, scalable applications. My experience is centered around the Flutter framework for mobile and web development, complemented by a strong backend foundation in Node.js and emerging proficiency in GoLang, which I proactively sought to learn for microservice development.",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  color: Colors.white
-                                                      .withOpacity(0.75),
-                                                  fontSize: 16,
-                                                  height: 1.4, // line height
-                                                  fontWeight: FontWeight.w400,
+                                              const SizedBox(height: 16),
+                                              SizedBox(
+                                                width: 500,
+                                                child: Text(
+                                                  "I am Achiket Kumar, a highly motivated and skilled Full Stack Developer, with a passion for building robust, scalable applications. My experience is centered around the Flutter framework for mobile and web development, complemented by a strong backend foundation in Node.js and emerging proficiency in GoLang, which I proactively sought to learn for microservice development.",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.white
+                                                        .withOpacity(0.75),
+                                                    fontSize: 16,
+                                                    height: 1.4,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-
-                                    Opacity(
-                                      opacity: Curves.easeInOut.transform(
-                                        projectsT,
+                                      Opacity(
+                                        opacity: Curves.easeInOut.transform(
+                                          projectsT,
+                                        ),
+                                        child: const Text(
+                                          "PROJECTS",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 50,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 2,
+                                          ),
+                                        ),
                                       ),
-                                      child: const Text(
-                                        "PROJECTS",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 50,
-                                          fontWeight: FontWeight.bold,
-                                          letterSpacing: 2,
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
+                    ValueListenableBuilder<double>(
+                      valueListenable: _scrollProgress,
+                      builder: (context, progress, _) {
+                        return _buildTanPathWidgets(
+                          screenWidth: screenWidth,
+                          screenHeight: screenHeight,
+                          progress: progress,
+                          isLeftSide: true,
+                          projects: pinnedProjects.sublist(3, 6),
+                        );
+                      },
+                    ),
+                    ValueListenableBuilder<double>(
+                      valueListenable: _scrollProgress,
+                      builder: (context, progress, _) {
+                        return _buildTanPathWidgets(
+                          screenWidth: screenWidth,
+                          screenHeight: screenHeight,
+                          progress: progress,
+                          isLeftSide: false,
+                          projects: pinnedProjects.sublist(0, 3),
+                        );
+                      },
+                    ),
+
+                    ValueListenableBuilder<double>(
+                      valueListenable: _scrollProgress,
+                      builder: (context, progress, _) {
+                        const double fadeStart = 0.90;
+                        const double fadeEnd = 1;
+                        final double fadeT =
+                            (progress - fadeStart) / (fadeEnd - fadeStart);
+                        final double opacity = fadeT.clamp(0.0, 1.0);
+                        return IgnorePointer(
+                          ignoring: true,
+                          child: Opacity(
+                            opacity: opacity,
+                            child: Container(
+                              color: Colors.black,
+                              width: screenWidth,
+                              height: screenHeight,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+
+                    IgnorePointer(
+                      ignoring:
+                          false, // <-- CRITICAL CHANGE: Allows clicks on the cards
+                      child: ValueListenableBuilder<int>(
+                        valueListenable: _currentFrameNotifier,
+                        builder: (context, frameIndex, _) {
+                          final progress = frameIndex / max(1, totalFrames - 1);
+                          // ... (rest of your animation logic is unchanged)
+                          const double start = 0.90;
+                          const double end = 1.0;
+                          double t = 0;
+                          if (progress >= start && progress <= end) {
+                            t = (progress - start) / (end - start);
+                          } else if (progress > end) {
+                            t = 1.0;
+                          }
+                          final double translateY = (1 - t) * screenHeight;
+                          final double rotateX = -(1 - t) * (pi / 3);
+                          final double rotateZ = -(1 - t) * 0.1;
+                          final double scale = 0.7 + 0.3 * t;
+                          final Matrix4 transform =
+                              Matrix4.identity()
+                                ..setEntry(3, 2, 0.0015)
+                                ..translate(0.0, translateY)
+                                ..rotateX(rotateX)
+                                ..rotateZ(rotateZ)
+                                ..scale(scale);
+                          final double cardStartOffset = 250.0;
+                          final double cardSpacing = 20.0;
+
+                          return SizedBox.expand(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Transform(
+                                transform: transform,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Transform.translate(
+                                      offset: Offset(0, -t * 150),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: const [
+                                          Icon(
+                                            Icons.rocket_launch,
+                                            color: Colors.white,
+                                            size: 80,
+                                          ),
+                                          SizedBox(height: 16),
+                                          Text(
+                                            "OPEN SOURCE CONTRIBUTIONS",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 26,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 40),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: List.generate(
+                                          openSourceContributions.length,
+                                          (index) {
+                                            final contribution =
+                                                openSourceContributions[index];
+                                            final cardT = ((progress - 0.82) *
+                                                        5 -
+                                                    index * 0.1)
+                                                .clamp(0.0, 1.0);
+                                            final dx =
+                                                cardStartOffset * (1 - cardT);
+                                            final opacity = Curves.easeInOut
+                                                .transform(cardT);
+                                            final scale =
+                                                ui.lerpDouble(0.8, 1.0, cardT)!;
+
+                                            return Transform.translate(
+                                              offset: Offset(dx, 0),
+                                              child: Opacity(
+                                                opacity: opacity,
+                                                child: Transform.scale(
+                                                  scale: scale,
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(
+                                                      left:
+                                                          index == 0
+                                                              ? 0
+                                                              : cardSpacing, // Add spacing between cards
+                                                      right: cardSpacing,
+                                                    ),
+                                                    // Call the updated widget with the contribution data
+                                                    child: _buildOpenSourceCard(
+                                                      contribution,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-
-                  // 4️⃣ Tan Path Widgets Left
-                  ValueListenableBuilder<double>(
-                    valueListenable: _scrollProgress,
-                    builder: (context, progress, _) {
-                      return _buildTanPathWidgets(
-                        screenWidth: screenWidth,
-                        screenHeight: screenHeight,
-                        progress: progress,
-                        isLeftSide: true,
-                      );
-                    },
-                  ),
-
-                  //  Tan Path Widgets Right
-                  ValueListenableBuilder<double>(
-                    valueListenable: _scrollProgress,
-                    builder: (context, progress, _) {
-                      return _buildTanPathWidgets(
-                        screenWidth: screenWidth,
-                        screenHeight: screenHeight,
-                        progress: progress,
-                        isLeftSide: false,
-                      );
-                    },
-                  ),
-                  ValueListenableBuilder<double>(
-                    valueListenable: _scrollProgress,
-                    builder: (context, progress, _) {
-                      // Define the scroll range for the fade effect
-                      const double fadeStart =
-                          0.90; // Start fading to black at 80% scroll
-                      const double fadeEnd = 1; // Fully black by 90% scroll
-
-                      // Calculate 'fade progress' (0.0 to 1.0)
-                      final double fadeT = (progress - fadeStart) / (fadeEnd - fadeStart);
-                          final double opacity = fadeT.clamp(0.0, 1.0);
-                      return IgnorePointer(
-                        ignoring: true, // Don't block user scroll interaction
-                        child: Opacity(
-                          opacity: opacity,
-                          child: Container(
-                            color:
-                                Colors.black, // Solid black color for the fade
-                            width: screenWidth,
-                            height: screenHeight,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-
-                  //  Transparent scroll area
-                  NotificationListener<ScrollNotification>(
-                    onNotification: (_) => true,
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Container(
-                        height: screenHeight * 10,
-                        color: Colors.transparent,
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ),
-                  IgnorePointer(
-                    ignoring: true,
-                    child: ValueListenableBuilder<int>(
-                      valueListenable: _currentFrameNotifier,
-                      builder: (context, frameIndex, _) {
-                        final progress = frameIndex / max(1, totalFrames - 1);
-                        const double start = 0.90;
-                        const double end = 1.0;
-
-                        double t = 0;
-                        if (progress >= start && progress <= end) {
-                          t = (progress - start) / (end - start);
-                        } else if (progress > end) {
-                          t = 1.0;
-                        }
-
-                        // 3D waking-up transform
-                        final double translateY = (1 - t) * screenHeight;
-                        final double rotateX = -(1 - t) * (pi / 3);
-                        final double rotateZ = -(1 - t) * 0.1;
-                        final double scale = 0.7 + 0.3 * t;
-
-                        final Matrix4 transform =
-                            Matrix4.identity()
-                              ..setEntry(3, 2, 0.0015)
-                              ..translate(0.0, translateY)
-                              ..rotateX(rotateX)
-                              ..rotateZ(rotateZ)
-                              ..scale(scale);
-
-                        // Horizontal card animation parameters
-                        final double cardStartOffset = 250.0; // offscreen start
-                        final double cardSpacing =
-                            20.0; // spacing between cards
-
-                        return SizedBox.expand(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Transform(
-                              transform: transform,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Icon + Title moving up (waking up effect)
-                                  Transform.translate(
-                                    offset: Offset(0, -t * 150),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: const [
-                                        Icon(
-                                          Icons.rocket_launch,
-                                          color: Colors.white,
-                                          size: 80,
-                                        ),
-                                        SizedBox(height: 16),
-                                        Text(
-                                          "OPEN SOURCE CONTRIBUTIONS",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 26,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 40),
-
-                                  // Contribution cards coming from right → left
-                                  SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: List.generate(5, (index) {
-                                        final cardT = ((progress - 0.82) * 5 -
-                                                index * 0.1)
-                                            .clamp(0.0, 1.0);
-                                        final dx =
-                                            cardStartOffset * (1 - cardT);
-                                        final opacity = Curves.easeInOut
-                                            .transform(cardT);
-                                        final scale =
-                                            ui.lerpDouble(0.8, 1.0, cardT)!;
-
-                                        return Transform.translate(
-                                          offset: Offset(dx, 0),
-                                          child: Opacity(
-                                            opacity: opacity,
-                                            child: Transform.scale(
-                                              scale: scale,
-                                              child: Padding(
-                                                padding: EdgeInsets.only(
-                                                  right: cardSpacing,
-                                                ),
-                                                child: _buildOpenSourceCard(
-                                                  index,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               )
               : const Center(child: LoadingWidget()),
     );
   }
 
-  Widget _buildOpenSourceCard(int index) {
-    final titles = [
-      "Flutter UI Library",
-      "Go AI Agent",
-      "OpenCV Plugin",
-      "Neovim Plugin",
-      "Portfolio Website",
-    ];
-    final subtitles = [
-      "Custom Flutter Widgets",
-      "Multi-agent AI system",
-      "Computer Vision Utils",
-      "Editor Enhancements",
-      "Personal Portfolio",
-    ];
+  Widget _buildOpenSourceCard(ContributionClass contribution) {
+    const double cardWidth = 280; // Increased width slightly for longer names
+    const double cardHeight =
+        120; // Increased height for more description space
 
-    // Use the static dimensions from the painter
-    const double cardWidth = 250;
-    const double cardHeight = 100;
+    // Helper function to launch URLs (can be moved to the State class)
+    Future<void> _launchURL(String url) async {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url));
+      }
+    }
 
     return SizedBox(
       width: cardWidth,
       height: cardHeight,
-      // Use Stack to layer the CustomPaint background and the Text/Button foreground
-      child: Stack(
-        children: [
-          // 1. Background, Gradient, Shadow (The Laggy part, now fast CustomPaint)
-          CustomPaint(
-            size: const Size(cardWidth, cardHeight),
-            painter: CardPainter(index),
-          ),
-
-          // 2. Foreground Content (Text and Padding)
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  titles[index % titles.length],
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  subtitles[index % subtitles.length],
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  // ----------------- TAN PATH WIDGETS -----------------
-
-  Widget _buildTanPathWidgets({
-    required double screenWidth,
-    required double screenHeight,
-    required double progress,
-    required bool isLeftSide,
-  }) {
-    final double startX = screenWidth / 2;
-    final double startY = screenHeight;
-    final double maxAngle = pi / 2.5;
-
-    // Increase horizontal distance based on screen width
-    // Example: 0.15 on small screens, up to ~0.35 on large screens
-    final double horizontalDistance =
-        screenWidth * 0.25; // adjust multiplier as needed
-
-    final double verticalDistance = screenHeight * 0.7;
-    final double curveIntensity = screenHeight * 0.1;
-    final curve = Curves.easeInOutCubic;
-
-    // Adjust widgetHalfWidth based on responsive container width
-    final double widgetHalfWidth =
-        screenWidth * 0.175; // half of containerWidth
-
-    const double spacingBetweenContainers = 0.18;
-
-    return Stack(
-      children: List.generate(3, (index) {
-        final offset = index * spacingBetweenContainers;
-        double adjustedProgress = (progress - offset).clamp(0.0, 1.0);
-
-        if (adjustedProgress <= 0) return const SizedBox.shrink();
-
-        // Smooth easing for position
-        adjustedProgress = curve.transform(adjustedProgress);
-
-        // Tan curve movement
-        final double xAngle = adjustedProgress * maxAngle;
-        double mathY = isLeftSide ? -tan(-xAngle) : tan(xAngle);
-        mathY = mathY.clamp(-6.0, 6.0);
-
-        final adjustedBaseY = startY - (adjustedProgress * verticalDistance);
-        final adjustedTargetY = adjustedBaseY - (mathY * curveIntensity);
-
-        // 🔹 Centered path calculation with increased spread
-        final double horizontalOffset = horizontalDistance * adjustedProgress;
-        final pathCenter =
-            isLeftSide ? startX - horizontalOffset : startX + horizontalOffset;
-
-        // Reactive opacity
-        final fadeIn = Curves.easeIn.transform(
-          (adjustedProgress * 2).clamp(0.0, 1.0),
-        );
-        final fadeOut =
-            1 -
-            Curves.easeOut.transform(
-              ((adjustedProgress - 0.5) * 2).clamp(0.0, 1.0),
-            );
-        final double opacity = (adjustedProgress <= 0.5) ? fadeIn : fadeOut;
-
-        // Scale & rotation
-        final scale = ui.lerpDouble(0.7, 1.0, opacity)!;
-        final rotation = (1.0 - adjustedProgress) * (isLeftSide ? -0.12 : 0.12);
-
-        // Final positions
-        final double finalLeftPosition = pathCenter - widgetHalfWidth;
-        final double smoothY = adjustedTargetY + 60 * (1 - adjustedProgress);
-
-        return Positioned(
-          left: finalLeftPosition,
-          top: smoothY - 100,
-          child: IgnorePointer(
-            ignoring: opacity < 0.95,
-            child: Transform(
-              alignment: Alignment.center,
-              transform:
-                  Matrix4.identity()
-                    ..scale(scale)
-                    ..rotateZ(rotation),
-              child: _buildAnimatedContainer(isLeftSide, opacity),
-            ),
-          ),
-        );
-      }),
-    );
-  }
-
-  Widget _buildAnimatedContainer(bool isLeftSide, double opacity) {
-    final sh = MediaQuery.of(context).size.height;
-    final sw = MediaQuery.of(context).size.width;
-
-    // 🔹 Responsive container dimensions (MUST MATCH Painter and SizedBox)
-    // Note: The hover logic setting containerWidth *= 0.1 and back is flawed
-    // because it requires setState inside a child widget which can break scroll physics.
-    // For a smooth scroll animation, hover effects are best handled by adjusting
-    // the scale/rotation via the main scroll progress, not local state.
-    // We'll fix containerWidth to a static responsive value for performance.
-    double containerWidth = sw * 0.35; // 35% of screen width
-    double containerHeight = sh * 0.25; // 25% of screen height
-    final iconSize = sh * 0.08;
-    final titleFontSize = sh * 0.03;
-    final subtitleFontSize = sh * 0.017;
-    final spacing1 = sh * 0.02;
-    final spacing2 = sh * 0.01;
-
-    // Removed the local setState hover logic to prevent performance hits and bugs.
-    // Hover effects should use MouseRegion and rely on an external state change,
-    // but for smooth scrolling, keeping the structure fixed is best.
-
-    return Opacity(
-      opacity: opacity, // directly reactive
-      child: SizedBox(
-        width: containerWidth,
-        height: containerHeight,
+      child: InkWell(
+        onTap: () => _launchURL(contribution.prLink), // Make the card clickable
+        borderRadius: BorderRadius.circular(
+          12,
+        ), // Match splash effect to card shape
         child: Stack(
           children: [
-            // 1. Draw the visual background, gradient, shadow, and border using CustomPaint.
-            // This replaces the performance-heavy BoxDecoration and BoxShadow.
             CustomPaint(
-              size: Size(containerWidth, containerHeight),
-              painter: AnimatedContainerPainter(
-                isLeftSide: isLeftSide,
-                opacity: opacity,
-                containerWidth: containerWidth,
-                containerHeight: containerHeight,
-              ),
+              size: const Size(cardWidth, cardHeight),
+              painter: CardPainter(
+                contribution.repoName.hashCode,
+              ), // Use hashcode for variety
             ),
-
-            // 2. Center the foreground content (Text, Icons, Button)
-            Center(
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    isLeftSide ? Icons.code : Icons.design_services,
-                    color: Colors.white.withOpacity(opacity),
-                    size: iconSize,
-                  ),
-                  SizedBox(height: spacing1),
+                  // Repository Name
                   Text(
-                    isLeftSide ? 'Development' : 'Design',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(opacity),
-                      fontSize: titleFontSize,
+                    contribution.repoName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
-                  SizedBox(height: spacing2),
-                  ElevatedButton(
-                    onPressed: () {
-                      print("Hello World");
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.green),
-                    ),
+                  const SizedBox(height: 8),
+                  // Contribution Description
+                  Expanded(
                     child: Text(
-                      isLeftSide
-                          ? 'Building Solutions'
-                          : 'Creating Experiences',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.8 * opacity),
-                        fontSize: subtitleFontSize,
+                      contribution.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white70,
+                        fontSize: 13,
+                        height: 1.4,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
@@ -814,9 +742,164 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
       ),
     );
   }
+
+  Widget _buildTanPathWidgets({
+    required double screenWidth,
+    required double screenHeight,
+    required double progress,
+    required bool isLeftSide,
+    required List<Project> projects,
+  }) {
+    final double startX = screenWidth / 2;
+    final double startY = screenHeight;
+    final double maxAngle = pi / 2.5;
+    final double horizontalDistance = screenWidth * 0.25;
+    final double verticalDistance = screenHeight * 0.7;
+    final double curveIntensity = screenHeight * 0.1;
+    final curve = Curves.easeInOutCubic;
+    final double widgetHalfWidth = screenWidth * 0.175;
+    const double spacingBetweenContainers = 0.18;
+
+    return Stack(
+      children: List.generate(projects.length, (index) {
+        final offset = index * spacingBetweenContainers;
+        double adjustedProgress = (progress - offset).clamp(0.0, 1.0);
+        if (adjustedProgress <= 0) return const SizedBox.shrink();
+
+        adjustedProgress = curve.transform(adjustedProgress);
+        final double xAngle = adjustedProgress * maxAngle;
+        double mathY = isLeftSide ? -tan(-xAngle) : tan(xAngle);
+        mathY = mathY.clamp(-6.0, 6.0);
+        final adjustedBaseY = startY - (adjustedProgress * verticalDistance);
+        final adjustedTargetY = adjustedBaseY - (mathY * curveIntensity);
+        final double horizontalOffset = horizontalDistance * adjustedProgress;
+        final pathCenter =
+            isLeftSide ? startX - horizontalOffset : startX + horizontalOffset;
+        final fadeIn = Curves.easeIn.transform(
+          (adjustedProgress * 2).clamp(0.0, 1.0),
+        );
+        final fadeOut =
+            1 -
+            Curves.easeOut.transform(
+              ((adjustedProgress - 0.5) * 2).clamp(0.0, 1.0),
+            );
+        final double opacity = (adjustedProgress <= 0.5) ? fadeIn : fadeOut;
+        final scale = ui.lerpDouble(0.7, 1.0, opacity)!;
+        final rotation = (1.0 - adjustedProgress) * (isLeftSide ? -0.12 : 0.12);
+        final double finalLeftPosition = pathCenter - widgetHalfWidth;
+        final double smoothY = adjustedTargetY + 60 * (1 - adjustedProgress);
+
+        return Positioned(
+          left: finalLeftPosition,
+          top: smoothY - 100,
+          child: Transform(
+            alignment: Alignment.center,
+            transform:
+                Matrix4.identity()
+                  ..scale(scale)
+                  ..rotateZ(rotation),
+
+            child: Listener(
+              behavior: HitTestBehavior.translucent,
+              child: _buildAnimatedContainer(
+                isLeftSide,
+                opacity,
+                projects[index],
+              ),
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget _buildAnimatedContainer(
+    bool isLeftSide,
+    double opacity,
+    Project project,
+  ) {
+    final sh = MediaQuery.of(context).size.height;
+    final sw = MediaQuery.of(context).size.width;
+    double containerWidth = sw * 0.35;
+    double containerHeight = sh * 0.25;
+
+    return SizedBox(
+      width: containerWidth,
+      height: containerHeight,
+      child: Stack(
+        children: [
+          CustomPaint(
+            size: Size(containerWidth, containerHeight),
+            painter: AnimatedContainerPainter(
+              isLeftSide: isLeftSide,
+              opacity: opacity,
+              containerWidth: containerWidth,
+              containerHeight: containerHeight,
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    project.title.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(opacity),
+                      fontSize: sh * 0.03,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  SizedBox(height: sh * 0.015),
+                  Text(
+                    project.description,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.white70.withOpacity(opacity * 0.7),
+                      fontSize: sh * 0.015,
+                      height: 1.4,
+                    ),
+                  ),
+                  const Spacer(),
+                  ElevatedButton(
+                    onPressed:
+                        () => _launchURL(
+                          project.github,
+                        ), // Launch the project's GitHub URL
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white.withOpacity(0.15),
+                      foregroundColor: Colors.white.withOpacity(0.3),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 12,
+                      ),
+                    ),
+                    child: Text(
+                      'View on GitHub',
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9 * opacity),
+                        fontSize: sh * 0.015,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-// ----------------- CANVAS PAINTER -----------------
 class FramePainter extends CustomPainter {
   final List<ui.Image?> frames;
   final int currentIndex;

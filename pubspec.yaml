@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   video_player: ^2.10.0
   typing_text: 1.0.4
+  url_launcher: 6.2.6
 
 dev_dependencies:
   flutter_test:
