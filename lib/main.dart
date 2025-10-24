@@ -8,49 +8,12 @@ import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:portfolio/data/contribution_class.dart';
+import 'package:portfolio/data/project_class.dart';
+import 'package:portfolio/loading_widget.dart';
 import 'package:typing_text/typing_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-// -----------------------------------------------------------------------------
-// MOCK/DEPENDENCY CLASSES (Included for completeness)
-// -----------------------------------------------------------------------------
-
-class Project {
-  final String title;
-  final String description;
-  final String github;
-  final String deployedUrl;
-
-  const Project({
-    required this.title,
-    required this.description,
-    required this.github,
-    required this.deployedUrl,
-  });
-}
-
-class ContributionClass {
-  final String repoName;
-  final String repoUrl;
-  final String description;
-  final String prLink;
-
-  const ContributionClass({
-    required this.repoName,
-    required this.repoUrl,
-    required this.description,
-    required this.prLink,
-  });
-}
-
-class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: CircularProgressIndicator(color: Colors.white));
-  }
-}
 
 class AnimatedContainerPainter extends CustomPainter {
   final bool isLeftSide;
@@ -230,7 +193,7 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
   );
   final ValueNotifier<double> _scrollProgress = ValueNotifier<double>(0.0);
 
-  final int totalFrames = 750;
+  final int totalFrames = 200;
   final int initialFrames = 30;
 
   List<Uint8List?> _frameBytes = [];
