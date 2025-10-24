@@ -541,7 +541,9 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                                 letterSpacing: 1.2,
                               ),
                               children: [
-                                const TextSpan(text: "A passionate "),
+                                const TextSpan(
+                                  text: "A Random Dude Who Likes ",
+                                ),
                                 WidgetSpan(
                                   alignment: PlaceholderAlignment.middle,
                                   child: IntrinsicWidth(
@@ -549,9 +551,10 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                                       alignment: Alignment.center,
                                       child: TypingText(
                                         words: const [
+                                          "Computer",
                                           "Flutter Dev",
                                           "Go Dev",
-                                          "Blogger",
+                                          "Blogging*",
                                         ],
                                         style: TextStyle(
                                           color: Colors.white.withOpacity(0.85),
