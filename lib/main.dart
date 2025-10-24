@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:math';
 import 'dart:ui' as ui;
+
+// Add this import to interact with the HTML document on the web.
+import 'dart:html' as html;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// Note: Assuming these external packages and local files are available in your project structure:
 import 'package:typing_text/typing_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -64,7 +67,6 @@ class AnimatedContainerPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Mock implementation for demo. In a real app, this would draw the complex shape/lines.
     final paint =
         Paint()
           ..color = Colors.white.withOpacity(0.15 * opacity)
@@ -90,7 +92,6 @@ class CardPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Mock implementation for demo. In a real app, this would draw the complex card background.
     final paint =
         Paint()
           ..color = Colors.white.withOpacity(0.1)
@@ -106,10 +107,6 @@ class CardPainter extends CustomPainter {
   bool shouldRepaint(covariant CardPainter oldDelegate) =>
       oldDelegate.seed != seed;
 }
-
-// -----------------------------------------------------------------------------
-// MAIN IMPLEMENTATION
-// -----------------------------------------------------------------------------
 
 class _StaticBlurOverlay extends StatelessWidget {
   final double sigmaX;
@@ -129,9 +126,19 @@ class _StaticBlurOverlay extends StatelessWidget {
   }
 }
 
-void main() => runApp(
-  const MaterialApp(debugShowCheckedModeBanner: false, home: ScrollVideoPage()),
-);
+// -----------------------------------------------------------------------------
+// MAIN IMPLEMENTATION
+// -----------------------------------------------------------------------------
+
+void main() {
+  html.document.body?.style.backgroundColor = 'transparent';
+  runApp(
+    const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: ScrollVideoPage(),
+    ),
+  );
+}
 
 class ScrollVideoPage extends StatefulWidget {
   const ScrollVideoPage({super.key});
@@ -240,6 +247,15 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
     _scrollController.addListener(_onScroll);
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _currentFrameNotifier.dispose();
+    _loadProgressNotifier.dispose();
+    _scrollProgress.dispose();
+    super.dispose();
+  }
+
   Future<void> _loadFramesParallel() async {
     await _loadSequentialBatch(0, initialFrames);
     if (mounted) setState(() => _isInitialLoadComplete = true);
@@ -280,19 +296,16 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
 
   Future<void> _loadSingleFrame(int index) async {
     if (_frameBytes[index] != null) return;
-
     final path =
         'assets/frames/frame_${(index + 1).toString().padLeft(4, '0')}.webp';
     try {
       final data = await rootBundle.load(path);
       final Uint8List bytes = data.buffer.asUint8List();
       final completer = Completer<void>();
-
       ui.decodeImageFromList(bytes, (ui.Image image) {
         _decodedFrames[index] = image;
         completer.complete();
       });
-
       await completer.future;
       _frameBytes[index] = bytes;
     } catch (e) {
@@ -305,7 +318,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
     if (!_isInitialLoadComplete || !_scrollController.hasClients) return;
     final maxScroll = _scrollController.position.maxScrollExtent;
     if (maxScroll <= 0) return;
-
     final scrollFraction = (_scrollController.offset / maxScroll).clamp(
       0.0,
       1.0,
@@ -314,7 +326,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
       0,
       totalFrames - 1,
     );
-
     int newIndex = targetFrameIndex;
     if (targetFrameIndex < _decodedFrames.length &&
         _decodedFrames[targetFrameIndex] == null) {
@@ -325,12 +336,10 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
         }
       }
     }
-
     if (_currentFrameNotifier.value != newIndex) {
       _currentFrameNotifier.value = newIndex;
       if (!_isFullyLoaded) _preloadNearbyFrames(newIndex);
     }
-
     _scrollProgress.value = scrollFraction;
   }
 
@@ -344,21 +353,14 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
   }
 
   @override
-  void dispose() {
-    _scrollController.dispose();
-    _currentFrameNotifier.dispose();
-    _loadProgressNotifier.dispose();
-    _scrollProgress.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
+    const double uiCutOffPoint = 0.68;
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
       body:
           _isInitialLoadComplete
               ? Listener(
@@ -375,359 +377,94 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                 behavior: HitTestBehavior.translucent,
                 child: Stack(
                   children: [
+                    ValueListenableBuilder<double>(
+                      valueListenable: _scrollProgress,
+                      builder: (context, progress, _) {
+                        const double fadeStart = 0.60;
+                        const double fadeEnd = uiCutOffPoint;
+
+                        double backgroundOpacity = 1.0;
+                        if (progress > fadeStart && progress < fadeEnd) {
+                          final t =
+                              (progress - fadeStart) / (fadeEnd - fadeStart);
+                          backgroundOpacity = 1.0 - t;
+                        } else if (progress >= fadeEnd) {
+                          backgroundOpacity = 0.0;
+                        }
+
+                        return Opacity(
+                          opacity: backgroundOpacity.clamp(0.0, 1.0),
+                          child: Stack(
+                            children: [
+                              IgnorePointer(
+                                child: ValueListenableBuilder<int>(
+                                  valueListenable: _currentFrameNotifier,
+                                  builder: (context, frameIndex, _) {
+                                    return CustomPaint(
+                                      size: Size(screenWidth, screenHeight),
+                                      painter: FramePainter(
+                                        _decodedFrames,
+                                        frameIndex,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              const _StaticBlurOverlay(sigmaX: 5, sigmaY: 5),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+
                     NotificationListener<ScrollNotification>(
                       onNotification: (_) => false,
                       child: SingleChildScrollView(
                         controller: _scrollController,
                         physics: const AlwaysScrollableScrollPhysics(),
                         child: Container(
-                          // Increased height to accommodate 4 more sections and transitions
                           height: screenHeight * 15,
                           color: Colors.transparent,
                         ),
                       ),
                     ),
-                    IgnorePointer(
-                      child: ValueListenableBuilder<int>(
-                        valueListenable: _currentFrameNotifier,
-                        builder: (context, frameIndex, _) {
-                          return CustomPaint(
-                            size: Size(screenWidth, screenHeight),
-                            painter: FramePainter(_decodedFrames, frameIndex),
-                          );
-                        },
-                      ),
-                    ),
-                    const _StaticBlurOverlay(sigmaX: 5, sigmaY: 5),
+
                     ValueListenableBuilder<double>(
                       valueListenable: _scrollProgress,
                       builder: (context, progress, _) {
-                        final nameT = ((progress - 0.2) / 0.3).clamp(0.0, 1.0);
-                        final projectsT = ((progress - 0.45) / 0.25).clamp(
-                          0.0,
-                          1.0,
-                        );
-
-                        return IgnorePointer(
-                          ignoring: true,
-                          child: Container(
-                            height: screenHeight,
-                            width: screenWidth,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.black.withOpacity(0.6),
-                                  Colors.black.withOpacity(0.4),
-                                  Colors.black.withOpacity(0.6),
-                                ],
-                              ),
+                        if (progress >= uiCutOffPoint) {
+                          return const SizedBox.shrink();
+                        }
+                        return Stack(
+                          children: [
+                            _buildIntroAndProjectsTitle(
+                              screenWidth: screenWidth,
+                              screenHeight: screenHeight,
+                              progress: progress,
                             ),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Positioned(
-                                  top: screenHeight * 0.3,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Opacity(
-                                        opacity:
-                                            ui.lerpDouble(
-                                              1.0,
-                                              0.0,
-                                              (progress * 2).clamp(0.0, 1.0),
-                                            )!,
-                                        child: Transform.scale(
-                                          scale:
-                                              ui.lerpDouble(
-                                                1.0,
-                                                0.9,
-                                                nameT.clamp(0.0, 1.0),
-                                              )!,
-                                          child: const Text(
-                                            "ACHIKET KUMAR",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 60,
-                                              fontWeight: FontWeight.bold,
-                                              letterSpacing: 2,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 16),
-                                      Opacity(
-                                        opacity:
-                                            ui.lerpDouble(
-                                              1.0,
-                                              0.0,
-                                              nameT.clamp(0.0, 1.0),
-                                            )!,
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Center(
-                                              child: RichText(
-                                                textAlign: TextAlign.center,
-                                                text: TextSpan(
-                                                  style: TextStyle(
-                                                    color: Colors.white
-                                                        .withOpacity(0.85),
-                                                    fontSize: 22,
-                                                    fontWeight: FontWeight.w400,
-                                                    letterSpacing: 1.2,
-                                                  ),
-                                                  children: [
-                                                    const TextSpan(
-                                                      text: "A passionate ",
-                                                    ),
-                                                    WidgetSpan(
-                                                      alignment:
-                                                          PlaceholderAlignment
-                                                              .middle,
-                                                      child: IntrinsicWidth(
-                                                        child: Align(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: TypingText(
-                                                            words: const [
-                                                              "Flutter Dev",
-                                                              "Go Dev",
-                                                              "Blogger",
-                                                            ],
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .white
-                                                                  .withOpacity(
-                                                                    0.85,
-                                                                  ),
-                                                              fontSize: 22,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              letterSpacing:
-                                                                  1.2,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 16),
-                                            SizedBox(
-                                              width: 500,
-                                              child: Text(
-                                                "I am Achiket Kumar, a highly motivated and skilled Full Stack Developer, with a passion for building robust, scalable applications. My experience is centered around the Flutter framework for mobile and web development, complemented by a strong backend foundation in Node.js and emerging proficiency in GoLang, which I proactively sought to learn for microservice development.",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  color: Colors.white
-                                                      .withOpacity(0.75),
-                                                  fontSize: 16,
-                                                  height: 1.4,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Opacity(
-                                        opacity: Curves.easeInOut.transform(
-                                          projectsT,
-                                        ),
-                                        child: const Text(
-                                          "PROJECTS",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 50,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 2,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                            _buildTanPathWidgets(
+                              screenWidth: screenWidth,
+                              screenHeight: screenHeight,
+                              progress: progress,
+                              isLeftSide: true,
+                              projects: pinnedProjects.sublist(3, 6),
                             ),
-                          ),
-                        );
-                      },
-                    ),
-                    ValueListenableBuilder<double>(
-                      valueListenable: _scrollProgress,
-                      builder: (context, progress, _) {
-                        return _buildTanPathWidgets(
-                          screenWidth: screenWidth,
-                          screenHeight: screenHeight,
-                          progress: progress,
-                          isLeftSide: true,
-                          projects: pinnedProjects.sublist(3, 6),
-                        );
-                      },
-                    ),
-                    ValueListenableBuilder<double>(
-                      valueListenable: _scrollProgress,
-                      builder: (context, progress, _) {
-                        return _buildTanPathWidgets(
-                          screenWidth: screenWidth,
-                          screenHeight: screenHeight,
-                          progress: progress,
-                          isLeftSide: false,
-                          projects: pinnedProjects.sublist(0, 3),
-                        );
-                      },
-                    ),
-                    ValueListenableBuilder<double>(
-                      valueListenable: _scrollProgress,
-                      builder: (context, progress, _) {
-                        // Increased delay for the black screen fade-in (was 0.60 to 0.65)
-                        const double fadeStart = 0.65;
-                        const double fadeEnd = 0.70;
-                        final double fadeT =
-                            (progress - fadeStart) / (fadeEnd - fadeStart);
-                        final double opacity = fadeT.clamp(0.0, 1.0);
-                        return IgnorePointer(
-                          ignoring: true,
-                          child: Opacity(
-                            opacity: opacity,
-                            child: Container(
-                              color: Colors.black,
-                              width: screenWidth,
-                              height: screenHeight,
+                            _buildTanPathWidgets(
+                              screenWidth: screenWidth,
+                              screenHeight: screenHeight,
+                              progress: progress,
+                              isLeftSide: false,
+                              projects: pinnedProjects.sublist(0, 3),
                             ),
-                          ),
+                          ],
                         );
                       },
                     ),
 
-                    // --- START: New Sliding Sections for sequential flow ---
-
-                    // Open Source: Enters: 0.70 to 0.74. Exits: 0.74 to 0.78.
-                    ValueListenableBuilder<double>(
-                      valueListenable: _scrollProgress,
-                      builder: (context, progress, _) {
-                        const double sectionStart = 0.70;
-                        const double sectionExitStart = 0.74;
-                        const double sectionEnd = 0.78;
-
-                        if (progress < sectionStart)
-                          return const SizedBox.shrink();
-
-                        final slideInT = ((progress - sectionStart) /
-                                (sectionExitStart - sectionStart))
-                            .clamp(0.0, 1.0);
-                        final slideOutT = ((progress - sectionExitStart) /
-                                (sectionEnd - sectionExitStart))
-                            .clamp(0.0, 1.0);
-
-                        return Positioned.fill(
-                          child: _buildSlidingSection(
-                            screenWidth,
-                            screenHeight,
-                            section: 'open_source',
-                            slideInProgress: slideInT,
-                            slideOutProgress: slideOutT,
-                          ),
-                        );
-                      },
-                    ),
-
-                    // Work Experience: Enters: 0.78 to 0.82. Exits: 0.82 to 0.86.
-                    ValueListenableBuilder<double>(
-                      valueListenable: _scrollProgress,
-                      builder: (context, progress, _) {
-                        const double sectionStart = 0.78;
-                        const double sectionExitStart = 0.82;
-                        const double sectionEnd = 0.86;
-
-                        if (progress < sectionStart)
-                          return const SizedBox.shrink();
-
-                        final slideInT = ((progress - sectionStart) /
-                                (sectionExitStart - sectionStart))
-                            .clamp(0.0, 1.0);
-                        final slideOutT = ((progress - sectionExitStart) /
-                                (sectionEnd - sectionExitStart))
-                            .clamp(0.0, 1.0);
-
-                        return Positioned.fill(
-                          child: _buildSlidingSection(
-                            screenWidth,
-                            screenHeight,
-                            section: 'work_experience',
-                            slideInProgress: slideInT,
-                            slideOutProgress: slideOutT,
-                          ),
-                        );
-                      },
-                    ),
-
-                    // Blogs: Enters: 0.86 to 0.90. Exits: 0.90 to 0.94.
-                    ValueListenableBuilder<double>(
-                      valueListenable: _scrollProgress,
-                      builder: (context, progress, _) {
-                        const double sectionStart = 0.86;
-                        const double sectionExitStart = 0.90;
-                        const double sectionEnd = 0.94;
-
-                        if (progress < sectionStart)
-                          return const SizedBox.shrink();
-
-                        final slideInT = ((progress - sectionStart) /
-                                (sectionExitStart - sectionStart))
-                            .clamp(0.0, 1.0);
-                        final slideOutT = ((progress - sectionExitStart) /
-                                (sectionEnd - sectionExitStart))
-                            .clamp(0.0, 1.0);
-
-                        return Positioned.fill(
-                          child: _buildSlidingSection(
-                            screenWidth,
-                            screenHeight,
-                            section: 'blogs',
-                            slideInProgress: slideInT,
-                            slideOutProgress: slideOutT,
-                          ),
-                        );
-                      },
-                    ),
-
-                    // Contact: Enters: 0.94 to 1.0. Stays pinned.
-                    ValueListenableBuilder<double>(
-                      valueListenable: _scrollProgress,
-                      builder: (context, progress, _) {
-                        const double sectionStart = 0.94;
-
-                        if (progress < sectionStart)
-                          return const SizedBox.shrink();
-
-                        final slideInT = ((progress - sectionStart) /
-                                (1.0 - sectionStart))
-                            .clamp(0.0, 1.0);
-
-                        // No slide-out phase for the final section
-                        return Positioned.fill(
-                          child: _buildSlidingSection(
-                            screenWidth,
-                            screenHeight,
-                            section: 'contact',
-                            slideInProgress: slideInT,
-                            slideOutProgress: 0.0,
-                          ),
-                        );
-                      },
-                    ),
-
-                    // --- END: New Sliding Sections Logic ---
+                    _buildSectionListener('open_source', 0.75, 0.79, 0.83),
+                    _buildSectionListener('work_experience', 0.83, 0.87, 0.91),
+                    _buildSectionListener('blogs', 0.91, 0.95, 0.99),
+                    _buildSectionListener('contact', 0.99, 1.0, 1.5),
                   ],
                 ),
               )
@@ -735,7 +472,181 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
     );
   }
 
-  // New unified section builder to handle slide in and slide out
+  Widget _buildSectionListener(
+    String section,
+    double start,
+    double exitStart,
+    double end,
+  ) {
+    return ValueListenableBuilder<double>(
+      valueListenable: _scrollProgress,
+      builder: (context, progress, _) {
+        if (progress < start && section != 'open_source') {
+          return const SizedBox.shrink();
+        }
+
+        final slideInT = ((progress - start) / (exitStart - start)).clamp(
+          0.0,
+          1.0,
+        );
+        final slideOutT = ((progress - exitStart) / (end - exitStart)).clamp(
+          0.0,
+          1.0,
+        );
+
+        return Positioned.fill(
+          child: _buildSlidingSection(
+            MediaQuery.of(context).size.width,
+            MediaQuery.of(context).size.height,
+            section: section,
+            slideInProgress: slideInT,
+            slideOutProgress: slideOutT,
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildIntroAndProjectsTitle({
+    required double screenWidth,
+    required double screenHeight,
+    required double progress,
+  }) {
+    final nameT = (((progress * 1.8) - 0.2) / 0.3).clamp(0.0, 1.0);
+    final projectsT = (((progress * 1.8) - 0.45) / 0.3).clamp(0.0, 1.0);
+
+    return IgnorePointer(
+      ignoring: true,
+      child: Container(
+        height: screenHeight,
+        width: screenWidth,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.black.withOpacity(0.6),
+              Colors.black.withOpacity(0.4),
+              Colors.black.withOpacity(0.6),
+            ],
+          ),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned(
+              top: screenHeight * 0.3,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Opacity(
+                    opacity:
+                        ui.lerpDouble(
+                          1.0,
+                          0.0,
+                          (progress * 2).clamp(0.0, 1.0),
+                        )!,
+                    child: Transform.scale(
+                      scale: ui.lerpDouble(1.0, 0.9, nameT.clamp(0.0, 1.0))!,
+                      child: const Text(
+                        "ACHIKET KUMAR",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 60,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Opacity(
+                    opacity: ui.lerpDouble(1.0, 0.0, nameT.clamp(0.0, 1.0))!,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.85),
+                                fontSize: 22,
+                                fontWeight: FontWeight.w400,
+                                letterSpacing: 1.2,
+                              ),
+                              children: [
+                                const TextSpan(text: "A passionate "),
+                                WidgetSpan(
+                                  alignment: PlaceholderAlignment.middle,
+                                  child: IntrinsicWidth(
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: TypingText(
+                                        words: const [
+                                          "Flutter Dev",
+                                          "Go Dev",
+                                          "Blogger",
+                                        ],
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.85),
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w400,
+                                          letterSpacing: 1.2,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: 500,
+                          child: Text(
+                            "I am Achiket Kumar, a highly motivated and skilled Full Stack Developer, with a passion for building robust, scalable applications. My experience is centered around the Flutter framework for mobile and web development, complemented by a strong backend foundation in Node.js and emerging proficiency in GoLang, which I proactively sought to learn for microservice development.",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.75),
+                              fontSize: 16,
+                              height: 1.4,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Opacity(
+                    opacity:
+                        ui.lerpDouble(
+                          0,
+                          0.4,
+                          (progress * 1.5).clamp(0.0, 1.0),
+                        )!,
+                    child: const Text(
+                      "PROJECTS",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildSlidingSection(
     double screenWidth,
     double screenHeight, {
@@ -743,7 +654,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
     required double slideInProgress,
     required double slideOutProgress,
   }) {
-    // 1. Determine which content widget to build (using renamed content getters)
     Widget content;
     switch (section) {
       case 'open_source':
@@ -761,37 +671,22 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
       default:
         return const SizedBox.shrink();
     }
-
-    // 2. Calculate Vertical Translation
-    // Slide in: screenHeight (off-screen bottom) -> 0.0 (center/pinned position)
     final double slideInCurve = Curves.easeOutCubic.transform(slideInProgress);
     double translationY = ui.lerpDouble(screenHeight, 0.0, slideInCurve)!;
-
-    // Slide out: 0.0 (center/pinned position) -> -screenHeight (off-screen top)
     if (slideOutProgress > 0.0) {
       final double slideOutCurve = Curves.easeInCubic.transform(
         slideOutProgress,
       );
-      // Overwrite translation to slide out from the pinned position (0.0)
       translationY = ui.lerpDouble(0.0, -screenHeight, slideOutCurve)!;
     }
-
-    // 3. Calculate Opacity
     double opacity = 1.0;
-    // Fade in while sliding in
     if (slideInProgress < 1.0) {
       opacity = slideInCurve;
     }
-    // Fade out while sliding out
     if (slideOutProgress > 0.0) {
-      // Use the inverse of slideOutProgress to control opacity
       opacity = 1.0 - slideOutProgress;
     }
-
-    // Ensure content disappears when it's supposed to be off-screen
     final bool ignoring = opacity < 0.01;
-
-    // 4. Return the translated and opaque content
     return IgnorePointer(
       ignoring: ignoring,
       child: Opacity(
@@ -804,11 +699,7 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
     );
   }
 
-  // Refactored helper function for Open Source Content
-  Widget _getOpenSourceContent(
-    double screenWidth,
-    double progress, // Now receives slideInProgress
-  ) {
+  Widget _getOpenSourceContent(double screenWidth, double progress) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -831,14 +722,10 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
               itemCount: openSourceContributions.length,
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
               itemBuilder: (context, index) {
-                // Staggered animation for each card uses the progress
                 final cardDelay = index * 0.1;
                 final cardProgress = (progress - cardDelay).clamp(0.0, 1.0);
                 final cardOpacity = Curves.easeOut.transform(cardProgress);
-
-                // Slide from right (horizontal entrance animation)
                 final slideOffset = (1 - cardProgress) * 100;
-
                 return Padding(
                   padding: EdgeInsets.only(left: slideOffset, right: 20),
                   child: Opacity(
@@ -854,11 +741,7 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
     );
   }
 
-  // Refactored helper function for Work Experience Content
-  Widget _getWorkExperienceContent(
-    double screenWidth,
-    double progress, // Now receives slideInProgress
-  ) {
+  Widget _getWorkExperienceContent(double screenWidth, double progress) {
     final experiences = [
       {
         'company': 'Tech Corp',
@@ -873,7 +756,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
         'description': 'Built scalable microservices with Go',
       },
     ];
-
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -895,9 +777,7 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
             final cardDelay = index * 0.15;
             final cardProgress = (progress - cardDelay).clamp(0.0, 1.0);
             final cardOpacity = Curves.easeOut.transform(cardProgress);
-            // Slide from left (internal entrance animation)
             final slideOffset = (1 - cardProgress) * 50;
-
             return Padding(
               padding: EdgeInsets.only(bottom: 20, left: slideOffset),
               child: Opacity(
@@ -951,11 +831,7 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
     );
   }
 
-  // Refactored helper function for Blogs Content
-  Widget _getBlogsContent(
-    double screenWidth,
-    double progress, // Now receives slideInProgress
-  ) {
+  Widget _getBlogsContent(double screenWidth, double progress) {
     final blogs = [
       {
         'title': 'Building Scalable Flutter Apps',
@@ -973,7 +849,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
         'url': 'https://yourblog.com/state-management',
       },
     ];
-
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1001,7 +876,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                 final cardProgress = (progress - cardDelay).clamp(0.0, 1.0);
                 final cardOpacity = Curves.easeOut.transform(cardProgress);
                 final slideOffset = (1 - cardProgress) * 100;
-
                 return Padding(
                   padding: EdgeInsets.only(left: slideOffset, right: 20),
                   child: Opacity(
@@ -1074,11 +948,7 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
     );
   }
 
-  // Refactored helper function for Contact Content
-  Widget _getContactContent(
-    double screenWidth,
-    double progress, // Now receives slideInProgress
-  ) {
+  Widget _getContactContent(double screenWidth, double progress) {
     final socials = [
       {
         'icon': Icons.code,
@@ -1088,20 +958,19 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
       {
         'icon': Icons.work,
         'name': 'LinkedIn',
-        'url': 'https://linkedin.com/in/achiket-kumar',
+        'url': 'https://www.linkedin.com/in/achiket-kumar-6b3505264/',
       },
       {
         'icon': Icons.language,
         'name': 'Twitter',
-        'url': 'https://twitter.com/achiket',
+        'url': 'https://twitter.com/achiketkumar',
       },
       {
         'icon': Icons.email,
         'name': 'Email',
-        'url': 'mailto:achiket@example.com',
+        'url': 'mailto:achiketkuma@gmail.com',
       },
     ];
-
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1129,7 +998,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
             ),
           ),
           const SizedBox(height: 40),
-          // Resume Download Button
           ElevatedButton.icon(
             onPressed:
                 () => _launchURL(
@@ -1156,7 +1024,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
             ),
           ),
           const SizedBox(height: 24),
-          // Social Icons
           Wrap(
             spacing: 20,
             runSpacing: 20,
@@ -1169,7 +1036,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
                   final iconProgress = (progress - iconDelay).clamp(0.0, 1.0);
                   final iconOpacity = Curves.easeOut.transform(iconProgress);
                   final scale = ui.lerpDouble(0.5, 1.0, iconProgress)!;
-
                   return Opacity(
                     opacity: iconOpacity,
                     child: Transform.scale(
@@ -1228,7 +1094,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
   Widget _buildOpenSourceCard(ContributionClass contribution) {
     const double cardWidth = 280;
     const double cardHeight = 120;
-
     return SizedBox(
       width: cardWidth,
       height: cardHeight,
@@ -1289,19 +1154,19 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
     final double startX = screenWidth / 2;
     final double startY = screenHeight;
     final double maxAngle = pi / 2.5;
-    final double horizontalDistance = screenWidth * 0.25;
-    final double verticalDistance = screenHeight * 0.7;
+    // MODIFICATION: Increased horizontal and vertical travel distance for faster movement
+    final double horizontalDistance = screenWidth * 0.35;
+    final double verticalDistance = screenHeight * 0.9;
     final double curveIntensity = screenHeight * 0.1;
     final curve = Curves.easeInOutCubic;
     final double widgetHalfWidth = screenWidth * 0.175;
-    const double spacingBetweenContainers = 0.18;
-
+    // MODIFICATION: Decreased spacing to make the animation sequence quicker
+    const double spacingBetweenContainers = 0.15;
     return Stack(
       children: List.generate(projects.length, (index) {
         final offset = index * spacingBetweenContainers;
-        double adjustedProgress = (progress - offset).clamp(0.0, 1.0);
+        double adjustedProgress = ((progress * 1.8) - offset).clamp(0.0, 1.0);
         if (adjustedProgress <= 0) return const SizedBox.shrink();
-
         adjustedProgress = curve.transform(adjustedProgress);
         final double xAngle = adjustedProgress * maxAngle;
         double mathY = isLeftSide ? -tan(-xAngle) : tan(xAngle);
@@ -1324,12 +1189,9 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
         final rotation = (1.0 - adjustedProgress) * (isLeftSide ? -0.12 : 0.12);
         final double finalLeftPosition = pathCenter - widgetHalfWidth;
         final double smoothY = adjustedTargetY + 60 * (1 - adjustedProgress);
-
         return Positioned(
           left: finalLeftPosition,
           top: smoothY - 100,
-          // Replaced the generic Transform with Matrix4.identity() with two simpler, specialized Transforms
-          // for potential performance benefits.
           child: Transform.rotate(
             angle: rotation,
             alignment: Alignment.center,
@@ -1360,7 +1222,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
     final sw = MediaQuery.of(context).size.width;
     double containerWidth = sw * 0.35;
     double containerHeight = sh * 0.25;
-
     return SizedBox(
       width: containerWidth,
       height: containerHeight,
@@ -1445,10 +1306,8 @@ class FramePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final frame = (currentIndex < frames.length) ? frames[currentIndex] : null;
     if (frame == null) return;
-
     final paint = Paint()..filterQuality = FilterQuality.low;
     final rect = Offset.zero & size;
-
     canvas.drawImageRect(
       frame,
       Rect.fromLTWH(0, 0, frame.width.toDouble(), frame.height.toDouble()),
