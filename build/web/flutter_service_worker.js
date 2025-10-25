@@ -3,7 +3,8 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"assets/AssetManifest.bin": "9efec270852aa550e67af7ce3616bf68",
+const RESOURCES = {"apple-touch-icon.png": "cbd0be6d587bc29cd578550f6a33983d",
+"assets/AssetManifest.bin": "9efec270852aa550e67af7ce3616bf68",
 "assets/AssetManifest.bin.json": "12813339e67744d31096824105503e21",
 "assets/AssetManifest.json": "4d37a302666abdeb7024319fc0295d95",
 "assets/assets/frames/frame_0001.png": "62fe954f209cabe8532d22b2754287ac",
@@ -1775,19 +1776,20 @@ const RESOURCES = {"assets/AssetManifest.bin": "9efec270852aa550e67af7ce3616bf68
 "canvaskit/skwasm_st.js": "9eeb36850f248a8e946442a13aaaa009",
 "canvaskit/skwasm_st.js.symbols": "ca49a44a388ecfe66ba43dd851d2b76d",
 "canvaskit/skwasm_st.wasm": "56c3973560dfcbf28ce47cebe40f3206",
-"favicon.png": "5dcef449791fa27946b3d35ad8803796",
+"favicon-96x96.png": "3f2b84a7df8b30fe41876440c13853b3",
+"favicon.ico": "fa10d91eef5c1b46b8afeee016e0e2f9",
+"favicon.svg": "b45d2e4e739a19c1fd04ff1f69fb38eb",
 "flutter.js": "888483df48293866f9f41d3d9274a779",
-"flutter_bootstrap.js": "1e6eac373f3e5a4f306c884b78ab994d",
-"icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
-"icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
-"icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
-"icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"index.html": "156f8959ef08d53e79afceb0ac186ceb",
-"/": "156f8959ef08d53e79afceb0ac186ceb",
+"flutter_bootstrap.js": "6a40d0df983d0261cdf243eb2a1b114f",
+"index.html": "edc2d80b1788c85177eefe6d35235969",
+"/": "edc2d80b1788c85177eefe6d35235969",
 "main.dart.js": "bc9bf6493002226146a599d5754bb753",
 "manifest.json": "e74af8957b5899dc6da961caee768ec9",
 "matrix.js": "d65c0bf2f86c5276e5c8108592030c14",
-"version.json": "009c9e65172e010890f7f65fde438006"};
+"site.webmanifest": "9090e674d41e265d5f03c180fe5f6721",
+"version.json": "009c9e65172e010890f7f65fde438006",
+"web-app-manifest-192x192.png": "de069b5b9823b0e8237822f2506eadfe",
+"web-app-manifest-512x512.png": "bd3a93a6a892f176b64fd7e5f3dd601e"};
 // The application shell files that are downloaded before a service worker can
 // start.
 const CORE = ["main.dart.js",
