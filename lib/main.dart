@@ -324,114 +324,115 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body:
-          _isInitialLoadComplete
-              ? Listener(
-                onPointerSignal: (event) {
-                  if (event is PointerScrollEvent) {
-                    _scrollController.jumpTo(
-                      (_scrollController.offset + event.scrollDelta.dy).clamp(
-                        0.0,
-                        _scrollController.position.maxScrollExtent,
-                      ),
-                    );
-                  }
-                },
-                behavior: HitTestBehavior.translucent,
-                child: Stack(
-                  children: [
-                    ValueListenableBuilder<double>(
-                      valueListenable: _scrollProgress,
-                      builder: (context, progress, _) {
-                        const double fadeStart = 0.60;
-                        const double fadeEnd = uiCutOffPoint;
-
-                        double backgroundOpacity = 1.0;
-                        if (progress > fadeStart && progress < fadeEnd) {
-                          final t =
-                              (progress - fadeStart) / (fadeEnd - fadeStart);
-                          backgroundOpacity = 1.0 - t;
-                        } else if (progress >= fadeEnd) {
-                          backgroundOpacity = 0.0;
-                        }
-
-                        return Opacity(
-                          opacity: backgroundOpacity.clamp(0.0, 1.0),
-                          child: Stack(
-                            children: [
-                              IgnorePointer(
-                                child: ValueListenableBuilder<int>(
-                                  valueListenable: _currentFrameNotifier,
-                                  builder: (context, frameIndex, _) {
-                                    return CustomPaint(
-                                      size: Size(screenWidth, screenHeight),
-                                      painter: FramePainter(
-                                        _decodedFrames,
-                                        frameIndex,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              const _StaticBlurOverlay(sigmaX: 5, sigmaY: 5),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-
-                    NotificationListener<ScrollNotification>(
-                      onNotification: (_) => false,
-                      child: SingleChildScrollView(
-                        controller: _scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: Container(
-                          height: screenHeight * 15,
-                          color: Colors.transparent,
-                        ),
-                      ),
-                    ),
-
-                    ValueListenableBuilder<double>(
-                      valueListenable: _scrollProgress,
-                      builder: (context, progress, _) {
-                        if (progress >= uiCutOffPoint) {
-                          return const SizedBox.shrink();
-                        }
-                        return Stack(
-                          children: [
-                            _buildIntroAndProjectsTitle(
-                              screenWidth: screenWidth,
-                              screenHeight: screenHeight,
-                              progress: progress,
-                            ),
-                            _buildTanPathWidgets(
-                              screenWidth: screenWidth,
-                              screenHeight: screenHeight,
-                              progress: progress,
-                              isLeftSide: true,
-                              projects: pinnedProjects.sublist(3, 6),
-                            ),
-                            _buildTanPathWidgets(
-                              screenWidth: screenWidth,
-                              screenHeight: screenHeight,
-                              progress: progress,
-                              isLeftSide: false,
-                              projects: pinnedProjects.sublist(0, 3),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-
-                    _buildSectionListener('open_source', 0.75, 0.79, 0.83),
-                    _buildSectionListener('work_experience', 0.83, 0.87, 0.91),
-                    _buildSectionListener('blogs', 0.91, 0.95, 0.99),
-                    _buildSectionListener('contact', 0.99, 1.0, 1.5),
-                  ],
+      body: CircularRevealWrapper(
+        isLoading: !_isInitialLoadComplete,
+        // loadingWidget: const LoadingWidget(),
+        transitionDuration: const Duration(milliseconds: 800),
+        child: Listener(
+          onPointerSignal: (event) {
+            if (event is PointerScrollEvent) {
+              _scrollController.jumpTo(
+                (_scrollController.offset + event.scrollDelta.dy).clamp(
+                  0.0,
+                  _scrollController.position.maxScrollExtent,
                 ),
-              )
-              : const Center(child: LoadingWidget()),
+              );
+            }
+          },
+          behavior: HitTestBehavior.translucent,
+          child: Stack(
+            children: [
+              ValueListenableBuilder<double>(
+                valueListenable: _scrollProgress,
+                builder: (context, progress, _) {
+                  const double fadeStart = 0.60;
+                  const double fadeEnd = uiCutOffPoint;
+
+                  double backgroundOpacity = 1.0;
+                  if (progress > fadeStart && progress < fadeEnd) {
+                    final t = (progress - fadeStart) / (fadeEnd - fadeStart);
+                    backgroundOpacity = 1.0 - t;
+                  } else if (progress >= fadeEnd) {
+                    backgroundOpacity = 0.0;
+                  }
+
+                  return Opacity(
+                    opacity: backgroundOpacity.clamp(0.0, 1.0),
+                    child: Stack(
+                      children: [
+                        IgnorePointer(
+                          child: ValueListenableBuilder<int>(
+                            valueListenable: _currentFrameNotifier,
+                            builder: (context, frameIndex, _) {
+                              return CustomPaint(
+                                size: Size(screenWidth, screenHeight),
+                                painter: FramePainter(
+                                  _decodedFrames,
+                                  frameIndex,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        const _StaticBlurOverlay(sigmaX: 5, sigmaY: 5),
+                      ],
+                    ),
+                  );
+                },
+              ),
+
+              NotificationListener<ScrollNotification>(
+                onNotification: (_) => false,
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Container(
+                    height: screenHeight * 15,
+                    color: Colors.transparent,
+                  ),
+                ),
+              ),
+
+              ValueListenableBuilder<double>(
+                valueListenable: _scrollProgress,
+                builder: (context, progress, _) {
+                  if (progress >= uiCutOffPoint) {
+                    return const SizedBox.shrink();
+                  }
+                  return Stack(
+                    children: [
+                      _buildIntroAndProjectsTitle(
+                        screenWidth: screenWidth,
+                        screenHeight: screenHeight,
+                        progress: progress,
+                      ),
+                      _buildTanPathWidgets(
+                        screenWidth: screenWidth,
+                        screenHeight: screenHeight,
+                        progress: progress,
+                        isLeftSide: true,
+                        projects: pinnedProjects.sublist(3, 6),
+                      ),
+                      _buildTanPathWidgets(
+                        screenWidth: screenWidth,
+                        screenHeight: screenHeight,
+                        progress: progress,
+                        isLeftSide: false,
+                        projects: pinnedProjects.sublist(0, 3),
+                      ),
+                    ],
+                  );
+                },
+              ),
+
+              _buildSectionListener('open_source', 0.75, 0.79, 0.83),
+              _buildSectionListener('work_experience', 0.83, 0.87, 0.91),
+              _buildSectionListener('blogs', 0.91, 0.95, 0.99),
+              _buildSectionListener('contact', 0.99, 1.0, 1.5),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
