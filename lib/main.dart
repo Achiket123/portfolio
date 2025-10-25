@@ -326,7 +326,6 @@ class _ScrollVideoPageState extends State<ScrollVideoPage> {
       backgroundColor: Colors.transparent,
       body: CircularRevealWrapper(
         isLoading: !_isInitialLoadComplete,
-        // loadingWidget: const LoadingWidget(),
         transitionDuration: const Duration(milliseconds: 800),
         child: Listener(
           onPointerSignal: (event) {

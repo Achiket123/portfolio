@@ -195,18 +195,31 @@ class _CircularRevealWrapperState extends State<CircularRevealWrapper>
         // 2. Loading Overlay (Fades out quickly)
         Widget loadingOverlay = IgnorePointer(
           ignoring: _controller.value > 0,
-          child: Opacity(
-            opacity: _loaderFadeAnimation.value,
-            child: Container(
-              color: Colors.black.withOpacity(_loaderFadeAnimation.value * 0.9),
-              child: Center(
-                // USING THE NEW BLOB LOADER
-                child: BlobLoader(
-                  color: widget.accentColor,
-                  size: 80, // Slightly larger for better visual impact
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Opacity(
+                  opacity: _loaderFadeAnimation.value,
+                  child: Container(
+                    color: Colors.black.withOpacity(
+                      _loaderFadeAnimation.value * 0.9,
+                    ),
+                    child: BlobLoader(
+                      color: Colors.green,
+                      size: 80, // Slightly larger for better visual impact
+                    ),
+                  ),
                 ),
               ),
-            ),
+              Center(
+                child: Text(
+                  "Yammettee Kudaassaaii...🥵🥵🥵",
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ),
+            ],
           ),
         );
 
