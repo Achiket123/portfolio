@@ -1,0 +1,38 @@
+// dart format off
+// ignore_for_file: type=lint
+
+// GENERATED FILE, DO NOT MODIFY
+// Generated with jaspr_builder
+
+import 'package:jaspr/server.dart';
+import 'package:portfolio/components/header.dart' as _header;
+import 'package:portfolio/constants/theme.dart' as _theme;
+import 'package:portfolio/pages/home.dart' as _home;
+import 'package:portfolio/app.dart' as _app;
+
+/// Default [ServerOptions] for use with your Jaspr project.
+///
+/// Use this to initialize Jaspr **before** calling [runApp].
+///
+/// Example:
+/// ```dart
+/// import 'main.server.options.dart';
+///
+/// void main() {
+///   Jaspr.initializeApp(
+///     options: defaultServerOptions,
+///   );
+///
+///   runApp(...);
+/// }
+/// ```
+ServerOptions get defaultServerOptions => ServerOptions(
+  clientId: 'main.client.dart.js',
+  clients: {_home.Home: ClientTarget<_home.Home>('home')},
+  styles: () => [
+    ..._theme.styles,
+    ..._app.App.styles,
+    ..._header.Header.styles,
+    ..._home.HomeState.styles,
+  ],
+);
