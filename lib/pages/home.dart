@@ -117,27 +117,29 @@ class HomeState extends State<Home> {
     final topRepos = _repos.toList();
 
     return main_([
-    
       section(id: 'home', classes: 'hero', [
         p(classes: 'eyebrow', [.text('FULL STACK DEVELOPER/ENGINEER')]),
-          img(
-    src:  '/assets/achiket.png',
-    alt: 'Achiket Kumar',
-    classes: 'profile-pic',
-  ),
+        img(
+          src: '/assets/achiket.png',
+          alt: 'Achiket Kumar',
+          classes: 'profile-pic',
+        ),
         h1(classes: 'name-row', [
-  .text('Achiket Kumar'),
-  
-]),
+          .text('Achiket Kumar'),
+        ]),
         p(classes: 'lead', [
           .text(
             'I build fast Flutter + Go/Node products with real-time systems, clean UX, and production-first execution.',
           ),
         ]),
 
-        div(classes: "pic",[
-         p([  .text('👋',)],classes: "pic")
-       ]),
+        div(classes: "pic", [
+          p([
+            .text(
+              '👋',
+            ),
+          ], classes: "pic"),
+        ]),
         div(classes: 'hero-actions', [
           a(
             href: 'mailto:achiketkuma@gmail.com',
@@ -156,7 +158,11 @@ class HomeState extends State<Home> {
             classes: 'btn btn-ghost',
             [.text('LinkedIn')],
           ),
-          a(href: "https://drive.google.com/file/d/13KtJgodJv8Hmrm2_Bw1QdAZJoJAO53Hy/view?usp=sharing", classes: 'btn btn-ghost', [.text('Resume')]),
+          a(
+            href: "https://drive.google.com/file/d/13KtJgodJv8Hmrm2_Bw1QdAZJoJAO53Hy/view?usp=sharing",
+            classes: 'btn btn-ghost',
+            [.text('Resume')],
+          ),
         ]),
       ]),
       section(id: 'experience', classes: 'panel', [
@@ -250,6 +256,7 @@ class HomeState extends State<Home> {
             "Test-Driven Development",
             "Docker",
             "CI/CD",
+            "Mongo DB",
             "Shell Scripting",
           ])
             span(classes: 'chip', [.text(item)]),
@@ -271,14 +278,17 @@ class HomeState extends State<Home> {
           ),
         ]),
       ]),
-      section(
-        classes: 'center',
-        [
-          
+      section(classes: 'center', [
         p([.text('Made with '), .text('❤️'), .text(' by Achiket Kumar')], classes: 'meta'),
       ]),
-       div(classes: "center" ,[ .text("&",)]),
-       div(classes: "center" ,[JasprBadge.darkTwoTone(),])
+      div(classes: "center", [
+        .text(
+          "&",
+        ),
+      ]),
+      div(classes: "center", [
+        JasprBadge.darkTwoTone(),
+      ]),
     ]);
   }
 
@@ -288,8 +298,8 @@ class HomeState extends State<Home> {
       display: .flex,
       alignItems: .center,
       justifyContent: .center,
-      // padding: .symmetric(vertical: 2.rem),
 
+      // padding: .symmetric(vertical: 2.rem),
     ),
     css('main').styles(width: 100.percent),
     css('.hero, .panel').styles(
@@ -299,19 +309,19 @@ class HomeState extends State<Home> {
       padding: .symmetric(horizontal: 1.2.rem, vertical: 2.4.rem),
     ),
     css('.name-row').styles(
-    display: .flex,
-    alignItems: .center,
-    gap: Gap(row: 1.rem),
-    flexWrap: .wrap,
-  ),
-  css('.profile-pic').styles(
-    width: 80.px,
-    height: 80.px,
-    alignContent: AlignContent.end,
-    radius: .all(.circular(40.px)), // circular avatar
-    border: Border.all(color: const Color('#6EA8FF'), width: 2.px),
-    boxSizing: BoxSizing.contentBox
-  ),
+      display: .flex,
+      alignItems: .center,
+      gap: Gap(row: 1.rem),
+      flexWrap: .wrap,
+    ),
+    css('.profile-pic').styles(
+      width: 80.px,
+      height: 80.px,
+      alignContent: AlignContent.end,
+      radius: .all(.circular(40.px)), // circular avatar
+      border: Border.all(color: const Color('#6EA8FF'), width: 2.px),
+      boxSizing: BoxSizing.contentBox,
+    ),
     css('.eyebrow').styles(
       color: const Color('#A6C4FF'),
       letterSpacing: 1.5.px,
