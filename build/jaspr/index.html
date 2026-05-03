@@ -1,367 +1,1190 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="icon" type="image/png" href="assets/achiket.png"/>
     <base href="/"/>
     <meta charset="utf-8"/>
     <style>
-      @import url(https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Manrope:wght@400;600;700&display=swap);
+      @import url(https://fonts.googleapis.com/css2?family=Just+Another+Hand&family=Special+Elite&display=swap);
       html, body {
-        width: 150%;
+        width: 100%;
         min-height: 100vh;
         padding: 0;
-        font-family: 'Manrope', sans-serif;
-        background-color: #060910;
-      }
-      h1, h2, h3, h4 {
         margin: 0;
-        font-family: 'Space Grotesk', sans-serif;
+        color: var(--text);
+        font-family: 'Special Elite', serif;
+        background-color: var(--bg);
+        background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+        background-size: 40px 40px;
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
-      * {
+      *, *::before, *::after {
+        padding: 0;
+        margin: 0;
         box-sizing: border-box;
       }
+      :root {
+        --bg: #FFFFFF;
+        --bg-card: #FFFFFF;
+        --text: #000000;
+        --text-muted: #333333;
+        --accent: #000000;
+        --accent-dim: rgba(0,0,0,0.05);
+        --border: #000000;
+        --grid-color: rgba(0,0,0,0.05);
+        --chaos-radius-1: 4% 95% 6% 95% / 95% 4% 92% 5%;
+        --chaos-radius-2: 95% 4% 92% 5% / 4% 95% 6% 95%;
+        --chaos-radius-3: 15px 50px 30px 5px / 10px 5px 50px 30px;
+        --chaos-path-1: polygon(2% 2%, 98% 4%, 99% 98%, 4% 96%);
+        --chaos-path-2: polygon(1% 5%, 95% 2%, 98% 94%, 5% 92%);
+        --chaos-path-3: polygon(4% 1%, 99% 3%, 96% 99%, 1% 97%);
+      }
+      body.dark {
+        --bg: #0D0D0D;
+        --bg-card: #141414;
+        --text: #F0F0F0;
+        --text-muted: #888888;
+        --accent: #39FF14;
+        --accent-dim: rgba(57,255,20,0.15);
+        --border: rgba(255,255,255,0.12);
+        --grid-color: rgba(57,255,20,0.03);
+      }
+      h1, h2, h3, h4, h5 {
+        margin: 0;
+        font-family: 'Just Another Hand', cursive;
+        font-weight: 400;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+      }
+      img {
+        display: block;
+      }
     </style>
+    <link sizes="180x180" href="/assets/favicon_io/apple-touch-icon.png" rel="apple-touch-icon"/>
+    <link sizes="32x32" href="/assets/favicon_io/favicon-32x32.png" rel="icon" type="image/png"/>
+    <link sizes="16x16" href="/assets/favicon_io/favicon-16x16.png" rel="icon" type="image/png"/>
+    <link href="/assets/favicon_io/site.webmanifest" rel="manifest"/>
     <!--$-->
     <title>Achiket Kumar | Full Stack Developer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Full-stack engineer building digital blueprints from messy thoughts."/>
     <!--/-->
     <script src="main.client.dart.js" defer></script>
     <style>
-      @import url(https://fonts.googleapis.com/css?family=Roboto);
+      @import url(https://fonts.googleapis.com/css2?family=Just+Another+Hand&family=Special+Elite&display=swap);
+      :root {
+        --bg: #FFFFFF;
+        --bg-card: #FFFFFF;
+        --text: #000000;
+        --text-muted: #333333;
+        --accent: #000000;
+        --accent-dim: rgba(0,0,0,0.05);
+        --border: #000000;
+        --grid-color: rgba(0,0,0,0.05);
+        --chaos-radius-1: 255px 15px 225px 15px / 15px 225px 15px 255px;
+        --chaos-radius-2: 15px 225px 15px 255px / 255px 15px 225px 15px;
+        --chaos-radius-3: 4% 95% 6% 95% / 95% 4% 92% 5%;
+        --chaos-path-1: polygon(2% 2%, 98% 4%, 99% 98%, 4% 96%);
+        --chaos-path-2: polygon(1% 5%, 95% 2%, 98% 94%, 5% 92%);
+        --chaos-path-3: polygon(4% 1%, 99% 3%, 96% 99%, 1% 97%);
+        --messy-lines: 1.5px 2px 0px 0px var(--border), -1.5px -1.5px 0px 0px var(--border), 2px -1px 0px 0px var(--border);
+      }
+      body.dark {
+        --bg: #0D0D0D;
+        --bg-card: #141414;
+        --text: #F0F0F0;
+        --text-muted: #888888;
+        --accent: #39FF14;
+        --accent-dim: rgba(57,255,20,0.15);
+        --border: rgba(255,255,255,0.4);
+        --grid-color: rgba(57,255,20,0.03);
+      }
       html, body {
-        width: 100%;
+        color: var(--text);
+        font-family: 'Special Elite', serif;
+        background-color: var(--bg);
+        transition: background-color 0.3s ease, color 0.3s ease;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      body::-webkit-scrollbar {
+        display: none;
+      }
+      h1, h2, h3, h4, h5 {
+        font-family: 'Just Another Hand', cursive;
+        font-weight: 400;
+        line-height: 1.1rem;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .app-root {
+        display: flex;
         min-height: 100vh;
-        padding: 0;
-        margin: 0;
-        font-family: 'Roboto', sans-serif;
+        color: var(--text);
+        background-color: var(--bg);
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
-      h1 {
-        margin: unset;
-        font-size: 4rem;
-      }
-      .main {
+      .app-main {
+        display: flex;
         min-height: 100vh;
-        color: #F4F7FF;
-        background-color: #0A1120;
+        margin-left: 260px;
+        margin-right: 260px;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow-x: hidden;
       }
-      .top-nav {
+      .app-content-layout {
+        display: flex;
+        position: relative;
+        flex-grow: 1;
+      }
+      .app-page-area {
+        min-width: 0px;
+        flex-grow: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      @media screen and (max-width: 1024px) {
+        .app-main {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+      .site-header {
         position: sticky;
         top: 0px;
+        z-index: 100;
         width: 100%;
+        padding: 1.5rem 2rem;
+        background-color: var(--bg);
+        backdrop-filter: blur(8px);
+      }
+      @media screen and (min-width: 1025px) {
+        .site-header {
+          width: 100%;
+        }
+      }
+      @media screen and (min-width: 1401px) {
+        .site-header {
+          width: 100%;
+        }
+      }
+      .header-inner {
+        display: flex;
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .brand-box {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border: 2px solid var(--accent);
+        box-shadow: 4px 4px 0 var(--accent);
+        clip-path: var(--chaos-path-1);
+        transition: all 0.2s;
+      }
+      .brand-box:hover {
+        box-shadow: 2px 2px 0 var(--accent);
+        transform: translate(2px, 2px);
+      }
+      .brand-text {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        column-gap: 2.5rem;
+      }
+      .header-nav {
+        display: flex;
+        align-items: center;
+        column-gap: 2rem;
+      }
+      .nav-link {
+        color: var(--text);
+        font-family: 'Special Elite', serif;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        transition: color 0.2s;
+      }
+      .nav-link:hover {
+        color: var(--accent);
+      }
+      .theme-toggle {
+        display: flex;
+        padding: 0.6rem;
+        border: solid var(--border) 2px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        transition: all 0.3s ease;
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-2);
+        color: var(--text);
+      }
+      .theme-toggle:hover {
+        background-color: var(--accent-dim);
+        transform: rotate(-5deg) scale(1.05);
+      }
+      .toggle-icon {
+        display: flex;
+        width: 24px;
+        height: 24px;
+        justify-content: center;
+        align-items: center;
+      }
+      .toggle-icon svg {
+        width: 20px;
+        height: 20px;
+      }
+      @media screen and (max-width: 768px) {
+        .header-nav {
+          display: none;
+        }
+        .brand-text {
+          font-size: 1.4rem;
+        }
+      }
+      .right-sidebar {
+        display: flex;
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        z-index: 101;
+        width: 260px;
+        height: 100vh;
+        padding: 2rem 1.5rem;
+        flex-direction: column;
+        background-color: var(--bg);
+        overflow: visible;
+      }
+      .sidebar-left-border-svg {
+        position: absolute;
+        top: 0;
+        left: -30px;
+        width: 60px;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+        z-index: 110;
+      }
+      .sidebar-title {
+        margin-bottom: 2rem;
+        color: var(--accent);
+        text-align: center;
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+      }
+      .posts-feed {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1.5rem;
+        flex-grow: 1;
+        overflow-y: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .posts-feed::-webkit-scrollbar {
+        display: none;
+      }
+      .post-card {
+        background: var(--bg-card);
+      }
+      .post-header {
+        display: flex;
+        margin-bottom: 0.5rem;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .post-type {
+        padding: 0.1rem 0.4rem;
+        color: var(--bg);
+        font-family: 'Special Elite';
+        font-size: 0.7rem;
+        font-weight: 700;
+        background-color: var(--accent);
+      }
+      .post-date {
+        color: var(--text-muted);
+        font-size: 0.65rem;
+      }
+      .post-content {
+        margin: 0;
+        font-size: 0.85rem;
+        line-height: 1.3rem;
+      }
+      @media screen and (max-width: 1024px) {
+        .right-sidebar {
+          display: none;
+        }
+      }
+      .sidebar {
+        display: flex;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        z-index: 101;
+        width: 260px;
+        height: 100vh;
+        padding: 2rem 1.5rem;
+        flex-direction: column;
+        background-color: var(--bg);
+        overflow: visible;
+      }
+      .sidebar-border-svg {
+        position: absolute;
+        top: 0;
+        right: -30px;
+        width: 60px;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+        z-index: 110;
+      }
+      .sidebar-profile {
+        margin-bottom: 3rem;
+        text-align: center;
+      }
+      .profile-img-box {
+        width: 90px;
+        height: 90px;
+        padding: 5px;
+        margin: 0 auto;
+        border: 2px solid var(--accent);
+        clip-path: var(--chaos-path-2);
+        border-radius: var(--chaos-radius-1);
+        background: var(--accent-dim);
+      }
+      .profile-img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        clip-path: var(--chaos-path-3);
+        border-radius: var(--chaos-radius-2);
+        filter: grayscale(100%) contrast(1.1);
+      }
+      .profile-name {
+        margin-top: 1.2rem;
+        margin-bottom: 0.3rem;
+        color: var(--accent);
+        font-size: 1.3rem;
+      }
+      .profile-sub {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.8rem;
+        flex-grow: 1;
+      }
+      .nav-item {
+        display: flex;
+        padding: 0.8rem 1rem;
+        align-items: center;
+        column-gap: 1rem;
+        color: var(--text);
+        transition: all 0.2s;
+        border: 1px solid transparent;
+      }
+      .nav-item:hover {
+        color: var(--accent);
+        border: 1.5px solid var(--accent);
+        clip-path: var(--chaos-path-1);
+        border-radius: var(--chaos-radius-3);
+        background-color: var(--accent-dim);
+      }
+      .nav-icon {
+        display: flex;
+        width: 24px;
+        height: 24px;
+        justify-content: center;
+        align-items: center;
+      }
+      .nav-icon svg {
+        width: 20px;
+        height: 20px;
+        stroke: currentColor;
+        fill: none;
+      }
+      .nav-label {
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+      .sidebar-footer {
+        padding: 1.2rem;
+        margin-top: auto;
+        border: 2px solid var(--border);
+        clip-path: var(--chaos-path-3);
+        border-radius: var(--chaos-radius-2);
+      }
+      .footer-quote {
+        color: var(--text-muted);
+        text-align: center;
+        font-size: 0.85rem;
+        font-style: italic;
+        line-height: 1.3rem;
+      }
+      @media screen and (max-width: 1024px) {
+        .sidebar {
+          display: none;
+        }
+      }
+      .sketch-box-container {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        background-color: var(--bg-card);
+        overflow: visible;
+      }
+      .sketch-svg {
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        width: calc(100% + 30px);
+        height: calc(100% + 30px);
+        pointer-events: none;
+        overflow: visible;
+        z-index: 10;
+      }
+      .sketch-content {
+        position: relative;
+        z-index: 2;
+      }
+      .sketch-timeline-container {
+        position: relative;
+        padding-left: 2.5rem;
+        margin-left: 2.5rem;
+        overflow: visible;
+      }
+      .sketch-timeline-svg {
+        position: absolute;
+        top: 0px;
+        left: -15px;
+        width: 30px;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+        z-index: 1;
+      }
+      .about-section {
         max-width: 1120px;
-        padding: 1rem 1.5rem;
+        padding: 4rem 2rem;
         margin-left: auto;
         margin-right: auto;
       }
-      .top-nav__inner {
+      .about-grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+      .about-list {
         display: flex;
-        padding: 0.9rem 1.7rem;
-        border: solid rgba(255,255,255,0.14);
-        border-radius: 999px;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        background-color: #0C141E;
+        flex-direction: column;
+        row-gap: 1.5rem;
       }
-      .brand {
-        color: #F5F6FA;
-        font-weight: 700;
-        text-decoration: none;
-        letter-spacing: 0.4px;
+      .about-list h3 {
+        margin-bottom: 0.5rem;
+        color: var(--accent);
+        font-size: 1.5rem;
       }
-      .top-nav ul {
-        display: flex;
-        padding: 0;
-        margin: 0;
-        flex-wrap: wrap;
-        justify-content: end;
+      .about-list p {
+        color: var(--text-muted);
+        line-height: 1.5rem;
       }
-      .top-nav li {
-        margin: 0.25rem 1.4rem;
+      .sketch-card {
+        padding: 2rem;
+        background-color: var(--bg-card);
+        border: 1.5px solid var(--border);
+        clip-path: var(--chaos-path-3);
+        border-radius: var(--chaos-radius-1);
       }
-      .top-nav a {
-        color: #D9E5FF;
-        font-size: 0.95rem;
-        text-decoration: none;
+      .availability-card {
+        color: var(--bg);
+        background-color: var(--accent);
+        border: 2px solid var(--border);
+        clip-path: var(--chaos-path-1);
+        border-radius: var(--chaos-radius-2);
       }
-      .top-nav a:hover {
-        color: white;
+      .availability-card h3 {
+        color: var(--bg);
       }
-      @media screen and (max-width: 760px) {
-        .top-nav {
-          padding: 0.7rem 0.7rem;
-        }
-        .top-nav__inner {
-          border-radius: 18px;
-          justify-content: center;
-        }
-        .brand {
-          width: 100%;
-          text-align: center;
-        }
-        .top-nav nav {
-          width: 100%;
-        }
-        .top-nav ul {
-          justify-content: center;
-        }
-        .top-nav a {
-          font-size: 0.9rem;
-        }
-      }
-      .center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      .availability-card p {
+        color: var(--bg);
       }
       main {
         width: 100%;
       }
-      .hero, .panel {
+      .section {
         width: 100%;
         max-width: 1120px;
-        padding: 2.4rem 1.2rem;
+        padding: 4rem 2rem;
         margin-left: auto;
         margin-right: auto;
       }
-      .name-row {
+      .hero-section {
+        padding: 5rem 2rem;
+      }
+      .hero-eyebrow {
+        margin-bottom: 2rem;
+      }
+      .eyebrow-tag {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+        border: 1.5px solid var(--accent);
+        padding: 2px 12px;
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-2);
+      }
+      .hero-content {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+        column-gap: 4rem;
+      }
+      .hero-left {
+        flex-grow: 1;
+        min-width: 280px;
+      }
+      .hero-right {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1.5rem;
+        min-width: 220px;
+      }
+      .hero-title {
+        margin-bottom: 1.5rem;
+        font-size: 4.5rem;
+        line-height: 1.25em;
+      }
+      .accent-text {
+        color: var(--accent);
+      }
+      .hero-desc {
+        margin-bottom: 2.5rem;
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6rem;
+        max-width: 580px;
+      }
+      .hero-cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 1.5rem;
+      }
+      .availability-card {
+        margin: 12px;
+        background-color: var(--text);
+        position: relative;
+        overflow: visible;
+      }
+      .availability-card .availability-label {
+        color: var(--bg);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+      }
+      .availability-card .availability-status {
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        color: var(--bg);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 3.2rem;
+        line-height: 1.25em;
+      }
+      .availability-card .availability-desc {
+        color: var(--bg);
+        font-size: 0.95rem;
+        line-height: 1.4rem;
+      }
+      .quote-strip {
+        padding: 2rem 0rem;
+        margin-top: 5rem;
+        border-top: 2px dashed var(--border);
+        border-bottom: 2px dashed var(--border);
+      }
+      .quote-text {
+        color: var(--text-muted);
+        text-align: center;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 2rem;
+        background-image: linear-gradient(var(--accent-dim) 1px, transparent 1px);
+        background-size: 100% 1.2em;
+      }
+      .section-header {
+        margin-bottom: 3rem;
+      }
+      .section-label {
+        display: block;
+        margin-bottom: 0.8rem;
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+      }
+      .section-title {
+        font-size: 2.8rem;
+        line-height: 2rem;
+        max-width: 850px;
+      }
+      .underline-sketch {
+        background-color: var(--accent-dim);
+        padding: 0 4px;
+        border-bottom: 2px solid var(--accent);
+      }
+      .sketch-box-container {
+        margin: 1.2rem;
+        transition: transform 0.2s ease;
+      }
+      .sketch-box-container:hover {
+        transform: translateY(-5px) rotate(-1deg);
+      }
+      .sketch-btn {
+        display: inline-block;
+        padding: 0.6rem 1.5rem;
+        cursor: pointer;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.4rem;
+        border-radius: var(--chaos-radius-2);
+        transition: opacity 0.2s, transform 0.2s;
+      }
+      .sketch-btn:hover {
+        opacity: 0.9;
+        transform: scale(1.02) rotate(-1deg);
+      }
+      .sketch-btn-accent {
+        color: var(--bg);
+        background-color: var(--accent);
+        border: none;
+      }
+      .sketch-btn-ghost {
+        color: var(--text);
+        background-color: transparent;
+        border: 2.5px solid var(--border);
+      }
+      .projects-grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      }
+      .project-card {
+        display: flex;
+        flex-direction: column;
         row-gap: 1rem;
       }
-      .profile-pic {
-        width: 80px;
-        height: 80px;
-        box-sizing: content-box;
-        border: solid #6EA8FF 2px;
-        border-radius: 40px;
-        align-content: end;
+      .project-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
-      .eyebrow {
-        color: #A6C4FF;
-        font-size: 0.8rem;
-        font-weight: 600;
-        letter-spacing: 1.5px;
+      .project-subtitle {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
       }
-      pic {
-        width: 1.2rem;
-        height: 1.2rem;
-        border: solid red;
-        border-radius: 12px;
-        color: #F4F7FF;
-        font-size: 200px;
-        background-color: red;
+      .project-icon {
+        color: var(--text-muted);
+        font-size: 1.2rem;
       }
-      .lead {
-        color: #D6DDF7;
+      .project-title {
+        font-size: 2.2rem;
       }
-      .hero-actions {
+      .project-desc {
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.6rem;
+        flex: 1;
+      }
+      .tech-tags {
         display: flex;
         flex-wrap: wrap;
+        gap: 0.5rem;
       }
-      .btn {
-        display: inline-block;
-        padding: 0.7rem 1rem;
-        border: solid rgba(255,255,255,0.2);
-        border-radius: 12px;
-        font-weight: 600;
-        text-decoration: none;
+      .tech-tag {
+        padding: 0.25rem 0.8rem;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+        border: 1px solid var(--border);
+        border-radius: 3px;
       }
-      .btn-primary {
-        color: #0A1020;
-        background-color: #6EA8FF;
+      .project-actions {
+        display: flex;
+        margin-top: 0.8rem;
+        flex-wrap: wrap;
+        column-gap: 1rem;
       }
-      .btn-ghost {
-        color: #E8EEFF;
+      .timeline-entry {
+        position: relative;
       }
-      .timeline, .grid {
-        display: grid;
+      .timeline-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 7px;
+        background-color: var(--bg);
+        position: absolute;
+        left: -3.15rem;
+        top: 2rem;
+        border: 2px solid var(--accent);
+        box-shadow: 0 0 8px var(--accent);
+        z-index: 5;
       }
-      .card {
-        padding: 1rem;
-        border: solid rgba(255,255,255,0.12);
-        border-radius: 18px;
-        background-color: rgba(14,20,34,0.82);
+      .timeline-card {
+        display: flex;
+        margin: 12px;
+        flex-direction: column;
+        row-gap: 1rem;
+        position: relative;
       }
-      h2 {
+      .timeline-card::before {
+        display: none;
+      }
+      .timeline-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .timeline-role {
+        font-size: 1.6rem;
+      }
+      .timeline-company {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+      }
+      .timeline-period {
+        color: var(--text-muted);
+        font-family: 'Special Elite', serif;
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+      .timeline-point {
+        margin-bottom: 0.4rem;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.5rem;
+      }
+      .skills-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
+      .skill-chip {
+        padding: 0.4rem 1.2rem;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+        border: 1.5px solid var(--border);
+        border-radius: var(--chaos-radius-2);
+        transition: all 0.2s;
+      }
+      .skill-chip:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        transform: rotate(-2deg) scale(1.05);
+      }
+      .contact-section {
+        padding: 6rem 2rem;
+        text-align: center;
+      }
+      .contact-title {
         margin-bottom: 1rem;
+        font-size: 3.5rem;
       }
-      .meta {
-        color: #9FB1DC;
-        font-size: 0.9rem;
+      .contact-sub {
+        margin-bottom: 2.5rem;
+        color: var(--text-muted);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.4rem;
       }
-      .stack {
-        color: #C7D5F5;
-        font-weight: 600;
-      }
-      .inline-link {
-        color: #9FCCFF;
-        font-weight: 600;
-        text-decoration: none;
-      }
-      .chips {
+      .contact-links {
         display: flex;
-        flex-wrap: wrap;
+        margin-bottom: 4rem;
+        justify-content: center;
+        column-gap: 2rem;
       }
-      .chip {
-        padding: 0.45rem 0.8rem;
-        border: solid rgba(151,188,255,0.35);
-        border-radius: 999px;
-        color: #EAF1FF;
-        background-color: rgba(151,188,255,0.16);
+      .contact-icon-link {
+        display: flex;
+        width: 60px;
+        height: 60px;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-muted);
+        font-size: 1.8rem;
+        border: 2px solid var(--border);
+        border-radius: var(--chaos-radius-3);
+        transition: all 0.2s;
       }
-      ul {
-        margin-left: 1.1rem;
+      .contact-icon-link:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        transform: scale(1.1) rotate(15deg);
+      }
+      .footer-credit {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
       }
       @media screen and (max-width: 760px) {
-        .hero, .panel {
-          padding: 1.6rem 0.9rem;
+        .section {
+          padding: 3rem 1.5rem;
+        }
+        .hero-title {
+          font-size: 3.2rem;
+        }
+        .section-title {
+          font-size: 2.2rem;
+        }
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
+        .contact-title {
+          font-size: 2.6rem;
+        }
+        .timeline {
+          padding-left: 2rem;
         }
       }
     </style>
   </head>
   <body>
-    <div class="main">
-      <header class="top-nav">
-        <div class="top-nav__inner">
-          <a class="brand" href="#home">Achiket Kumar</a>
-          <nav>
-            <ul>
-              <li><a href="#home">Home</a></li>
-              <li><a href="#experience">Work</a></li>
-              <li><a href="#projects">Projects</a></li>
-              <li><a href="#skills">Skills</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </nav>
+    <!--@app-->
+    <div class="app-root">
+      <aside class="sidebar">
+        <div class="sidebar-profile">
+          <div class="profile-img-box"><img alt="Achiket Kumar" src="/assets/achiket.png"/></div>
+          <h3 class="profile-name">Achiket Kumar</h3>
+          <p class="profile-sub">Dev Lab Journal v1.0</p>
         </div>
-      </header>
-      <!--@home-->
-      <main>
-        <section id="home" class="hero">
-          <p class="eyebrow">FULL STACK DEVELOPER/ENGINEER</p>
-          <img class="profile-pic" alt="Achiket Kumar" src="assets/achiket.png"/>
-          <h1 class="name-row">Achiket Kumar</h1>
-          <p class="lead">
-            I build fast Flutter + Go/Node products with real-time systems, clean UX, and production-first execution.
-          </p>
-          <div class="pic"><p class="pic">👋</p></div>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="mailto:achiketkuma@gmail.com">Email Me</a>
-            <a class="btn btn-ghost" href="https://github.com/Achiket123" target="_blank">GitHub</a>
-            <a class="btn btn-ghost" href="https://linkedin.com/in/achiket-kumar" target="_blank">LinkedIn</a>
-            <a class="btn btn-ghost" href="https://drive.google.com/file/d/13KtJgodJv8Hmrm2_Bw1QdAZJoJAO53Hy/view?usp=sharing">Resume</a>
+        <nav class="sidebar-nav">
+          <a class="nav-item" href="/">
+            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span>
+            <span class="nav-label">Home</span>
+          </a>
+          <a class="nav-item" href="#projects">
+            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg></span>
+            <span class="nav-label">Projects</span>
+          </a>
+          <a class="nav-item" href="#experience">
+            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+            <span class="nav-label">Experience</span>
+          </a>
+          <a class="nav-item" href="#skills">
+            <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg></span>
+            <span class="nav-label">Skills</span>
+          </a>
+        </nav>
+        <div class="sidebar-footer"><p class="footer-quote">"Code is just structured sketching."</p></div>
+        <svg class="sidebar-border-svg" viewBox="0 0 100 1000" preserveAspectRatio="none">
+          <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 37.9204382336311 -17.03605849961481 Q 56.576396674226544 24.077893137119418 52.44369459577791 44.168762324553796 Q 48.31099251732928 64.25963151198818 42.00970386164619 85.0875205559787 Q 35.7084152059631 105.91540959996922 37.19687168644171 123.6756043966177 Q 38.68532816692032 141.43579919326618 39.39592011956009 163.62640601288982 Q 40.10651207219985 185.81701283251346 51.92911560427399 207.73506748613772 Q 63.75171913634813 229.65312213976202 54.73378264522683 249.4391258126155 Q 45.715846154105535 269.2251294854689 50.78505417830806 289.0526236710799 Q 55.85426220251058 308.88011785669084 47.83628505060706 332.4316173070055 Q 39.81830789870353 355.9831167573202 38.13462238004132 376.3280383333011 Q 36.45093686137911 396.672959909282 48.102215186837945 417.65686707666623 Q 59.75349351229678 438.6407742440504 54.9293851239743 459.1638731628364 Q 50.10527673565182 479.6869720816224 53.487771566667774 502.3844291944 Q 56.870266397683736 525.0818863071776 47.6217131870228 541.879741659397 Q 38.37315997636186 558.6775970116166 50.18204600787667 582.2845432675375 Q 61.99093203939148 605.8914895234584 56.19866879642383 626.965347211325 Q 50.406405553456175 648.0392048991916 51.04410419863865 665.343344933973 Q 51.68180284382112 682.6474849687542 50.71993454980792 707.3234133179116 Q 49.758066255794716 731.999341667069 44.78083606044109 751.9437704901204 Q 39.80360586508746 771.8881993131718 47.004818335225934 792.8073425885432 Q 54.20603080536441 813.7264858639147 56.92554787623216 832.102920889876 Q 59.64506494709991 850.4793559158373 58.25467315353394 871.5556451121863 Q 56.86428135996797 892.6319343085353 53.4258360696555 915.4313179569965 Q 49.987390779343045 938.2307016054576 53.235943014427264 957.0870260375007 Q 56.48449524951148 975.9433504695436 58.12719991526227 995.8756906035038 L 59.76990458101305 1015.808030737464"></path>
+          <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 58.376134735769654 -20.358187263796403 Q 42.576756224217576 25.64736623284707 39.279205024937916 42.140946940861454 Q 35.981653825658256 58.63452764887584 41.85135852902489 81.40923343970651 Q 47.72106323239152 104.18393923053719 44.6463786529397 125.29915183541772 Q 41.571694073487876 146.41436444029824 44.81661874633872 166.9243480240012 Q 48.06154341918956 187.43433160770417 42.644395984786556 206.0441034320255 Q 37.22724855038355 224.65387525634682 48.855114046682516 250.0790509713391 Q 60.48297954298149 275.5042266863313 54.61069480407143 296.40487269589653 Q 48.73841006516137 317.30551870546174 56.58979404576134 335.7108171020206 Q 64.44117802636131 354.11611549857946 55.86095459846071 372.9920091539483 Q 47.28073117056011 391.8679028093171 48.47147965262383 416.4200755336195 Q 49.662228134687545 440.9722482579219 51.07308759560265 461.482003210262 Q 52.483947056517756 481.99175816260214 49.095211176069284 501.00221459504576 Q 45.70647529562082 520.0126710274894 46.99459573472424 540.2308263672589 Q 48.28271617382766 560.4489817070285 50.612689603219906 581.5583014088686 Q 52.94266303261216 602.6676211107089 55.39346669343656 622.4899224785692 Q 57.844270354260956 642.3122238464294 59.33667066867963 662.277672075374 Q 60.8290709830983 682.2431203043185 48.11556290589449 704.3560140638449 Q 35.40205482869068 726.4689078233713 41.13222506563604 750.5770574812392 Q 46.862395302581405 774.6852071391071 42.83126017380613 793.9954169857576 Q 38.80012504503086 813.3056268324083 44.93773109939622 831.6517569895148 Q 51.07533715376158 849.9978871466211 56.587226608718005 870.9314527252827 Q 62.09911606367443 891.8650183039443 60.78339815939985 914.9311453786738 Q 59.46768025512527 937.9972724534032 50.89331906240797 956.6682107759525 Q 42.31895786969067 975.3391490985018 50.83167584427292 997.0122335508156 L 59.34439381885518 1018.6853180031293"></path>
+        </svg>
+      </aside>
+      <div class="app-main">
+        <!--@header-->
+        <header class="site-header">
+          <div class="header-inner">
+            <div class="header-left"><a class="brand-box" href="/"><span class="brand-text">ACHIKET KUMAR</span></a></div>
+            <div class="header-right">
+              <nav class="header-nav">
+                <a class="nav-link" href="/#projects">PROJECTS</a>
+                <a class="nav-link" href="/#experience">EXPERIENCE</a>
+                <a class="nav-link" href="/#skills">SKILLS</a>
+                <a class="nav-link" href="/about">ABOUT</a>
+              </nav>
+            </div>
           </div>
-        </section>
-        <section id="experience" class="panel">
-          <h2>Work Experience</h2>
-          <div class="timeline">
-            <article class="card">
-              <h3>Full Stack Developer Intern · DST HUB LLP</h3>
-              <p class="meta">Aug 2024 - Jul 2025 · Virtual</p>
-              <ul>
-                <li>Optimized authentication flow, cutting login time by around 40%.</li>
-                <li>Built real-time chat with file sharing for 200+ concurrent users.</li>
-                <li>Developed CRM reducing manual data entry by 60%.</li>
-              </ul>
-            </article>
-            <article class="card">
-              <h3>Flutter Developer Intern · Ricoz.in</h3>
-              <p class="meta">Mar 2024 - Jul 2024 · Virtual</p>
-              <ul>
-                <li>Built 2 end-to-end apps with Node.js backends, each onboarding 500+ users.</li>
-                <li>Integrated Razorpay and real-time chat across both apps.</li>
-                <li>Deployed apps to Play Store with 4.2+ average ratings.</li>
-              </ul>
-            </article>
+        </header>
+        <!--/@header-->
+        <div class="app-content-layout">
+          <div class="app-page-area">
+            <!--@home-->
+            <main>
+              <section id="home" class="section hero-section">
+                <div class="hero-eyebrow"><span class="eyebrow-tag">System.init(portfolio)</span></div>
+                <div class="hero-content">
+                  <div class="hero-left">
+                    <h1 class="hero-title">Crafting <span class="accent-text">Digital Blueprints</span><br/>from Messy Thoughts.</h1>
+                    <p class="hero-desc">
+                      Full-stack engineer building tools that feel like hand-crafted machines. Currently exploring the intersection of creative coding and brutalist UI.
+                    </p>
+                    <div class="hero-cta-row">
+                      <a class="sketch-btn sketch-btn-accent" href="#projects">View the Lab</a>
+                      <a class="sketch-btn sketch-btn-ghost" href="https://drive.google.com/file/d/13KtJgodJv8Hmrm2_Bw1QdAZJoJAO53Hy/view?usp=sharing" target="_blank">Download Journal_</a>
+                    </div>
+                  </div>
+                  <div class="hero-right">
+                    <div class="sketch-box-container availability-card">
+                      <svg class="sketch-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+                        <path stroke="var(--bg)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 19.007443321269267 23.712161450410967 Q 113.45709535149615 13.29513722724812 163.5696498242612 10.636459368670128 Q 213.6822042970263 7.977781510092134 258.58907656022063 17.333931389727002 Q 303.49594882341495 26.69008126936187 354.69168535110657 20.928696900883057 Q 405.88742187879814 15.167312532404248 446.4879325871098 21.14500672893331 Q 487.0884432954215 27.12270092546237 536.3251408619444 18.664940824565782 Q 585.5618384284672 10.207180723669191 641.012615432805 18.33558416901708 Q 696.4633924371426 26.463987614364964 745.4643287455294 18.226242045557814 Q 794.4652650539161 9.988496476750663 845.1225710462904 7.479595842707796 Q 895.7798770386648 4.970695208664928 944.3533375998719 7.71625499890972 Q 992.926798161079 10.461814789154513 985.2931881019977 19.62410551433807 Q 977.6595780429165 28.786396239521626 977.8737979279235 66.05759907051373 Q 978.0880178129305 103.32880190150583 978.8624944291537 152.6919476318819 Q 979.6369710453768 202.055093362258 981.5255131485135 250.36091845722308 Q 983.4140552516501 298.66674355218817 989.1343520758794 344.4805162848792 Q 994.8546489001086 390.29428901757024 983.8039194380988 445.57890547469117 Q 972.7531899760891 500.86352193181216 985.1464991242192 541.673944438618 Q 997.5398082723492 582.484366945424 990.6323560038891 631.2019404377195 Q 983.724903735429 679.9195139300149 984.1984687022264 730.1175069517012 Q 984.6720336690237 780.3154999733875 986.2444414635454 829.7082035739421 Q 987.8168492580671 879.1009071744967 992.3243301736632 930.9688850656022 Q 996.8318110892593 982.8368629567077 985.0516184647461 978.9337645618248 Q 973.2714258402328 975.030666166942 928.8103379168481 976.4544311425535 Q 884.3492499934634 977.8781961181651 842.508247025757 985.4992222640531 Q 800.6672440580505 993.1202484099409 740.7022697999291 987.2824107862244 Q 680.7372955418077 981.4445731625079 638.5603295270848 976.4700999671516 Q 596.383363512362 971.4956267717951 541.8694620522447 973.9307918308637 Q 487.3555605921273 976.3659568899321 450.3372093634123 984.5336460998179 Q 413.3188581346972 992.7013353097037 365.91733611904635 988.2475395624226 Q 318.51581410339554 983.7937438151414 263.00346760273874 987.4073511925524 Q 207.49112110208188 991.0209585699635 163.68859315082693 987.9825365797535 Q 119.88606519957197 984.9441145895436 71.22942283257285 984.3901671814972 Q 22.572780465573725 983.8362197734508 19.682536997854825 989.7635146209597 Q 16.792293530135925 995.6908094684685 11.557612779381392 936.7100982881846 Q 6.322932028626859 877.7293871079005 8.960703569357054 836.5753650108126 Q 11.59847511008725 795.4213429137246 9.11173344714972 749.4311693483984 Q 6.6249917842121935 703.4409957830721 17.2430907496834 654.9117541202422 Q 27.86118971515461 606.3825124574122 24.47077904970225 549.357677654536 Q 21.080368384249894 492.3328428516599 17.585339559195077 450.6541672718605 Q 14.090310734140262 408.9754916920611 16.05533215447042 359.4418469826129 Q 18.020353574800577 309.9082022731647 9.305818489132463 257.44115424553377 Q 0.591283403464347 204.97410621790277 9.725547468548083 164.01650161562543 Q 18.85981153363182 123.05889701334806 12.740893511563353 67.10830387649945 Q 6.621975489494888 11.157710739650847 12.814709405382079 17.434936095030906 Q 19.007443321269267 23.712161450410967 19.007443321269267 23.712161450410967"></path>
+                        <path stroke="var(--bg)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 2.7770602650220226 17.568369197306353 Q 101.04271783615407 12.429267217519937 156.8514138908466 9.936828467411223 Q 212.66010994553915 7.444389717302508 256.46224219402006 7.60393806948807 Q 300.26437444250104 7.7634864216736315 356.1902515495442 10.394521266923995 Q 412.11612865658736 13.02555611217436 456.45609828020696 11.395167999350637 Q 500.79606790382655 9.764779886526915 543.2837456822257 11.907134869559775 Q 585.7714234606248 14.049489852592634 641.6279389709407 12.810050937554191 Q 697.4844544812565 11.570612022515748 739.0046387257316 19.630807987723156 Q 780.5248229702067 27.69100395293056 831.7636675129456 19.93393228821378 Q 883.0025120556845 12.176860623496996 932.7185403411634 12.137997746531697 Q 982.4345686266422 12.099134869566399 984.2697378856118 7.816374105677665 Q 986.1049071445814 3.533613341788932 983.2446088256966 63.11200000092997 Q 980.3843105068116 122.690386660071 984.2726873711488 161.26145442457346 Q 988.1610642354858 199.8325221890759 981.4275111219542 253.9432575514162 Q 974.6939580084228 308.0539929137565 981.6178027049605 359.6820027496145 Q 988.5416474014982 411.3100125854726 985.405392357781 448.95585064524397 Q 982.269137314064 486.60168870501536 976.1500669093286 539.9984050130922 Q 970.0309965045933 593.3951213211691 982.5077882705009 646.7595868326134 Q 994.9845800364085 700.1240523440576 987.6353938610382 749.8132270032471 Q 980.2862076856679 799.5024016624366 986.7728904486994 836.3145818023447 Q 993.2595732117309 873.1267619422528 985.4778140407407 928.0552331991817 Q 977.6960548697506 982.9837044561107 983.1806100089116 981.0290950002986 Q 988.6651651480724 979.0744855444866 941.6566896122592 980.8093849463221 Q 894.6482140764459 982.5442843481576 836.1586553980535 978.6935615269205 Q 777.6690967196611 974.8428387056833 732.5720320093064 972.4868982010827 Q 687.4749672989519 970.130957696482 637.7840540751324 984.0861009087735 Q 588.0931408513129 998.041244121065 550.1793415815841 991.5275215361683 Q 512.2655423118554 985.0137989512714 462.8909321203008 978.3021246360672 Q 413.5163219287463 971.5904503208632 352.30000783020137 980.294097005595 Q 291.08369373165635 988.9977436903268 249.1741414237535 990.9940574279512 Q 207.26458911585064 992.9903711655758 153.57516554415847 989.7051279431108 Q 99.88574197246628 986.4198847206459 64.49346354176092 989.3347349881523 Q 29.101185111055567 992.2495852556586 17.702454211231625 987.5874848603434 Q 6.30372331140768 982.9253844650281 11.77690018611416 931.5309082358124 Q 17.25007706082064 880.1364320065967 13.8440268960854 836.7200581802695 Q 10.43797673135016 793.3036843539423 10.208045663657835 742.0141392247411 Q 9.978114595965508 690.7245940955399 19.03217972589581 646.8863443569421 Q 28.086244855826113 603.0480946183442 29.030627502799227 547.2415643843618 Q 29.975010149772338 491.43503415037947 19.119470463799164 451.3662497055763 Q 8.263930777825992 411.29746526077315 18.639800618912872 352.98822980597777 Q 29.01567045999975 294.67899435118244 28.085458936124063 253.88132463920175 Q 27.15524741224838 213.08365492722106 26.4194185978353 168.1245073054116 Q 25.68358978342222 123.16535968360213 23.650394236341533 62.122985018323725 Q 21.61719868926085 1.0806103530453193 12.197129477141436 9.324489775175836 Q 2.7770602650220226 17.568369197306353 2.7770602650220226 17.568369197306353"></path>
+                      </svg>
+                      <div class="sketch-content" style="padding: 2rem">
+                        <p class="availability-label">Availability</p>
+                        <h2 class="availability-status">OPEN FOR COLLAB</h2>
+                        <p class="availability-desc">Looking for projects that challenge the status quo of web design.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="quote-strip">
+                  <p class="quote-text">"The best code is the one that looks like it was sketched by a human, executed by a machine."</p>
+                </div>
+              </section>
+              <section id="projects" class="section">
+                <div class="section-header">
+                  <span class="section-label">My Lab Experiments_</span>
+                  <h2 class="section-title">
+                    A collection of <span class="underline-sketch">unconventional prototypes</span> and production-grade tools designed in the middle of the night.
+                  </h2>
+                </div>
+                <div class="projects-grid">
+                  <div class="sketch-box-container project-card">
+                    <svg class="sketch-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+                      <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 19.747540535045626 2.8972727102702134 Q 121.10425433884984 18.909382419531987 158.31282114326285 22.722556011240943 Q 195.52138794767586 26.5357296029499 250.17695866817058 24.613605154746487 Q 304.8325293886653 22.69148070654308 346.62074802694383 21.114958514802744 Q 388.40896666522235 19.538436323062413 451.4502170319426 19.139519858495618 Q 514.4914673986628 18.740603393928826 550.3043126395734 18.111505889674106 Q 586.1171578804839 17.482408385419383 633.8211645114111 18.26016021096512 Q 681.5251711423384 19.03791203651086 731.6786630207944 10.723506909859715 Q 781.8321548992503 2.4091017832085697 829.3297949349787 9.47481875046833 Q 876.8274349707073 16.54053571772809 936.3648829177948 11.806537050414086 Q 995.9023308648825 7.072538383100082 997.4774248777015 10.307676569705329 Q 999.0525188905206 13.542814756310577 986.8654074103141 64.21129637891869 Q 974.6782959301077 114.8797780015268 978.704160594519 158.550292818042 Q 982.7300252589303 202.2208076345572 978.894753541056 258.21825794023835 Q 975.0594818231818 314.21570824591953 981.3281147389234 356.0694032077424 Q 987.596747654665 397.92309816956526 990.6094800155958 450.6741664823715 Q 993.6222123765265 503.42523479517774 987.414265124283 557.2161015346476 Q 981.2063178720397 611.0069682741174 980.7757472900877 658.0102693392009 Q 980.3451767081357 705.0135704042846 977.927638674446 755.3124628175832 Q 975.5101006407564 805.6113552308818 978.8055710346006 845.7444706448127 Q 982.1010414284448 885.8775860587436 982.6590682791341 936.9392759305043 Q 983.2170951298233 988.000965802265 986.5511741712486 989.843043645059 Q 989.8852532126739 991.6851214878529 943.6735332633891 988.1667826850659 Q 897.4618133141043 984.6484438822788 844.7038121159711 984.37096180328 Q 791.9458109178379 984.0934797242812 736.2864521525067 980.3961308297156 Q 680.6270933871756 976.69878193515 637.5145312547982 980.3881553164149 Q 594.4019691224208 984.0775286976797 542.7342617325868 985.1787964441985 Q 491.06655434275274 986.2800641907173 451.64390030214236 984.3562199313653 Q 412.22124626153203 982.4323756720133 352.0507863255857 982.9654149734971 Q 291.8803263896393 983.4984542749809 243.92228683290332 990.4872149222242 Q 195.96424727616733 997.4759755694676 160.97424746626828 985.122711364915 Q 125.98424765636925 972.7694471603623 77.88976375598263 979.6160907314188 Q 29.795279855595997 986.4627343024754 24.158370054897656 979.3102615611411 Q 18.521460254199315 972.1577888198069 23.637563999327625 935.6274909941861 Q 28.75366774445593 899.0971931685654 28.917641213384172 838.2158887465017 Q 29.081614682312413 777.3345843244381 27.133740410228576 738.9428419172218 Q 25.18586613814474 700.5510995100054 18.00444113627459 651.7342378964715 Q 10.82301613440444 602.9173762829377 12.938012520070698 550.1152098714833 Q 15.053008905736956 497.313043460029 22.452650984480968 450.4291765229167 Q 29.852293063224977 403.54530958580443 27.131827095070733 355.1177567286629 Q 24.41136112691649 306.6902038715215 21.32642309960682 254.07463926410267 Q 18.241485072297152 201.45907465668387 23.16194677157255 155.73675249200315 Q 28.082408470847945 110.01443032732243 26.39917460175627 63.98482430563254 Q 24.715940732664592 17.95521828394265 22.23174063385511 10.426245497106432 Q 19.747540535045626 2.8972727102702134 19.747540535045626 2.8972727102702134"></path>
+                      <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 7.218399892785933 22.011487266202742 Q 106.75377814571499 17.976878857717846 160.94733025546049 19.02564935031409 Q 215.140882365206 20.07441984291033 262.48700704170767 18.745649869015676 Q 309.8331317182093 17.41687989512102 357.1535738537733 18.814357464445074 Q 404.47401598933726 20.211835033769127 454.40360061883405 11.120860376018056 Q 504.3331852483309 2.0298857182669856 545.370194980685 13.222262059292348 Q 586.4072047130392 24.41463840031771 636.862818794769 12.622755486899525 Q 687.3184328764988 0.8308725734813418 739.6271882623437 13.145680088961402 Q 791.9359436481885 25.460487604441465 841.1509625996116 23.2340603090763 Q 890.3659815510347 21.007633013711136 933.5479648779925 20.332317370185134 Q 976.7299482049503 19.657001726659132 979.5315034649637 11.294615351053432 Q 982.3330587249771 2.9322289754477318 981.4566512930844 59.425061425405346 Q 980.5802438611917 115.91789387536296 987.6613062377321 169.2079896039603 Q 994.7423686142724 222.49808533255762 985.646041691791 269.594573939014 Q 976.5497147693096 316.6910625454704 974.4669490608474 352.46746030023394 Q 972.3841833523852 388.24385805499753 980.7430071646518 440.9353799625045 Q 989.1018309769183 493.6269018700115 994.3474133048007 548.5278406092173 Q 999.5929956326833 603.4287793484231 985.5402431281968 645.5053062225168 Q 971.4874906237104 687.5818330966106 984.3993185035388 737.7825257427232 Q 997.3111463833671 787.983218388836 995.8502557834615 831.0037406753729 Q 994.3893651835559 874.0242629619099 988.4831382024628 936.0839482757356 Q 982.5769112213696 998.1436335895612 989.6407132828908 999.0425205946951 Q 996.7045153444119 999.941407599829 935.9746514353556 997.4329874824198 Q 875.2447875262991 994.9245673650106 829.4000746348797 989.2713615450382 Q 783.5553617434605 983.6181557250657 734.2389763069191 977.996550755067 Q 684.9225908703777 972.3749457850683 643.8133774477642 983.4969650490368 Q 602.7041640251507 994.6189843130054 549.3788217220223 995.5250513038029 Q 496.0534794188939 996.4311182946005 444.7752635256713 986.8121537280529 Q 393.49704763244864 977.1931891615053 346.644537099669 980.057864597709 Q 299.7920265668893 982.9225400339127 255.68900351631595 983.5474395837939 Q 211.58598046574255 984.1723391336752 169.01091684782972 979.4114550261893 Q 126.43585322991689 974.6505709187032 76.19021448740098 982.6204647394611 Q 25.944575744885082 990.5903585602191 22.833736106168658 981.6356563114762 Q 19.72289646745223 972.6809540627332 14.420228285318487 923.1994330321165 Q 9.117560103184744 873.7179120014999 17.645953649883364 832.1793455519114 Q 26.174347196581984 790.6407791023229 27.263927151440043 738.9958070777759 Q 28.353507106298103 687.350835053229 26.92868532491836 640.1171711337784 Q 25.503863543538614 592.8835072143278 15.366774215990926 549.0036426065619 Q 5.229684888443238 505.12377799879613 6.127002777249063 458.27962212019133 Q 7.024320666054889 411.4354662415865 16.036458578239728 364.38757974100577 Q 25.048596490424565 317.339693240425 15.363868280056765 260.1345475801285 Q 5.679140069688966 202.92940191983203 4.354340239317594 162.4252688184287 Q 3.0295404089462217 121.92113571702535 14.42498355791466 66.56710832016402 Q 25.820426706883097 11.213080923302693 16.519413299834515 16.612284094752717 Q 7.218399892785933 22.011487266202742 7.218399892785933 22.011487266202742"></path>
+                    </svg>
+                    <div class="sketch-content" style="padding: 2rem">
+                      <div class="project-card-top"><p class="project-subtitle">Shazam Clone</p><span class="project-icon">[/]</span></div>
+                      <h3 class="project-title">Soundsalike</h3>
+                      <p class="project-desc">
+                        Audio-fingerprinting engine with Go backend and Flutter UI, handling 100+ concurrent identification requests.
+                      </p>
+                      <div class="tech-tags">
+                        <span class="tech-tag">Go</span>
+                        <span class="tech-tag">Flutter</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                      </div>
+                      <div class="project-actions">
+                        <a class="sketch-btn sketch-btn-accent" href="https://github.com/Achiket123?tab=repositories&amp;q=Soundsalike" target="_blank">Launch Experiment</a>
+                        <a class="sketch-btn sketch-btn-ghost" href="https://github.com/Achiket123" target="_blank">View Source</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="sketch-box-container project-card">
+                    <svg class="sketch-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+                      <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 27.397619424944374 23.705590391756697 Q 118.96614948881333 5.648160426822487 166.75979537879277 3.1161145656513405 Q 214.5534412687722 0.5840687044801935 264.21609568948884 4.679771576766244 Q 313.8787501102055 8.775474449052295 364.3968040754875 16.698340034185488 Q 414.91485804076956 24.62120561931868 450.38315247086905 14.03497551582719 Q 485.8514469009685 3.4487454123357004 541.6102625379802 2.1496390414131694 Q 597.369078174992 0.8505326704906384 642.4252833035182 9.826531495378095 Q 687.4814884320446 18.802530320265554 744.121042148571 17.29883010789441 Q 800.7605958650973 15.795129895523264 838.4792891562505 19.13752895642044 Q 876.1979824474037 22.47992801731761 923.9860681425284 11.419775440446218 Q 971.7741538376531 0.359622863574824 976.7732867625385 0.8201909519929185 Q 981.772419687424 1.280759040411013 981.2285889205357 50.65608550832606 Q 980.6847581536475 100.0314119762411 987.8275017189244 153.45258175816645 Q 994.9702452842014 206.8737515400918 985.8492435607911 258.6509737463284 Q 976.7282418373809 310.428195952565 987.8376702712156 356.4009842592266 Q 998.9470987050504 402.37377256588826 994.830290397317 444.66043831055947 Q 990.7134820895834 486.9471040552307 984.2976641187297 546.3901000258903 Q 977.881846147876 605.83309599655 978.3707670890619 643.1267773048301 Q 978.8596880302478 680.42045861311 985.3640158920098 740.4834838364022 Q 991.8683437537719 800.5465090596945 986.9046059905531 851.6069180001259 Q 981.9408682273342 902.6673269405574 989.9479817826008 939.7471534960821 Q 997.9550953378673 976.8269800516068 997.8069209401078 987.5163110469723 Q 997.6587465423485 998.2056420423377 944.5855047342866 988.5205142505215 Q 891.5122629262248 978.8353864587054 838.4400296484696 981.9552559897311 Q 785.3677963707144 985.0751255207567 738.9663530823123 991.6990476148335 Q 692.5649097939101 998.3229697089101 640.9053199066975 993.6147286634123 Q 589.2457300194849 988.9064876179144 546.5373514876305 988.9262814208363 Q 503.8289729557763 988.9460752237582 459.5593563402665 990.475965053694 Q 415.2897397247567 992.0058548836299 357.00998630699917 994.1412672764853 Q 298.7302328892417 996.2766796693408 255.1364503297049 993.9544437303432 Q 211.54266777016812 991.6322077913455 167.87685014714413 986.4115982610138 Q 124.2110325241201 981.190988730682 76.83092325418939 978.6287047211946 Q 29.450813984258666 976.0664207117072 26.060617182105034 973.7579232893839 Q 22.670420379951405 971.4494258670607 21.630003320717385 924.8424001685049 Q 20.589586261483362 878.2353744699492 14.07459884302117 839.0902186693789 Q 7.559611424558977 799.9450628688087 17.617719654512236 750.5159457251123 Q 27.675827884465498 701.0868285814158 14.735232353023978 643.2753968024778 Q 1.794636821582456 585.4639650235397 11.377824047993276 540.3712520322035 Q 20.961011274404093 495.27853904086743 10.924563905618216 453.8518154134595 Q 0.8881165368323387 412.4250917860516 5.597143846573156 361.6290303817726 Q 10.306171156313972 310.83296897749364 14.789307824222528 252.8337669398586 Q 19.272444492131083 194.83456490222358 15.902105474256597 146.7017907405175 Q 12.53176645638211 98.56901657881146 14.26030491833275 56.12485121773216 Q 15.988843380283388 13.680685856652854 21.693231402613883 18.693138124204776 Q 27.397619424944374 23.705590391756697 27.397619424944374 23.705590391756697"></path>
+                      <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 3.5416076625617343 1.8144591814254927 Q 118.71434274348088 26.775774438391636 166.3155471472687 25.614194198549725 Q 213.91675155105648 24.452613958707815 252.62743679831448 26.304165699437302 Q 291.3381220455725 28.15571744016679 340.81487353567087 16.117388248443646 Q 390.29162502576924 4.079059056720505 440.56046677859456 16.72198311405602 Q 490.8293085314198 29.364907171391536 546.8545608330197 17.86079940264362 Q 602.8798131346196 6.356691633895707 643.4666322428691 15.536659813524077 Q 684.0534513511185 24.716627993152446 731.74204420857 12.863427721547502 Q 779.4306370660213 1.0102274499425583 835.0384122403542 2.88664118489251 Q 890.6461874146871 4.763054919842462 941.3653177433471 8.690405757827573 Q 992.0844480720071 12.617756595812683 984.2070335766081 11.046453527215581 Q 976.329619081209 9.47515045861848 977.3202575629999 63.46998766460223 Q 978.3108960447909 117.46482487058597 984.5136737550814 161.9834235197818 Q 990.716451465372 206.50202216897762 993.3825618552676 261.53645412581756 Q 996.0486722451631 316.5708860826575 991.5818879140909 363.49677305564796 Q 987.1151035830187 410.42266002863835 991.750954243694 457.6938776611157 Q 996.3868049043693 504.9650952935931 993.3325709864109 554.7577372634926 Q 990.2783370684525 604.550379233392 987.1533802801446 655.5869336088258 Q 984.0284234918367 706.6234879842596 985.6619168932957 747.9069214871733 Q 987.2954102947546 789.190354990087 983.6968113369851 839.9478666193291 Q 980.0982123792156 890.7053782485713 975.9140584751663 935.6144047749385 Q 971.7299045711168 980.5234313013057 979.1237959242421 989.444392329049 Q 986.5176872773674 998.3653533567924 940.1163947451831 993.5353769513563 Q 893.7151022129989 988.70540054592 842.7873535270451 981.1223226222594 Q 791.8596048410913 973.5392446985986 748.4447773418636 977.0304734095893 Q 705.029949842636 980.5217021205799 645.6473029637593 987.2588268247349 Q 586.2646560848826 993.9959515288899 546.3416226185395 990.0461258922121 Q 506.4185891521964 986.0963002555343 455.5498358643339 981.5116747062206 Q 404.68108257647134 976.9270491569068 352.88064048880653 987.7723911754276 Q 301.08019840114173 998.6177331939483 255.70817214836825 998.92352032932 Q 210.33614589559474 999.2293074646917 158.03173043032533 997.6734776646166 Q 105.72731496505591 996.1176478645415 63.63197561312072 997.9389120435865 Q 21.536636261185535 999.7601762226313 24.909372442326603 988.4253492621781 Q 28.28210862346767 977.0905223017247 15.809285129232112 933.1487851880594 Q 3.336461634996555 889.207048074394 9.364106105225652 836.4065348383677 Q 15.391750575454749 783.6060216023415 19.487886738172552 733.933251298041 Q 23.584022900890357 684.2604809937405 26.55481475184509 636.0880537249757 Q 29.525606602799822 587.9156264562109 14.88597220264424 545.3424867698552 Q 0.24633780248865733 502.7693470834996 12.794753773859302 457.55794398328976 Q 25.343169745229947 412.34654088307997 15.740841833807302 351.96196386639366 Q 6.138513922384655 291.57738684970735 10.585255473620057 243.1073382548615 Q 15.031997024855459 194.63728966001565 17.107141254962276 151.69538839185805 Q 19.18228548506909 108.75348712370047 21.663683474789714 55.90550450001261 Q 24.145081464510334 3.057521876324758 13.843344563536034 2.4359905288751253 Q 3.5416076625617343 1.8144591814254927 3.5416076625617343 1.8144591814254927"></path>
+                    </svg>
+                    <div class="sketch-content" style="padding: 2rem">
+                      <div class="project-card-top"><p class="project-subtitle">Scrabble-style Word Game</p><span class="project-icon">[/]</span></div>
+                      <h3 class="project-title">InkBattle</h3>
+                      <p class="project-desc">
+                        Real-time 2-player game with matchmaking, leaderboard, and WebSocket sync averaging 300+ daily matches.
+                      </p>
+                      <div class="tech-tags">
+                        <span class="tech-tag">Flutter</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                        <span class="tech-tag">WebSockets</span>
+                      </div>
+                      <div class="project-actions">
+                        <a class="sketch-btn sketch-btn-accent" href="https://github.com/Achiket123?tab=repositories&amp;q=InkBattle" target="_blank">Launch Experiment</a>
+                        <a class="sketch-btn sketch-btn-ghost" href="https://github.com/Achiket123" target="_blank">View Source</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="sketch-box-container project-card">
+                    <svg class="sketch-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+                      <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 18.454698706770365 23.02036979916868 Q 126.25611657282028 9.522652431163563 166.94061288581702 5.057652355828851 Q 207.62510919881373 0.5926522804941392 261.26560950000874 10.06605264151288 Q 314.9061098012037 19.53945300253162 356.25606077797613 24.72054380395268 Q 397.6060117547485 29.901634605373744 454.5373006839244 17.41951256784398 Q 511.4685896131002 4.93739053031422 559.2253200871156 13.538600980498366 Q 606.982050561131 22.13981143068251 652.9019488746665 22.926923718511993 Q 698.8218471882018 23.714036006341477 739.3412316115769 14.148866615382058 Q 779.860616034952 4.583697224422638 841.3599131559592 13.251635779191663 Q 902.8592102769663 21.919574333960686 941.6839211599776 24.44006359557372 Q 980.5086320429888 26.960552857186748 977.4751485125623 18.690857054099272 Q 974.4416649821358 10.421161251011798 980.1101507418755 61.36336451953051 Q 985.7786365016152 112.30556778804923 982.1011036598679 165.79571273557374 Q 978.4235708181208 219.28585768309827 983.5053618354434 265.6020461809973 Q 988.5871528527662 311.9182346788964 986.0364317796275 360.5797975894786 Q 983.4857107064889 409.24136050006075 984.1033675493645 455.8678145721795 Q 984.72102439224 502.49426864429824 979.118484877607 549.579493958278 Q 973.5159453629739 596.6647192722578 985.389681186153 645.9237965261027 Q 997.263417009332 695.1828737799475 996.6675146448069 741.9997337095353 Q 996.071612280282 788.8165936391233 992.3646713118803 837.8344911147922 Q 988.6577303434786 886.8523885904611 992.3621378966559 932.0619508368034 Q 996.066545449833 977.2715130831455 995.097259229876 980.8206300390732 Q 994.1279730099192 984.3697469950009 946.4286997770294 983.8550059758539 Q 898.7294265441394 983.340264956707 846.5193485927489 978.0850509035278 Q 794.3092706413584 972.8298368503486 737.3403121604704 983.6958285157853 Q 680.3713536795825 994.5618201812218 637.2123223102807 993.8859967444562 Q 594.0532909409789 993.2101733076905 541.0662891054393 992.9038280349637 Q 488.0792872698997 992.597482762237 439.1675028401212 990.7263561717931 Q 390.25571841034264 988.8552295813492 347.4998439818575 992.2754773011638 Q 304.7439695533724 995.6957250209786 255.19206260309826 997.3164965662502 Q 205.64015565282415 998.9372681115218 163.2681861493004 997.336909911469 Q 120.8962166457766 995.7365517114162 74.00715025137286 994.8019521824281 Q 27.118083856969122 993.8673526534399 25.95935134124792 992.2335463843503 Q 24.80061882552672 990.5997401152608 18.28424174752734 946.207722518455 Q 11.767864669527958 901.8157049216491 12.769387800297281 848.0961935189827 Q 13.770910931066604 794.3766821163163 7.758362686456466 743.0296292298642 Q 1.7458144418463277 691.6825763434122 9.477368409796918 651.749552636879 Q 17.20892237774751 611.8165289303458 9.434349899842164 554.9115940306415 Q 1.6597774219368198 498.00665913093707 3.0811995537303254 446.0101040736152 Q 4.502621685523831 394.0135490162933 8.485412253427704 345.3360017259826 Q 12.468202821331575 296.6584544356719 7.14573611827454 256.9500139996234 Q 1.8232694152175046 217.24157356357497 10.493466302948917 171.08981735629635 Q 19.163663190680328 124.93806114901776 13.368593659791303 67.14461244129868 Q 7.573524128902278 9.351163733579584 13.014111417836322 16.185766766374133 Q 18.454698706770365 23.02036979916868 18.454698706770365 23.02036979916868"></path>
+                      <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 24.890303030356357 0.8672941405713406 Q 97.25160652272397 1.599878649417425 154.24354790238556 14.493175449557082 Q 211.23548928204715 27.386472249696737 254.97020371118697 16.529331548661926 Q 298.70491814032675 5.672190847627114 347.40296098144614 5.8246592812958164 Q 396.10100382256553 5.977127714964519 451.4057759537012 4.841636365524181 Q 506.7105480848369 3.706145016083843 546.8735833451242 6.0272144801755205 Q 587.0366186054114 8.348283944267198 647.4394135862817 11.26585672600163 Q 707.842208567152 14.183429507736063 753.3101208244393 7.778680659748182 Q 798.7780330817267 1.3739318117603005 843.7746431819995 9.173503822718175 Q 888.7712532822724 16.97307583367605 936.5884137628226 22.79434857517278 Q 984.4055742433728 28.61562131666951 988.4146825238452 16.182455844879744 Q 992.4237908043175 3.749290373089977 983.6514405901357 63.20306351578914 Q 974.879090375954 122.6568366584883 980.5622786612938 165.30698874825146 Q 986.2454669466337 207.9571408380146 983.1541090539647 263.2419525484934 Q 980.0627511612956 318.5267642589722 981.2152481547591 356.32004379068263 Q 982.3677451482226 394.11332332239306 980.0651897832885 446.6985737840722 Q 977.7626344183543 499.2838242457514 973.9283344026521 540.7775875993244 Q 970.09403438695 582.2713509528975 980.2080363728293 633.2969472624545 Q 990.3220383587085 684.3225435720115 990.2230394542935 737.0610702122874 Q 990.1240405498786 789.7995968525635 993.8023504294893 840.1143189534582 Q 997.4806603090998 890.4290410543529 990.67120604079 931.701952232525 Q 983.8617517724803 972.974863410697 981.3416222754754 972.7224210576164 Q 978.8214927784704 972.469978704536 933.4726844510985 980.4314565638538 Q 888.1238761237267 988.3929344231715 839.3982956204193 986.144807440101 Q 790.6727151171117 983.8966804570305 746.4544353517888 988.4973345742444 Q 702.236155586466 993.0979886914582 645.1960983610828 982.5303404985204 Q 588.1560411356996 971.9626923055828 542.964906053774 983.3920453301167 Q 497.77377097184853 994.8213983546507 447.7413645677307 987.3329619924825 Q 397.7089581636129 979.8445256303143 352.51640184354335 986.7647842357978 Q 307.3238455234738 993.6850428412813 258.2104218264417 993.7992715663061 Q 209.09699812940954 993.9135002913308 158.8822595934705 984.5623461767068 Q 108.66752105753147 975.2111920620828 63.35376292166866 984.0532930518161 Q 18.04000478580585 992.8953940415495 23.468892018754985 992.5660465049851 Q 28.897779251704126 992.2366989684208 17.642774762790893 947.2225525034544 Q 6.387770273877663 902.2084060384881 10.19332731841595 847.1431248523552 Q 13.998884362954238 792.0778436662222 11.95418213884631 737.7814050135368 Q 9.909479914738384 683.4849663608513 5.466811662162713 640.207360559036 Q 1.024143409587042 596.9297547572206 10.269983067373982 549.3177494120389 Q 19.515822725160923 501.7057440668571 18.876855486335728 446.3629837838251 Q 18.237888247510536 391.02022350079307 15.022980298411788 343.5448363693355 Q 11.808072349313042 296.06944923787796 7.510366851697476 255.344036850051 Q 3.212661354081911 214.61862446222403 16.27743558124152 170.25643479939566 Q 29.342209808401126 125.89424513656728 19.763271675149532 64.50188924289174 Q 10.184333541897942 3.1095333492162034 17.53731828612715 1.988413744893772 Q 24.890303030356357 0.8672941405713406 24.890303030356357 0.8672941405713406"></path>
+                    </svg>
+                    <div class="sketch-content" style="padding: 2rem">
+                      <div class="project-card-top"><p class="project-subtitle">Productivity App Locker</p><span class="project-icon">[/]</span></div>
+                      <h3 class="project-title">Mushin</h3>
+                      <p class="project-desc">Geo-aware app locker using Android location APIs that unlocks in greenery or outdoor contexts.</p>
+                      <div class="tech-tags">
+                        <span class="tech-tag">Flutter</span>
+                        <span class="tech-tag">Android APIs</span>
+                        <span class="tech-tag">Geofencing</span>
+                      </div>
+                      <div class="project-actions">
+                        <a class="sketch-btn sketch-btn-accent" href="https://github.com/Achiket123?tab=repositories&amp;q=Mushin" target="_blank">Launch Experiment</a>
+                        <a class="sketch-btn sketch-btn-ghost" href="https://github.com/Achiket123" target="_blank">View Source</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="repos-section">
+                  <h3 class="repos-title">Live GitHub Repositories</h3>
+                  <p class="loading-text">Fetching repositories...</p>
+                </div>
+                <div class="cta-footer">
+                  <p class="cta-text">Have a weird idea for a collab?</p>
+                  <div class="cta-actions">
+                    <a class="sketch-btn sketch-btn-accent" href="mailto:achiketkuma@gmail.com">Say Hi_</a>
+                    <a class="sketch-btn sketch-btn-ghost" href="https://drive.google.com/file/d/13KtJgodJv8Hmrm2_Bw1QdAZJoJAO53Hy/view?usp=sharing" target="_blank">Download Logs_</a>
+                  </div>
+                </div>
+              </section>
+              <section id="experience" class="section">
+                <div class="section-header"><span class="section-label">Work Logs_</span><h2 class="section-title">Experience</h2></div>
+                <div class="sketch-timeline-container">
+                  <svg class="sketch-timeline-svg" viewBox="0 0 100 1000" preserveAspectRatio="none">
+                    <path stroke="var(--border)" fill="none" stroke-width="2" stroke-dasharray="8 6" vector-effect="non-scaling-stroke" d="M 52.67127408390177 0.0 Q 48.925874295167205 50.0 47.57761544245911 75.0 Q 46.22935658975102 100.0 45.95848241597887 125.0 Q 45.68760824220672 150.0 46.643042847921436 175.0 Q 47.59847745363616 200.0 47.16297836162059 225.0 Q 46.72747926960503 250.0 48.62409042414227 275.0 Q 50.520701578679514 300.0 50.63598504381844 325.0 Q 50.75126850895737 350.0 50.717543638947305 375.0 Q 50.683818768937236 400.0 50.499258217242954 425.0 Q 50.31469766554868 450.0 48.45437474191543 475.0 Q 46.59405181828219 500.0 46.75011716143678 525.0 Q 46.90618250459138 550.0 46.5513685190021 575.0 Q 46.19655453341281 600.0 48.92003632367417 625.0 Q 51.64351811393553 650.0 49.862478811350925 675.0 Q 48.08143950876632 700.0 47.572583458991666 725.0 Q 47.06372740921701 750.0 46.99826964453803 775.0 Q 46.93281187985905 800.0 47.61972357380273 825.0 Q 48.3066352677464 850.0 46.75251180397461 875.0 Q 45.19838834020282 900.0 47.97536277699263 925.0 Q 50.75233721378245 950.0 48.227105004005665 975.0 L 45.70187279422889 1000.0"></path>
+                  </svg>
+                  <div class="sketch-timeline-content">
+                    <div class="timeline-entry">
+                      <div class="timeline-dot"></div>
+                      <div class="sketch-box-container timeline-card">
+                        <svg class="sketch-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+                          <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 11.087271036740619 7.975487830839452 Q 107.79220232849337 26.52674539061142 157.7221630834125 22.291210879756065 Q 207.65212383833168 18.055676368900713 254.13664099691914 17.558442769928927 Q 300.62115815550663 17.06120917095714 347.6018127667777 16.113076263672724 Q 394.5824673780487 15.164943356388305 440.9180773697639 16.661594427237656 Q 487.25368736147914 18.15824549808701 549.3634903475975 17.198687211050665 Q 611.4732933337159 16.23912892401432 645.3331623812242 10.405802768296203 Q 679.1930314287325 4.572476612578086 732.4819836698039 8.94768714098593 Q 785.7709359108752 13.322897669393774 839.6944985293034 9.990468490877657 Q 893.6180611477315 6.658039312361542 937.5472956001445 5.673125074269215 Q 981.4765300525573 4.688210836176889 987.5403571273897 7.380171779627538 Q 993.6041842022221 10.072132723078187 984.8080390489647 64.10693202111362 Q 976.0118938957073 118.14173131914906 982.4905007773102 156.64184430844819 Q 988.9691076589132 195.1419572977473 980.4380301024128 250.62054206581155 Q 971.9069525459123 306.0991268338758 980.004530866184 355.07105673640154 Q 988.1021091864558 404.0429866389273 989.7454274781617 453.33022713356377 Q 991.3887457698675 502.61746762820025 994.0582110208346 555.3487311365478 Q 996.7276762718018 608.0799946448954 993.2205089264353 649.5822821829495 Q 989.7133415810689 691.0845697210036 986.4591027947783 738.3702994896629 Q 983.2048640084878 785.6560292583222 976.9214928097006 829.7011402108262 Q 970.6381216109132 873.7462511633303 972.1827650807556 922.9101435527655 Q 973.7274085505982 972.0740359422008 980.5168508441425 973.4681994750315 Q 987.3062931376868 974.8623630078621 933.1849760769604 976.219933007724 Q 879.063659016234 977.5775030075857 840.3049783770942 979.0030089086545 Q 801.5462977379544 980.4285148097231 748.9285993728182 986.042115691512 Q 696.310901007682 991.6557165733009 645.6019859552271 995.5029001069761 Q 594.8930709027721 999.3500836406512 541.076671345873 998.8423697500043 Q 487.26027178897397 998.3346558593574 450.3893522294583 995.913199369649 Q 413.5184326699427 993.4917428799406 356.4722700467212 987.7070854435431 Q 299.42610742349973 981.9224280071456 246.7801959825115 976.8751180611912 Q 194.13428454152321 971.8278081152367 152.74126983608716 973.3005843110911 Q 111.34825513065107 974.7733605069457 56.99604339832625 986.8127609656176 Q 2.643831666001436 998.8521614242896 4.204444328008772 997.6483816180016 Q 5.765056990016108 996.4446018117135 11.3311466080728 942.1453069926796 Q 16.897236226129493 887.8460121736457 12.905654602213378 832.9837203275445 Q 8.914072978297263 778.1214284814433 16.364166208109744 735.8843930734458 Q 23.814259437922225 693.6473576654483 17.490966383211628 641.3326186204756 Q 11.167673328501035 589.017879575503 20.296769897181022 538.374295532691 Q 29.425866465861006 487.73071148987907 18.859639538892473 448.76626644579835 Q 8.29341261192394 409.8018214017177 19.100779993718056 358.23021403771133 Q 29.908147375512176 306.65860667370504 27.655512562780327 264.1521163383145 Q 25.40287775004848 221.64562600292396 21.306563636702922 160.2647144186555 Q 17.210249523357366 98.88380283438704 14.196022316440981 57.19008125943279 Q 11.181795109524598 15.496359684478536 11.134533073132609 11.735923757658995 Q 11.087271036740619 7.975487830839452 11.087271036740619 7.975487830839452"></path>
+                          <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 26.26764465449418 17.183262805873774 Q 117.49613203990555 2.159403845411221 168.6848808907828 7.47478066012252 Q 219.87362974166007 12.79015747483382 262.61794057946565 7.2172083533033575 Q 305.3622514172712 1.644259231772896 351.76120092017266 7.524799508700187 Q 398.16015042307407 13.405339785627477 441.66112776021384 17.623627213692185 Q 485.16210509735356 21.841914641756894 544.0959071931239 23.677802448328954 Q 603.0297092888943 25.513690254901018 644.6210765656724 16.269413104968187 Q 686.2124438424505 7.025135955035355 745.0039861124135 10.755238035712257 Q 803.7955283823765 14.485340116389159 850.5997284707959 16.78576050779196 Q 897.4039285592153 19.086180899194762 940.4903635301923 21.41996310095763 Q 983.5767985011694 23.753745302720503 980.5983815211092 26.689201478228526 Q 977.6199645410491 29.62465765373655 976.968182243245 65.55031262648416 Q 976.3163999454409 101.47596759923178 984.5371240405495 161.7249750840736 Q 992.757848135658 221.9739825689154 986.0696984483006 256.92887526659945 Q 979.3815487609432 291.88376796428355 979.7907049700547 353.88450928323783 Q 980.1998611791661 415.8852506021921 978.8052275869456 451.1279290665532 Q 977.4105939947253 486.3706075309143 984.0916925859738 535.158649989247 Q 990.7727911772222 583.9466924475797 992.4498740461898 632.1938745577593 Q 994.1269569151575 680.4410566679389 996.4345816016429 729.8020820085044 Q 998.7422062881283 779.16310734907 993.967075422009 827.0102257651272 Q 989.1919445558896 874.8573441811845 990.258041275784 931.8801777383319 Q 991.3241379956784 988.9030112954794 983.9579248316602 993.4435328381965 Q 976.5917116676419 997.9840543809137 934.2068283362044 987.1581578564146 Q 891.8219450047667 976.3322613319156 841.0345780896571 982.3430974279462 Q 790.2472111745475 988.3539335239768 737.5234134701616 985.0967429655694 Q 684.7996157657758 981.839552407162 641.7827285534192 982.5222581268214 Q 598.7658413410626 983.2049638464807 549.0697622361151 984.6937323919985 Q 499.3736831311677 986.1825009375164 451.03276006492354 984.159760622906 Q 402.6918369986793 982.1370203082956 347.99608517464026 985.2657305433211 Q 293.30033335060125 988.3944407783466 250.65166522635383 985.0852397095764 Q 208.0029971021064 981.7760386408063 155.36952023063492 987.675197549021 Q 102.73604335916345 993.5743564572358 64.32252357346418 982.5505562190085 Q 25.909003787764913 971.5267559807811 15.896139518425056 975.100334762099 Q 5.883275249085196 978.6739135434168 6.94775138062322 938.2734178545038 Q 8.012227512161244 897.8729221655908 8.851643465823813 842.2210652714118 Q 9.691059419486383 786.5692083772329 6.563561557304139 743.7349065499424 Q 3.436063695121895 700.9006047226518 16.396859014604026 656.2059023881807 Q 29.357654334086153 611.5112000537097 17.633052660524278 552.0685218674395 Q 5.9084509869624 492.6258436811692 16.214448519137527 454.96241324773985 Q 26.520446051312653 417.29898281431053 19.71831286279815 359.38516441298987 Q 12.916179674283644 301.4713460116692 11.60653822755636 249.31082428096704 Q 10.296896780829078 197.15030255026488 10.212738453694286 155.83698127751336 Q 10.128580126559491 114.52366000476187 5.213803181852948 60.432474305094026 Q 0.2990262371464052 6.34128860542619 13.283335445820292 11.762275705649982 Q 26.26764465449418 17.183262805873774 26.26764465449418 17.183262805873774"></path>
+                        </svg>
+                        <div class="sketch-content" style="padding: 2rem">
+                          <div class="timeline-header">
+                            <div class="timeline-info">
+                              <h3 class="timeline-role">Full Stack Developer Intern</h3>
+                              <p class="timeline-company">DST HUB LLP</p>
+                            </div>
+                            <span class="timeline-period">Aug 2024 - Jul 2025</span>
+                          </div>
+                          <ul class="timeline-points">
+                            <li class="timeline-point"><span class="point-marker">+</span>Optimized authentication flow, cutting login time by around 40%.</li>
+                            <li class="timeline-point"><span class="point-marker">+</span>Built real-time chat with file sharing for 200+ concurrent users.</li>
+                            <li class="timeline-point"><span class="point-marker">+</span>Developed CRM reducing manual data entry by 60%.</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="timeline-entry">
+                      <div class="timeline-dot"></div>
+                      <div class="sketch-box-container timeline-card">
+                        <svg class="sketch-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+                          <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 29.91454148998056 28.07123026941373 Q 113.20787092239009 1.237163065420397 159.26672375984012 3.4064905877567977 Q 205.32557659729014 5.5758181100931985 260.3193057284428 14.963110496801473 Q 315.31303485959546 24.350402883509748 359.96693610126806 23.423963833126468 Q 404.62083734294066 22.497524782743188 450.89865338062145 18.543675458928384 Q 497.1764694183022 14.589826135113581 541.6107808570157 14.596161345435338 Q 586.0450922957291 14.602496555757092 642.3745525515737 19.94836141780955 Q 698.7040128074184 25.294226279862013 751.9187583384004 14.804617103146462 Q 805.1335038693824 4.315007926430912 843.0839715172781 4.885041873365406 Q 881.0344391651738 5.4550758202999 933.6176093945821 3.5312622945364947 Q 986.2007796239906 1.6074487687730894 987.3925598293731 11.54697843234489 Q 988.5843400347558 21.48650809591669 985.8662589454318 67.31250608169205 Q 983.1481778561077 113.13850406746741 990.8822084420894 163.3116346438715 Q 998.6162390280712 213.4847652202756 984.3395674935737 262.6167773441032 Q 970.0628959590762 311.74878946793075 975.0107223282691 350.89350880426036 Q 979.9585486974622 390.03822814059004 980.1150731547596 445.65449880366447 Q 980.271597612057 501.2707694667389 983.5617399758765 552.4023145593455 Q 986.8518823396961 603.5338596519521 978.826854844817 653.5239083200476 Q 970.8018273499379 703.513956988143 974.744207843618 741.5524341831897 Q 978.6865883372982 779.5909113782362 979.461417615591 833.5992034717985 Q 980.236246893884 887.607495565361 977.3098421134508 929.7024526051028 Q 974.3834373330177 971.7974096448447 977.9474775905014 982.666123122689 Q 981.5115178479851 993.5348366005331 940.6854613119192 988.8986204959638 Q 899.8594047758532 984.2624043913944 845.1373396298627 984.4490287712924 Q 790.4152744838723 984.6356531511906 739.515105083673 982.0093074021775 Q 688.6149356834737 979.3829616531644 647.9795458381438 979.3882127552672 Q 607.344155992814 979.39346385737 558.2634838810443 982.0410170543528 Q 509.18281176927456 984.6885702513357 449.2468407677103 979.5455914618722 Q 389.310869766146 974.4026126724085 352.5359979996945 979.6479334271357 Q 315.76112623324286 984.893254181863 258.13796378862685 992.3255131262367 Q 200.51480134401086 999.7577720706104 160.83168095215268 991.3793413295 Q 121.14856056029448 983.0009105883895 66.97296067549952 988.8525793485892 Q 12.797360790704552 994.7042481087888 12.910928740764994 995.6574463850942 Q 13.024496690825437 996.6106446613996 6.99310350798854 942.5520954190242 Q 0.9617103251516426 888.4935461766488 1.7330110531328415 841.9471491773286 Q 2.5043117811140405 795.4007521780082 7.230442213030702 749.99421111882 Q 11.956572644947363 704.5876700596317 6.945168827469648 644.6204505155879 Q 1.9337650099919337 584.6532309715442 10.450684323885971 534.9982938463249 Q 18.96760363778001 485.3433567211056 23.629065598536016 448.51572050150276 Q 28.290527559292023 411.6880842819 16.830864309814643 359.9484705531519 Q 5.371201060337263 308.2088568244038 8.217755656782227 252.22794170458099 Q 11.064310253227193 196.24702658475817 13.908683204467867 155.77598482492877 Q 16.753056155708542 115.30494306509937 20.769441579818995 71.88849653349146 Q 24.785827003929445 28.47205000188355 27.350184246955003 28.27164013564864 Q 29.91454148998056 28.07123026941373 29.91454148998056 28.07123026941373"></path>
+                          <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 3.085811460797377 16.627628971716174 Q 119.77026379259492 28.049266261740804 164.34233288957003 18.89165092383845 Q 208.91440198654516 9.734035585936098 260.9217091328221 13.518813669603714 Q 312.92901627909913 17.30359175327133 362.62911476555473 17.65276890744772 Q 412.32921325201033 18.001946061624107 463.4035106745149 11.70598140098798 Q 514.4778080970195 5.4100167403518515 554.7380364471892 3.33063916667542 Q 594.998264797359 1.251261592998988 645.6343066486102 10.159752254629712 Q 696.2703484998614 19.068242916260438 744.155403349318 23.088693240764204 Q 792.0404581987748 27.10914356526797 837.837936003532 20.335524195207704 Q 883.6354138082893 13.56190482514744 936.4242429046852 11.610874127288062 Q 989.2130720010812 9.659843429428683 989.9619227437536 12.29859046231338 Q 990.7107734864261 14.937337495198076 994.1722032574093 70.61224767496577 Q 997.6336330283924 126.28715785473348 986.9744440394359 170.57714320026636 Q 976.3152550504794 214.86712854579923 977.0612518724342 264.5843965808351 Q 977.8072486943892 314.301664615871 979.4977056304209 362.3477883627859 Q 981.1881625664527 410.3939121097008 989.1616197922598 455.17292094539584 Q 997.1350770180669 499.9519297810909 996.258812552639 551.392667885924 Q 995.3825480872113 602.833405990757 991.3338887678572 652.7301102178861 Q 987.2852294485031 702.6268144450153 987.6178201616449 751.2006444744874 Q 987.9504108747867 799.7744745039595 981.2415131664839 849.1788789272623 Q 974.532615458181 898.583283350565 983.9064600027195 947.8971656559911 Q 993.2803045472582 997.2110479614171 989.0333263577713 991.6556753532102 Q 984.7863481682843 986.1003027450034 943.1406276325039 988.0452818737826 Q 901.4949070967234 989.990261002562 852.2804252202855 983.7654158191499 Q 803.0659433438475 977.5405706357378 741.4405001719547 982.5886394759843 Q 679.8150570000618 987.6367083162307 640.5071328534325 992.1961658009116 Q 601.1992087068033 996.7556232855925 555.5338765967199 987.300325083821 Q 509.8685444866365 977.8450268820495 456.08221394650116 981.9170776511296 Q 402.2958834063658 985.9891284202097 349.37692178860004 978.641441511928 Q 296.4579601708343 971.2937546036463 250.19995542692692 973.8132364885611 Q 203.94195068301954 976.3327183734758 151.75723946353762 986.064117445299 Q 99.57252824405569 995.795516517122 55.1606056134501 996.2184648402592 Q 10.748682982844509 996.6414131633966 11.571620935411126 983.5849429640475 Q 12.394558887977741 970.5284727646983 6.854365805154562 932.7747622505999 Q 1.3141727223313833 895.0210517365014 12.272878385524834 836.74958562976 Q 23.231584048718286 778.4781195230186 18.826868166049877 736.3217360039308 Q 14.422152283381472 694.1653524848431 7.812006369465076 642.4851859413586 Q 1.2018604555486796 590.805019397874 9.80671113932867 541.1808782572729 Q 18.41156182310866 491.55673711667174 13.470596063319455 453.7882823644264 Q 8.529630303530253 416.019827612181 10.590904235649498 357.1392164877054 Q 12.652178167768744 298.25860536322983 18.93406284391732 253.02395344171316 Q 25.215947520065896 207.78930152019646 23.884986409703075 159.77415385728068 Q 22.554025299340253 111.7590061943649 26.199117050715422 69.33808347263691 Q 29.844208802090588 26.917160750908913 16.465010131443982 21.77239486131254 Q 3.085811460797377 16.627628971716174 3.085811460797377 16.627628971716174"></path>
+                        </svg>
+                        <div class="sketch-content" style="padding: 2rem">
+                          <div class="timeline-header">
+                            <div class="timeline-info"><h3 class="timeline-role">Flutter Developer Intern</h3><p class="timeline-company">Ricoz.in</p></div>
+                            <span class="timeline-period">Mar 2024 - Jul 2024</span>
+                          </div>
+                          <ul class="timeline-points">
+                            <li class="timeline-point">
+                              <span class="point-marker">+</span>Built 2 end-to-end apps with Node.js backends, each onboarding 500+ users.
+                            </li>
+                            <li class="timeline-point"><span class="point-marker">+</span>Integrated Razorpay and real-time chat across both apps.</li>
+                            <li class="timeline-point"><span class="point-marker">+</span>Deployed apps to Play Store with 4.2+ average ratings.</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section id="skills" class="section">
+                <div class="section-header"><span class="section-label">Tech Stack_</span><h2 class="section-title">Skills</h2></div>
+                <div class="skills-grid">
+                  <span class="skill-chip">Flutter</span>
+                  <span class="skill-chip">Dart</span>
+                  <span class="skill-chip">Python</span>
+                  <span class="skill-chip">Go</span>
+                  <span class="skill-chip">Node.js</span>
+                  <span class="skill-chip">PostgreSQL</span>
+                  <span class="skill-chip">MySQL</span>
+                  <span class="skill-chip">Firebase</span>
+                  <span class="skill-chip">Supabase</span>
+                  <span class="skill-chip">WebSockets</span>
+                  <span class="skill-chip">WebRTC</span>
+                  <span class="skill-chip">gRPC</span>
+                  <span class="skill-chip">REST APIs</span>
+                  <span class="skill-chip">Redis</span>
+                  <span class="skill-chip">C/C++</span>
+                  <span class="skill-chip">Linux CLI</span>
+                  <span class="skill-chip">Git/GitHub</span>
+                  <span class="skill-chip">Razorpay</span>
+                  <span class="skill-chip">S.O.L.I.D</span>
+                  <span class="skill-chip">Clean Architecture</span>
+                  <span class="skill-chip">Test-Driven Development</span>
+                  <span class="skill-chip">Docker</span>
+                  <span class="skill-chip">CI/CD</span>
+                  <span class="skill-chip">MongoDB</span>
+                  <span class="skill-chip">Shell Scripting</span>
+                </div>
+              </section>
+              <section id="contact" class="section contact-section">
+                <h2 class="contact-title">Let's build something raw.</h2>
+                <p class="contact-sub">achiketkuma@gmail.com  //  #achiket_kumar</p>
+                <div class="contact-links">
+                  <a class="contact-icon-link" href="mailto:achiketkuma@gmail.com">@</a>
+                  <a class="contact-icon-link" href="https://github.com/Achiket123" target="_blank">[/]</a>
+                  <a class="contact-icon-link" href="https://linkedin.com/in/achiket-kumar" target="_blank">&lt;-&gt;</a>
+                </div>
+                <p class="footer-credit">Made with care and code.  //  Achiket Kumar 2025</p>
+              </section>
+            </main>
+            <!--/@home-->
           </div>
-        </section>
-        <section id="projects" class="panel">
-          <h2>Featured Projects</h2>
-          <div class="grid">
-            <article class="card project">
-              <p class="meta">Shazam Clone</p>
-              <h3>Soundsalike</h3>
-              <p>
-                Audio-fingerprinting engine with Go backend and Flutter UI, handling 100+ concurrent identification requests.
-              </p>
-              <p class="stack">Go, Flutter, PostgreSQL</p>
-              <a class="inline-link" href="https://github.com/Achiket123?tab=repositories&amp;q=Soundsalike" target="_blank">Open Project</a>
-            </article>
-            <article class="card project">
-              <p class="meta">Scrabble-style Word Game</p>
-              <h3>InkBattle</h3>
-              <p>
-                Real-time 2-player game with matchmaking, leaderboard, and WebSocket sync averaging 300+ daily matches.
-              </p>
-              <p class="stack">Flutter, Node.js, PostgreSQL, WebSockets</p>
-              <a class="inline-link" href="https://github.com/Achiket123?tab=repositories&amp;q=InkBattle" target="_blank">Open Project</a>
-            </article>
-            <article class="card project">
-              <p class="meta">Productivity App Locker</p>
-              <h3>Mushin</h3>
-              <p>Geo-aware app locker using Android location APIs that unlocks in greenery/outdoor contexts.</p>
-              <p class="stack">Flutter, Android APIs, Geofencing</p>
-              <a class="inline-link" href="https://github.com/Achiket123?tab=repositories&amp;q=Mushin" target="_blank">Open Project</a>
-            </article>
-          </div>
-          <h3>Live GitHub Repositories</h3>
-          <p>Loading repositories...</p>
-        </section>
-        <section id="skills" class="panel">
-          <h2>Skills</h2>
-          <div class="chips">
-            <span class="chip">Flutter</span>
-            <span class="chip">Dart</span>
-            <span class="chip">Python</span>
-            <span class="chip">Go</span>
-            <span class="chip">Node.js</span>
-            <span class="chip">PostgreSQL</span>
-            <span class="chip">MySQL</span>
-            <span class="chip">Firebase</span>
-            <span class="chip">Supabase</span>
-            <span class="chip">WebSockets/WebRTC</span>
-            <span class="chip">gRPC</span>
-            <span class="chip">REST APIs</span>
-            <span class="chip">Redis</span>
-            <span class="chip">C/C++</span>
-            <span class="chip">Linux CLI</span>
-            <span class="chip">Git/GitHub</span>
-            <span class="chip">Razorpay</span>
-            <span class="chip">S.O.L.I.D</span>
-            <span class="chip">Clean Architecture</span>
-            <span class="chip">Test-Driven Development</span>
-            <span class="chip">Docker</span>
-            <span class="chip">CI/CD</span>
-            <span class="chip">Shell Scripting</span>
-          </div>
-        </section>
-        <section id="contact" class="panel contact">
-          <h2>Let's Build Something Sharp</h2>
-          <p>Jaipur, India · Open to internships, freelance, and product collaborations.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="mailto:achiketkuma@gmail.com">achiketkuma@gmail.com</a>
-            <a class="btn btn-ghost" href="tel:+917355139678">+91 7355139678</a>
-          </div>
-        </section>
-        <section class="center"><p class="meta">Made with ❤️ by Achiket Kumar</p></section>
-        <div class="center">&amp;</div>
-        <div class="center">
-          <svg fill="none" viewBox="0 0 106 40" width="106px" height="40px">
-            <rect rx="10" width="106" height="40" fill="#0E1117"></rect>
-            <path stroke-linejoin="round" d="M14.8115 26.0483C14.8115 26.0483 16.5768 27.9534 18.269 29.3852L21.4834 25.4226L22.5262 26.0483C23.9862 23.5455 22.3041 22.096 22.3041 22.096C24.1264 21.8356 23.7359 19.1022 23.7359 19.1022C22.8248 18.0608 22.6946 17.0195 22.8248 16.3687C22.9454 15.8288 22.754 15.2687 22.5644 14.9368L23.7359 13.6352L24.6139 13.7432C24.6139 11.6576 21.2503 10.6148 20.8598 10.6148C20.4693 10.6148 19.4404 11.4224 19.1801 12.3335L16.0561 12.5939C15.6458 8.11202 9.46732 13.0672 9.59749 14.3689L10.6403 13.9517L12.021 15.848C9.93835 17.41 9.59748 20.8342 9.59748 20.8342L11.3702 20.534C10.459 22.3563 10.7193 24.4389 10.7193 24.4389L12.3088 23.7541C12.439 25.4463 13.7687 27.2996 13.7687 27.2996L14.8115 26.0483Z" stroke="#0066B4" stroke-width="1.25"></path>
-            <path stroke-linejoin="round" d="M16.0558 12.5941C15.4049 12.5941 15.0197 13.1178 13.9769 14.3691C12.9341 15.6205 13.4524 15.4578 11.6301 16.1086" stroke="#0066B4" stroke-width="1.25"></path>
-            <path stroke-linejoin="round" d="M19.1799 12.3338C20.2213 12.5941 21.6531 13.3751 22.5642 14.9371" stroke="#0066B4" stroke-width="1.25"></path>
-            <path stroke-linejoin="round" d="M11.3701 20.5339C11.3701 20.5339 12.1511 19.1021 13.8433 18.3211C12.0209 19.1021 11.3701 20.5339 11.3701 20.5339Z" stroke="#0066B4" stroke-width="1.25"></path>
-            <path d="M21.5648 18.9821C21.5648 18.9821 20.0028 18.7218 20.2632 19.8933C20.5813 21.3251 22.7363 20.6743 22.6061 19.7631C22.6061 18.9821 21.5648 18.9821 21.5648 18.9821Z" fill="#0066B4"></path>
-            <path stroke-linejoin="round" d="M22.4341 22.0961C21.2626 22.0961 18.9826 22.2943 17.7312 21.46C19.1891 22.7114 23.3603 21.0429 22.9432 24.797C23.3603 23.1285 22.5281 22.5028 22.4341 22.0961Z" stroke="#0066B4" stroke-width="1.25"></path>
-            <path d="M48.6833 14.4545H51.7231V24.5966C51.7231 25.5341 51.5124 26.3485 51.091 27.0398C50.6743 27.7311 50.0943 28.2637 49.3509 28.6378C48.6075 29.0118 47.7434 29.1989 46.7586 29.1989C45.8826 29.1989 45.0872 29.045 44.3722 28.7372C43.662 28.4247 43.0985 27.9512 42.6819 27.3168C42.2652 26.6776 42.0592 25.875 42.064 24.9091H45.125C45.1345 25.2926 45.2126 25.6217 45.3594 25.8963C45.5109 26.1662 45.7169 26.3745 45.9773 26.5213C46.2425 26.6634 46.555 26.7344 46.9148 26.7344C47.2936 26.7344 47.6132 26.6539 47.8736 26.4929C48.1388 26.3272 48.34 26.0857 48.4773 25.7685C48.6146 25.4512 48.6833 25.0606 48.6833 24.5966V14.4545ZM57.3196 29.206C56.6236 29.206 56.0034 29.0852 55.4589 28.8438C54.9143 28.5975 54.4835 28.2353 54.1662 27.7571C53.8537 27.2741 53.6975 26.6728 53.6975 25.9531C53.6975 25.3471 53.8088 24.8381 54.0313 24.4261C54.2538 24.0142 54.5569 23.6828 54.9404 23.4318C55.3239 23.1809 55.7595 22.9915 56.2472 22.8636C56.7396 22.7358 57.2557 22.6458 57.7955 22.5938C58.43 22.5275 58.9413 22.4659 59.3296 22.4091C59.7178 22.3475 59.9996 22.2576 60.1748 22.1392C60.35 22.0208 60.4375 21.8456 60.4375 21.6136V21.571C60.4375 21.1212 60.2955 20.7732 60.0114 20.527C59.7321 20.2808 59.3343 20.1577 58.8182 20.1577C58.2737 20.1577 57.8405 20.2784 57.5185 20.5199C57.1965 20.7566 56.9835 21.0549 56.8793 21.4148L54.081 21.1875C54.2231 20.5246 54.5024 19.9517 54.9191 19.4688C55.3357 18.9811 55.8732 18.607 56.5313 18.3466C57.1942 18.0814 57.9612 17.9489 58.8324 17.9489C59.4385 17.9489 60.0185 18.0199 60.5725 18.1619C61.1312 18.304 61.626 18.5241 62.0569 18.8224C62.4925 19.1207 62.8357 19.5043 63.0867 19.973C63.3376 20.437 63.4631 20.9934 63.4631 21.642V29H60.5938V27.4872H60.5086C60.3334 27.8281 60.099 28.1288 59.8054 28.3892C59.5119 28.6449 59.1591 28.8461 58.7472 28.9929C58.3353 29.1349 57.8594 29.206 57.3196 29.206ZM58.1861 27.1179C58.6312 27.1179 59.0242 27.0303 59.3651 26.8551C59.706 26.6752 59.9735 26.4337 60.1677 26.1307C60.3618 25.8277 60.4589 25.4844 60.4589 25.1009V23.9432C60.3642 24.0047 60.2339 24.0616 60.0682 24.1136C59.9072 24.161 59.725 24.206 59.5214 24.2486C59.3178 24.2865 59.1142 24.322 58.9106 24.3551C58.707 24.3835 58.5223 24.4096 58.3566 24.4332C58.0015 24.4853 57.6913 24.5682 57.4262 24.6818C57.161 24.7955 56.9551 24.9493 56.8083 25.1435C56.6615 25.3329 56.5881 25.5696 56.5881 25.8537C56.5881 26.2656 56.7373 26.5805 57.0356 26.7983C57.3386 27.0114 57.7221 27.1179 58.1861 27.1179ZM74.8871 21.2017L72.1172 21.3722C72.0699 21.1354 71.9681 20.9223 71.8118 20.733C71.6556 20.5388 71.4496 20.3849 71.1939 20.2713C70.943 20.1529 70.6423 20.0938 70.2919 20.0938C69.8232 20.0938 69.4278 20.1932 69.1059 20.392C68.7839 20.5862 68.6229 20.8466 68.6229 21.1733C68.6229 21.4337 68.7271 21.6539 68.9354 21.8338C69.1437 22.0137 69.5012 22.1581 70.0079 22.267L71.9823 22.6648C73.0429 22.8826 73.8336 23.233 74.3544 23.7159C74.8753 24.1989 75.1357 24.8333 75.1357 25.6193C75.1357 26.3343 74.925 26.9616 74.5036 27.5014C74.0869 28.0412 73.514 28.4626 72.7848 28.7656C72.0604 29.0639 71.2247 29.2131 70.2777 29.2131C68.8336 29.2131 67.683 28.9124 66.826 28.3111C65.9738 27.705 65.4742 26.8812 65.3275 25.8395L68.3033 25.6832C68.3933 26.1236 68.6111 26.4598 68.9567 26.6918C69.3024 26.919 69.7451 27.0327 70.2848 27.0327C70.8151 27.0327 71.2413 26.9309 71.5633 26.7273C71.89 26.5189 72.0557 26.2514 72.0604 25.9247C72.0557 25.6501 71.9397 25.4252 71.7124 25.25C71.4851 25.0701 71.1348 24.9328 70.6613 24.8381L68.7721 24.4616C67.7067 24.2486 66.9136 23.8793 66.3928 23.3537C65.8767 22.8281 65.6187 22.1581 65.6187 21.3438C65.6187 20.643 65.808 20.0393 66.1868 19.5327C66.5704 19.026 67.1078 18.6354 67.7991 18.3608C68.4951 18.0862 69.3095 17.9489 70.2422 17.9489C71.6201 17.9489 72.7044 18.2401 73.4951 18.8224C74.2905 19.4048 74.7545 20.1979 74.8871 21.2017ZM77.0409 33.0909V18.0909H80.0238V19.9233H80.1588C80.2914 19.6297 80.4831 19.3314 80.7341 19.0284C80.9897 18.7206 81.3212 18.465 81.7284 18.2614C82.1403 18.053 82.6517 17.9489 83.2625 17.9489C84.0579 17.9489 84.7918 18.1572 85.4642 18.5739C86.1365 18.9858 86.6739 19.6084 87.0764 20.4418C87.4789 21.2704 87.6801 22.3097 87.6801 23.5597C87.6801 24.7765 87.4836 25.804 87.0906 26.642C86.7023 27.4754 86.172 28.1075 85.4997 28.5384C84.8321 28.9645 84.084 29.1776 83.2554 29.1776C82.6682 29.1776 82.1687 29.0805 81.7568 28.8864C81.3496 28.6922 81.0158 28.4484 80.7554 28.1548C80.495 27.8565 80.2961 27.5559 80.1588 27.2528H80.0665V33.0909H77.0409ZM80.0025 23.5455C80.0025 24.1941 80.0925 24.7599 80.2724 25.2429C80.4523 25.7259 80.7128 26.1023 81.0537 26.3722C81.3946 26.6373 81.8089 26.7699 82.2966 26.7699C82.789 26.7699 83.2057 26.6349 83.5466 26.3651C83.8875 26.0904 84.1455 25.7116 84.3207 25.2287C84.5006 24.741 84.5906 24.1799 84.5906 23.5455C84.5906 22.9157 84.503 22.3617 84.3278 21.8835C84.1526 21.4053 83.8946 21.0312 83.5537 20.7614C83.2128 20.4915 82.7937 20.3565 82.2966 20.3565C81.8041 20.3565 81.3875 20.4867 81.0466 20.7472C80.7104 21.0076 80.4523 21.3769 80.2724 21.8551C80.0925 22.3333 80.0025 22.8968 80.0025 23.5455ZM89.6971 29V18.0909H92.6304V19.9943H92.744C92.9429 19.3172 93.2767 18.8059 93.7454 18.4602C94.2142 18.1098 94.754 17.9347 95.3647 17.9347C95.5163 17.9347 95.6796 17.9441 95.8548 17.9631C96.03 17.982 96.1839 18.008 96.3165 18.0412V20.7259C96.1744 20.6832 95.9779 20.6454 95.727 20.6122C95.476 20.5791 95.2464 20.5625 95.038 20.5625C94.593 20.5625 94.1952 20.6596 93.8449 20.8537C93.4992 21.0431 93.2246 21.3082 93.021 21.6491C92.8221 21.9901 92.7227 22.383 92.7227 22.8281V29H89.6971Z" fill="#F5F5F5"></path>
-            <path d="M56.9197 14V7.45455H59.3167C59.7812 7.45455 60.1658 7.53125 60.4705 7.68466C60.7752 7.83594 61.0032 8.04155 61.1545 8.30149C61.3057 8.5593 61.3814 8.85014 61.3814 9.17401C61.3814 9.44673 61.3313 9.67685 61.2312 9.86435C61.131 10.0497 60.9968 10.1989 60.8285 10.3118C60.6623 10.4226 60.479 10.5036 60.2787 10.5547V10.6186C60.4961 10.6293 60.7081 10.6996 60.9147 10.8295C61.1236 10.9574 61.2961 11.1396 61.4325 11.3761C61.5689 11.6126 61.637 11.9002 61.637 12.239C61.637 12.5735 61.5582 12.8739 61.4005 13.1403C61.245 13.4045 61.0042 13.6143 60.6782 13.7699C60.3522 13.9233 59.9357 14 59.4286 14H56.9197ZM57.9073 13.1531H59.3327C59.8057 13.1531 60.1445 13.0614 60.3491 12.8782C60.5536 12.695 60.6559 12.4659 60.6559 12.1911C60.6559 11.9844 60.6037 11.7947 60.4993 11.6222C60.3949 11.4496 60.2457 11.3121 60.0518 11.2099C59.8601 11.1076 59.6321 11.0565 59.3679 11.0565H57.9073V13.1531ZM57.9073 10.2862H59.2304C59.452 10.2862 59.6513 10.2436 59.8281 10.1584C60.0071 10.0732 60.1488 9.95384 60.2532 9.80043C60.3597 9.64489 60.413 9.46165 60.413 9.25071C60.413 8.98011 60.3182 8.7532 60.1285 8.56996C59.9389 8.38672 59.6481 8.2951 59.256 8.2951H57.9073V10.2862ZM65.8414 11.9641V9.09091H66.8002V14H65.8606V13.1499H65.8095C65.6965 13.4119 65.5154 13.6303 65.2661 13.805C65.019 13.9776 64.7111 14.0639 64.3425 14.0639C64.0271 14.0639 63.748 13.9947 63.5051 13.8562C63.2644 13.7156 63.0747 13.5078 62.9362 13.233C62.7999 12.9581 62.7317 12.6183 62.7317 12.2134V9.09091H63.6873V12.0984C63.6873 12.4329 63.78 12.6992 63.9654 12.8974C64.1507 13.0955 64.3915 13.1946 64.6877 13.1946C64.8666 13.1946 65.0445 13.1499 65.2214 13.0604C65.4004 12.9709 65.5484 12.8356 65.6656 12.6545C65.785 12.4734 65.8435 12.2433 65.8414 11.9641ZM68.0842 14V9.09091H69.0398V14H68.0842ZM68.5668 8.33345C68.4006 8.33345 68.2579 8.27805 68.1386 8.16726C68.0214 8.05433 67.9628 7.9201 67.9628 7.76456C67.9628 7.60689 68.0214 7.47266 68.1386 7.36186C68.2579 7.24893 68.4006 7.19247 68.5668 7.19247C68.733 7.19247 68.8747 7.24893 68.9919 7.36186C69.1112 7.47266 69.1709 7.60689 69.1709 7.76456C69.1709 7.9201 69.1112 8.05433 68.9919 8.16726C68.8747 8.27805 68.733 8.33345 68.5668 8.33345ZM71.281 7.45455V14H70.3254V7.45455H71.281ZM74.8582 9.09091V9.85795H72.1767V9.09091H74.8582ZM72.8958 7.91477H73.8514V12.5586C73.8514 12.744 73.8791 12.8835 73.9345 12.9773C73.9899 13.0689 74.0613 13.1317 74.1487 13.1658C74.2382 13.1978 74.3351 13.2138 74.4395 13.2138C74.5162 13.2138 74.5833 13.2085 74.6409 13.1978C74.6984 13.1871 74.7431 13.1786 74.7751 13.1722L74.9477 13.9616C74.8923 13.983 74.8135 14.0043 74.7112 14.0256C74.6089 14.049 74.4811 14.0618 74.3277 14.0639C74.0762 14.0682 73.8419 14.0234 73.6245 13.9297C73.4072 13.8359 73.2314 13.6911 73.0972 13.495C72.963 13.299 72.8958 13.0529 72.8958 12.7567V7.91477ZM79.3614 14L77.9168 9.09091H78.9044L79.8664 12.696H79.9143L80.8795 9.09091H81.8671L82.8259 12.68H82.8738L83.8294 9.09091H84.817L83.3756 14H82.4008L81.4037 10.4556H81.3301L80.333 14H79.3614ZM85.7239 14V9.09091H86.6795V14H85.7239ZM86.2065 8.33345C86.0403 8.33345 85.8975 8.27805 85.7782 8.16726C85.661 8.05433 85.6024 7.9201 85.6024 7.76456C85.6024 7.60689 85.661 7.47266 85.7782 7.36186C85.8975 7.24893 86.0403 7.19247 86.2065 7.19247C86.3727 7.19247 86.5144 7.24893 86.6315 7.36186C86.7509 7.47266 86.8105 7.60689 86.8105 7.76456C86.8105 7.9201 86.7509 8.05433 86.6315 8.16726C86.5144 8.27805 86.3727 8.33345 86.2065 8.33345ZM90.2566 9.09091V9.85795H87.5752V9.09091H90.2566ZM88.2943 7.91477H89.2499V12.5586C89.2499 12.744 89.2776 12.8835 89.333 12.9773C89.3884 13.0689 89.4598 13.1317 89.5471 13.1658C89.6366 13.1978 89.7336 13.2138 89.838 13.2138C89.9147 13.2138 89.9818 13.2085 90.0393 13.1978C90.0968 13.1871 90.1416 13.1786 90.1735 13.1722L90.3461 13.9616C90.2907 13.983 90.2119 14.0043 90.1096 14.0256C90.0073 14.049 89.8795 14.0618 89.7261 14.0639C89.4747 14.0682 89.2403 14.0234 89.023 13.9297C88.8056 13.8359 88.6299 13.6911 88.4956 13.495C88.3614 13.299 88.2943 13.0529 88.2943 12.7567V7.91477ZM92.3748 11.0852V14H91.4192V7.45455H92.362V9.88991H92.4227C92.5378 9.62571 92.7136 9.41584 92.9501 9.2603C93.1866 9.10476 93.4955 9.02699 93.8769 9.02699C94.2136 9.02699 94.5076 9.09624 94.759 9.23473C95.0126 9.37322 95.2086 9.5799 95.3471 9.85476C95.4877 10.1275 95.558 10.4684 95.558 10.8775V14H94.6024V10.9925C94.6024 10.6325 94.5097 10.3533 94.3244 10.1552C94.139 9.9549 93.8812 9.85476 93.5509 9.85476C93.3251 9.85476 93.1227 9.9027 92.9437 9.99858C92.7668 10.0945 92.6273 10.2351 92.525 10.4205C92.4249 10.6037 92.3748 10.8253 92.3748 11.0852Z" fill="#F5F5F5"></path>
-          </svg>
         </div>
-      </main>
-      <!--/@home-->
+      </div>
+      <aside class="right-sidebar">
+        <svg class="sidebar-left-border-svg" viewBox="0 0 100 1000" preserveAspectRatio="none">
+          <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 35.15779315782511 -21.841187895394725 Q 55.84972976024043 18.879933476730265 45.854816622356736 42.014888496534766 Q 35.85990348447305 65.14984351633927 35.78608573335831 84.81994081684407 Q 35.712267982243574 104.49003811734886 38.34367504462111 125.99885925356841 Q 40.97508210699865 147.50768038978796 45.27921698450639 165.4707216052163 Q 49.583351862014126 183.43376282064466 49.75962969158681 207.4252311977744 Q 49.93590752115949 231.4166995749041 48.906544078847105 250.8147595960522 Q 47.87718063653472 270.2128196172003 54.27647631765642 289.3935621927379 Q 60.67577199877812 308.57430476827545 57.92745592952154 332.2451178299631 Q 55.17913986026497 355.9159308916507 49.81656254812535 374.33924546728167 Q 44.453985235985726 392.76256004291264 40.90898753928508 413.21228817914994 Q 37.363989842584424 433.66201631538723 41.62450918118292 454.42840847672767 Q 45.88502851978142 475.19480063806816 45.113247237520994 500.3401206180877 Q 44.34146595526056 525.4854405981073 53.0113008467629 542.1319498562597 Q 61.68113573826524 558.778459114412 55.692017290979486 579.592993345301 Q 49.70289884369373 600.4075275761901 43.053260109049425 621.0447593361075 Q 36.40362137440512 641.681991096025 48.590982483667524 663.9713062596604 Q 60.77834359292993 686.2606214232959 53.02430332024841 709.4867257065049 Q 45.270263047566885 732.7128299897139 41.19054528561598 752.964705311472 Q 37.11082752366507 773.2165806332303 41.395195571740786 794.13106274694 Q 45.67956361981649 815.0455448606498 51.210462298944165 835.1175003505189 Q 56.74136097807183 855.1894558403878 53.09072686930416 875.3572705995281 Q 49.440092760536494 895.5250853586683 46.94640456905725 918.1097608946426 Q 44.452716377578 940.6944364306169 50.99707148157658 961.2852630987862 Q 57.54142658557516 981.8760897669556 49.140456720182975 1001.7084269490988 L 40.73948685479079 1021.540764131242"></path>
+          <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 43.599948489148474 -23.54761530116607 Q 42.33649660333701 16.634439565028224 52.645254772131224 38.99712540544597 Q 62.95401294092543 61.35981124586372 51.479763598348626 83.43949308959775 Q 40.00551425577182 105.51917493333177 42.98932260057043 124.25193673049446 Q 45.973130945369036 142.98469852765714 48.26635635659753 163.2658029213016 Q 50.55958176782601 183.54690731494603 50.662288824284815 204.88245507106365 Q 50.764995880743626 226.21800282718127 48.36962035362686 248.29825447852613 Q 45.97424482651009 270.37850612987097 40.65075860443977 293.83976554627105 Q 35.327272382369465 317.30102496267114 42.45803558588702 336.49030926171235 Q 49.588798789404564 355.67959356075363 54.890337870491486 377.7005665403111 Q 60.19187695157841 399.72153951986854 58.148138966674736 419.52584672184537 Q 56.104400981771064 439.33015392382225 55.81449376239644 461.4580611916772 Q 55.52458654302181 483.5859684595322 49.22090190789836 501.70826952197865 Q 42.917217272774906 519.8305705844251 51.78943383036055 541.1937360234604 Q 60.66165038794619 562.5569014624955 61.61824368682827 584.8529198318363 Q 62.574836985710355 607.1489382011771 54.479519806278375 628.3637679770138 Q 46.384202626846395 649.5785977528506 52.51023543553278 668.5498799831112 Q 58.63626824421917 687.5211622133718 49.89016743908003 710.1479965153983 Q 41.144066633940895 732.7748308174248 39.090655625171024 750.0745498619206 Q 37.03724461640115 767.3742689064164 39.04122186349019 791.2536782566078 Q 41.04519911057923 815.1330876067992 52.969756120546926 832.4236054583912 Q 64.89431313051462 849.7141233099833 55.319195838318954 870.7859412104042 Q 45.74407854612329 891.857759110825 48.952360421589894 913.4097026201159 Q 52.1606422970565 934.961646129407 55.25699252178197 954.3457069920357 Q 58.35334274650744 973.7297678546644 53.917064207991004 994.7440757136699 L 49.48078566947458 1015.7583835726755"></path>
+        </svg>
+        <h3 class="sidebar-title">LOGBOOK_</h3>
+        <div class="posts-feed">
+          <div class="sketch-box-container post-card">
+            <svg class="sketch-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+              <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 13.02760692432097 0.06880909172307526 Q 102.9838966954149 0.7373734369985403 151.96060583430662 14.234797256075726 Q 200.93731497319834 27.73222107515291 257.2162724571795 17.45120299082398 Q 313.4952299411607 7.170184906495045 362.8855625982675 4.3360819975688205 Q 412.2758952553742 1.5019790886425959 457.90644377974377 3.738503628595039 Q 503.53699230411337 5.975028168547482 546.6879178830699 17.781203870062576 Q 589.8388434620264 29.587379571577674 639.1739458573953 23.39530040054282 Q 688.5090482527643 17.203221229507964 732.9712511376981 22.922023013361965 Q 777.4334540226321 28.64082479721597 832.18406808196 23.359858400846228 Q 886.9346821412881 18.078892004476483 942.3771226435551 20.42703595467725 Q 997.8195631458223 22.77517990487802 990.0032230807117 13.680097993791746 Q 982.186883015601 4.585016082705472 982.5845550722951 55.12102485151944 Q 982.9822271289892 105.65703362033341 987.1622504142409 152.51135912213613 Q 991.3422736994927 199.36568462393885 987.7098708063315 249.61642145769258 Q 984.0774679131705 299.86715829144634 988.6179425950145 351.02733259197834 Q 993.1584172768586 402.1875068925103 995.6820883318935 445.1464489791716 Q 998.2057593869284 488.1053910658329 996.4029086443712 543.833468125823 Q 994.600057901814 599.5615451858129 989.5738066276709 647.4250952697307 Q 984.5475553535279 695.2886453536485 986.8069163402606 743.8176312354974 Q 989.0662773269935 792.3466171173462 982.6665976179124 837.654702416264 Q 976.2669179088315 882.9627877151817 987.7019427971052 934.5047470681013 Q 999.1369676853789 986.0467064210211 993.1983209525478 985.2975310843087 Q 987.2596742197167 984.5483557475965 931.3419762631645 979.5960861680444 Q 875.4242783066125 974.6438165884924 836.2302429243807 976.4632196123098 Q 797.0362075421489 978.2826226361271 738.269407315304 985.9159051305322 Q 679.5026070884591 993.5491876249373 642.8672136816838 991.3907318406389 Q 606.2318202749084 989.2322760563404 549.7628036427881 981.7141251422852 Q 493.2937870106678 974.19597422823 447.99945706750196 977.5350087595292 Q 402.7051271243361 980.8740432908284 355.5109425691975 981.7008864025781 Q 308.31675801405885 982.5277295143278 254.28470950576224 983.906205664108 Q 200.25266099746565 985.2846818138881 151.87794232647096 991.7208960236835 Q 103.50322365547625 998.1571102334788 52.09047028870978 990.4654490341436 Q 0.6777169219433166 982.7737878348083 7.348846421552902 979.6687466682802 Q 14.019975921162487 976.563705501752 9.859732064187686 932.0886045284095 Q 5.699488207212884 887.613503555067 4.373118355784755 839.3811541094802 Q 3.0467485043566267 791.1488046638934 11.401942912313032 739.0916807427814 Q 19.757137320269436 687.0345568216694 12.92649126023015 641.1668208227062 Q 6.095845200190867 595.299084823743 11.1836047583243 554.9447171050278 Q 16.27136431645773 514.5903493863126 10.986107589599754 454.55435205828275 Q 5.700850862741776 394.5183547302529 17.675154241659516 351.8647552312172 Q 29.649457620577255 309.2111557321815 23.808875315869575 260.7890455375277 Q 17.968293011161894 212.36693534287397 22.959010125008895 165.2948849690739 Q 27.9497272388559 118.22283459527385 24.788928362727226 71.81203133780019 Q 21.62812948659855 25.401228080326547 17.327868205459758 12.735018586024811 Q 13.02760692432097 0.06880909172307526 13.02760692432097 0.06880909172307526"></path>
+              <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 11.697954225215227 21.320239924840454 Q 102.4068360469432 22.348743596225695 155.88864220023706 19.55127470041284 Q 209.37044835353092 16.75380580459999 262.84964462642586 20.610133045711446 Q 316.3288408993208 24.466460286822905 361.8794579104725 12.950569969975067 Q 407.43007492162417 1.4346796531272297 450.7358978967518 6.956928816150435 Q 494.0417208718795 12.47917797917364 544.2164615341932 6.25478844680683 Q 594.3912021965069 0.03039891444002052 648.5784406959181 4.2704993248567975 Q 702.7656791953293 8.510599735273574 750.7179310911508 8.575091385898858 Q 798.6701829869723 8.639583036524144 844.5582958516549 10.476246699891192 Q 890.4464087163374 12.31291036325824 932.9612091863219 20.489399833309598 Q 975.4760096563065 28.665889303360956 985.6935644819721 20.709890999132675 Q 995.9111193076378 12.753892694904392 992.8599078823618 55.51236242202076 Q 989.8086964570856 98.27083214913712 980.3746620478195 156.1641046913942 Q 970.9406276385533 214.05737723365127 975.3645276804685 259.1027277424531 Q 979.7884277223837 304.1480782512549 986.1978297300368 348.6520544250284 Q 992.6072317376897 393.15603059880186 996.1949475327103 444.0973914373153 Q 999.782663327731 495.0387522758288 987.9065803376242 539.5336008634971 Q 976.0304973475173 584.0284494511653 983.5478347194216 639.0260674044907 Q 991.0651720913261 694.023685357816 994.8277854502585 741.3536181316399 Q 998.5903988091909 788.6835509054639 992.5125832596375 838.9593574363497 Q 986.434767710084 889.2351639672355 983.661365217252 941.4770649278473 Q 980.8879627244199 993.718965888459 989.6959234795315 994.0735585081597 Q 998.503884234643 994.4281511278606 935.7923389995326 984.8742971864592 Q 873.0807937644223 975.320443245058 828.2681242313888 976.8947098047037 Q 783.4554546983552 978.4689763643494 739.1449717244757 974.2501709914729 Q 694.8344887505963 970.0313656185966 647.7273828250376 977.6133866804591 Q 600.6202768994789 985.1954077423217 547.2051797140568 986.0935106981567 Q 493.7900825286347 986.9916136539917 449.89787696672255 985.4900345725705 Q 406.0056714048104 983.9884554911491 354.02902673119934 990.9216546003258 Q 302.0523820575883 997.8548537095027 255.97527933149516 995.342496353813 Q 209.898176605402 992.8301389981234 166.81529319932375 981.4218572226289 Q 123.73240979324551 970.0135754471345 63.324353438709466 978.1419161544667 Q 2.9162970841734275 986.2702568617989 3.2210727830589194 985.4802274003191 Q 3.5258484819444114 984.6901979388392 8.018805656409405 936.2709447704891 Q 12.5117628308744 887.851691602139 15.13592979587338 846.738256273614 Q 17.76009676087236 805.6248209450889 22.119127865191384 743.1992469576113 Q 26.478158969510407 680.7736729701337 13.4616482543187 638.9439725051068 Q 0.4451375391269927 597.1142720400798 8.631583073383693 541.3541229001809 Q 16.818028607640393 485.5939737602819 21.488239935454878 450.5069372359173 Q 26.158451263269363 415.41990071155266 18.819046175553257 363.6778038768598 Q 11.479641087837152 311.935707042167 8.859428422347715 254.4531530395919 Q 6.239215756858279 196.97059903701683 7.156719021879099 159.51995447181378 Q 8.07422228689992 122.06930990661073 17.291450253976205 74.85358345174691 Q 26.50867822105249 27.637856996883098 19.10331622313386 24.479048460861776 Q 11.697954225215227 21.320239924840454 11.697954225215227 21.320239924840454"></path>
+            </svg>
+            <div class="sketch-content" style="padding: 1rem">
+              <div class="post-header"><span class="post-type">TWITTER</span><span class="post-date">2h ago</span></div>
+              <p class="post-content">Just pushed a new update to the lab. Sketchy lines are now 100% more sketchy. 🎨 #buildinpublic</p>
+            </div>
+          </div>
+          <div class="sketch-box-container post-card">
+            <svg class="sketch-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+              <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 1.9626971448426502 18.911476396810343 Q 114.7375364668033 17.814570387940037 156.53750669738326 20.48839813430366 Q 198.3374769279632 23.162225880667286 258.1785459657744 16.608488310264164 Q 318.01961500358556 10.054750739861046 364.1754546256059 8.20235230296965 Q 410.33129424762626 6.349953866078257 456.05600154778705 16.596326062770412 Q 501.78070884794784 26.842698259462566 543.6278019803112 25.617214493733712 Q 585.4748951126745 24.39173072800486 636.9000840695854 22.705015509009264 Q 688.3252730264963 21.01830029001367 739.3820468696258 12.45463404246969 Q 790.4388207127554 3.890967794925711 843.4705276049804 5.159773493730751 Q 896.5022344972052 6.428579192535791 939.2701849168175 10.745564849216166 Q 982.0381353364298 15.062550505896542 987.2711565094603 12.730527474900306 Q 992.5041776824909 10.398504443904068 983.243545072831 57.88524608342506 Q 973.982912463171 105.37198772294605 980.3910639859894 149.8327481001972 Q 986.7992155088077 194.29350847744837 992.2472362806807 243.22201925593058 Q 997.6952570525538 292.1505300344128 997.2926263050606 343.00408495199116 Q 996.8899955575675 393.85763986956954 995.9431519544038 453.8001548624536 Q 994.99630835124 513.7426698553377 984.9368844744104 557.4908474438002 Q 974.8774605975807 601.2390250322629 986.9665245123454 650.5377546883111 Q 999.05558842711 699.8364843443593 986.8898048458616 743.9267920802536 Q 974.7240212646133 788.0170998161477 975.7583820250833 844.9319168818829 Q 976.7927427855533 901.846733947618 987.589737816194 943.939583578529 Q 998.3867328468345 986.03243320944 989.7247493350051 981.9037452425439 Q 981.0627658231755 977.7750572756479 940.3502482652973 977.4914376390708 Q 899.6377307074191 977.2078180024937 851.816864398493 978.9070055058618 Q 803.9959980895669 980.6061930092299 750.2494001225291 981.4800679927555 Q 696.5028021554912 982.3539429762811 643.1467621870886 985.5808935517027 Q 589.790722218686 988.8078441271244 543.5594379028104 987.5700575340345 Q 497.3281535869347 986.3322709409446 454.60512485049765 992.4738575285008 Q 411.88209611406063 998.6154441160571 356.6103282071703 998.9330328126608 Q 301.33856030028 999.2506215092645 253.30311490940946 985.3342501022105 Q 205.26766951853892 971.4178786951563 153.93532263270203 979.329010777218 Q 102.60297574686514 987.2401428592796 56.89441485252785 982.9962575617352 Q 11.185853958190558 978.7523722641909 13.796653277209185 986.3979671377716 Q 16.407452596227813 994.0435620113524 8.304856374700442 941.8091888962811 Q 0.20226015317307144 889.5748157812098 9.53163822720033 839.2221876873248 Q 18.86101630122759 788.8695595934398 24.394854983191163 748.5559957879534 Q 29.928693665154736 708.2424319824669 15.495843626310265 657.2409438486088 Q 1.062993587465792 606.2394557147509 11.536662640705725 546.7286201305442 Q 22.01033169394566 487.21778454633755 11.471063537049869 451.5066092761722 Q 0.9317953801540764 415.79543400600676 14.143940744854365 366.25826998682066 Q 27.356086109554653 316.72110596763457 23.735361341964737 266.96220887484935 Q 20.11463657437482 217.20331178206408 11.451033407019803 159.4832377402625 Q 2.7874302396647845 101.76316369846089 15.851336683033885 53.496836415155144 Q 28.915243126402988 5.230509131849404 15.438970135622819 12.070992764329873 Q 1.9626971448426502 18.911476396810343 1.9626971448426502 18.911476396810343"></path>
+              <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 7.703980765639677 14.551455749945033 Q 114.67203465465252 9.27137626603463 167.7363393058733 5.88673010895691 Q 220.80064395709405 2.5020839518791895 256.07671520286004 6.432114396514955 Q 291.35278644862603 10.362144841150721 350.55080843121584 9.873258738552147 Q 409.74883041380565 9.384372635953573 461.8816816573353 17.99619479860362 Q 514.014532900865 26.60801696125367 548.2004616884001 16.517151792943828 Q 582.3863904759351 6.426286624633988 631.4784386928288 5.295697267938971 Q 680.5704869097225 4.165107911243954 728.6267955102865 10.554057636731278 Q 776.6831041108503 16.9430073622186 839.4093329936122 15.984329397397193 Q 902.1355618763743 15.025651432575787 948.7921362128887 9.392349027453184 Q 995.4487105494032 3.7590466223305814 992.2598770422721 2.8325760486341176 Q 989.0710435351411 1.9061054749376538 987.2166724343829 61.20565811299119 Q 985.3623013336246 120.50521075104473 986.6528344245462 160.514330247107 Q 987.9433675154679 200.52344974316927 990.1087547525101 253.5825931603938 Q 992.2741419895522 306.6417365776183 982.2592345300984 361.5840668603877 Q 972.2443270706448 416.52639714315706 975.2865500319031 452.8460408562466 Q 978.3287729931615 489.1656845693361 987.535427896797 541.9782887057817 Q 996.7420828004326 594.7908928422272 985.0200416102691 639.7220625781531 Q 973.2980004201056 684.653232314079 976.2337070694516 730.9244393863237 Q 979.1694137187975 777.1956464585683 987.878904621133 832.8627837181667 Q 996.5883955234685 888.5299209777652 996.5115037420154 935.0717120688969 Q 996.4346119605623 981.6135031600287 988.6115152124755 976.8149863282154 Q 980.7884184643888 972.0164694964021 935.5618623907022 981.1384868380701 Q 890.3353063170157 990.2605041797382 844.6441866763143 987.1551658339783 Q 798.9530670356131 984.0498274882186 748.815142628258 981.0242329252624 Q 698.6772182209027 977.9986383623061 648.6658370866782 978.454853574154 Q 598.6544559524536 978.9110687860018 542.7435800461168 986.6252176828934 Q 486.83270413978 994.3393665797851 443.6138290808875 988.3223521638118 Q 400.39495402199503 982.3053377478386 352.43970068384465 980.1449982844802 Q 304.4844473456942 977.9846588211216 252.67616636043527 979.6465309180887 Q 200.86788537517634 981.308403015056 151.7944690948416 985.954595410564 Q 102.7210528145068 990.6007878060719 62.20157031224481 980.3085797310565 Q 21.682087809982818 970.0163716560411 13.804766585697811 975.3159574696184 Q 5.927445361412804 980.6155432831957 13.73276184118098 928.3713028428685 Q 21.538078320949158 876.1270624025414 12.122246299792021 832.4455507026247 Q 2.7064142786348846 788.764039002708 9.59310033815515 737.4570369768119 Q 16.479786397675415 686.1500349509158 19.142549438365727 645.3553132431487 Q 21.805312479056035 604.5605915353815 23.19155789412804 551.2803516146926 Q 24.577803309200046 498.0001116940035 12.561557936679687 456.06298504242545 Q 0.5453125641593282 414.12585839084744 9.112057961986224 358.5094491992587 Q 17.67880335981312 302.8930400076699 18.45260553071006 259.04394712489545 Q 19.226407701607 215.19485424212104 14.828380555832872 170.1588868527453 Q 10.430353410058745 125.12291946336958 18.08036626412117 73.21391965910823 Q 25.7303791181836 21.304919854846876 16.71717994191164 17.928187802395954 Q 7.703980765639677 14.551455749945033 7.703980765639677 14.551455749945033"></path>
+            </svg>
+            <div class="sketch-content" style="padding: 1rem">
+              <div class="post-header"><span class="post-type">BLOG</span><span class="post-date">Yesterday</span></div>
+              <p class="post-content">New Blog Post: Why I prefer wobbly lines over straight ones. It is all about the human touch.</p>
+            </div>
+          </div>
+          <div class="sketch-box-container post-card">
+            <svg class="sketch-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+              <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 29.265515550972253 21.682357514021895 Q 97.82151026464146 13.08674285430657 147.4011645235553 21.170205419175236 Q 196.98081878246916 29.2536679840439 248.48317737635082 18.903602459117682 Q 299.9855359702325 8.553536934191463 349.2993999723881 19.02489987199162 Q 398.61326397454366 29.496262809791777 448.313097888994 15.697737517899665 Q 498.01293180344436 1.8992122260075543 551.633825566772 8.702642488255847 Q 605.2547193300996 15.506072750504142 649.0528175919034 9.317372438074191 Q 692.8509158537071 3.12867212564424 736.0728369994033 13.967488212090773 Q 779.2947581450995 24.806304298537306 835.3475875152599 26.283767570647804 Q 891.4004168854201 27.7612308427583 943.489287009768 17.160484195998713 Q 995.5781571341158 6.559737549239124 995.1893547660949 18.145310461563678 Q 994.8005523980739 29.730883373888233 984.1677823967855 64.2939037159739 Q 973.535012395497 98.85692405805955 973.3030027657123 153.56650391439945 Q 973.0709931359278 208.27608377073935 980.4773394095841 263.88208761927325 Q 987.8836856832406 319.4880914678071 986.0387701970462 364.9781689533449 Q 984.1938547108518 410.46824643888266 990.7721159925227 453.82757227435815 Q 997.3503772741935 497.18689810983363 988.9456979662281 546.021673851914 Q 980.5410186582626 594.8564495939944 977.818990837478 646.5394558270424 Q 975.0969630166935 698.2224620600904 972.5742972001731 748.2495593085896 Q 970.0516313836526 798.2766565570887 980.0056591473241 835.6910227101873 Q 989.9596869109955 873.105388863286 989.9502100548506 935.1391573992487 Q 989.9407331987056 997.1729259352113 986.017127238274 991.4962615558027 Q 982.0935212778423 985.8195971763942 940.5976471980823 992.0239882099768 Q 899.1017731183223 998.2283792435595 839.1563095906547 988.072169766246 Q 779.210846062987 977.9159602889325 736.8374424215026 986.8474167561042 Q 694.4640387800182 995.7788732232757 652.5636567815637 994.2147857844127 Q 610.6632747831093 992.6506983455497 551.4594713398906 995.2847089416526 Q 492.25566789667175 997.9187195377556 447.70336538312665 992.9349500028347 Q 403.1510628695816 987.951180467914 354.839435317175 993.7951627065486 Q 306.52780776476845 999.6391449451831 251.97057224648634 996.9536617701399 Q 197.41333672820423 994.2681785950965 157.4774309130818 993.8856027438519 Q 117.5415250979594 993.5030268926073 61.96561670180726 983.499054539503 Q 6.389708305655118 973.4950821863987 14.157071737059244 986.4335923399921 Q 21.92443516846337 999.3721024935854 18.513250057692716 942.0914512974748 Q 15.102064946922066 884.8108001013642 10.839853851035611 832.1768436659603 Q 6.5776427551491565 779.5428872305564 14.673940690858004 743.1954661928023 Q 22.77023862656685 706.8480451550483 16.44484726320188 650.6002032080028 Q 10.119455899836904 594.3523612609571 17.875083513459394 546.7244432149245 Q 25.63071112708188 499.0965251688918 16.796820329092263 448.47966494440755 Q 7.962929531102648 397.86280471992336 14.26129870467658 352.23466362004905 Q 20.55966787825051 306.60652252017474 20.475414612950715 258.3739149386863 Q 20.391161347650915 210.14130735719792 24.1712699013488 159.9488291618236 Q 27.951378455046683 109.7563509664493 14.229733987074406 58.97611352309066 Q 0.5080895191021284 8.19587607973201 14.88680253503719 14.939116796876952 Q 29.265515550972253 21.682357514021895 29.265515550972253 21.682357514021895"></path>
+              <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 24.76738543585176 9.047889198951108 Q 112.20617880501635 19.216606062905996 165.89299501941014 20.939019210072672 Q 219.5798112338039 22.661432357239345 267.41966682382287 22.347832185321863 Q 315.25952241384186 22.034232013404377 364.948418020648 23.737382018576817 Q 414.63731362745403 25.440532023749252 457.2255112812274 15.54323448922054 Q 499.81370893500076 5.645936954691827 549.2492740650277 17.810220289416378 Q 598.6848391950548 29.97450362414093 643.4337836590031 18.874490871524223 Q 688.1827281229514 7.774478118907519 742.333008872152 6.681847515334409 Q 796.4832896213526 5.5892169117613 837.2645267337065 13.717921300933476 Q 878.0457638460604 21.84662569010565 935.183874238286 23.67450104192133 Q 992.3219846305116 25.50237639373701 984.8720141054043 16.904063977081783 Q 977.422043580297 8.305751560426557 984.4274779776342 55.291730402218896 Q 991.4329123749716 102.27770924401123 991.0571454272135 157.59909108326087 Q 990.6813784794554 212.92047292251053 995.0173046395214 257.1120167603178 Q 999.3532307995873 301.303560598125 995.9156823317098 353.734760792207 Q 992.4781338638322 406.16596098628906 983.8183231121548 446.2640192182139 Q 975.1585123604772 486.3620774501387 977.3936551982405 535.8964003294277 Q 979.6287980360038 585.4307232087166 977.3250927003207 635.5949061705594 Q 975.0213873646378 685.7590891324022 979.5210192997058 732.4350085450872 Q 984.0206512347738 779.110927957772 978.9832529937771 830.2358794258454 Q 973.9458547527805 881.3608308939188 980.9922040157178 927.444278198175 Q 988.038553278655 973.5277255024313 984.5144196673075 972.4546890323952 Q 980.9902860559602 971.3816525623592 936.5849121592064 973.0993936719518 Q 892.1795382624526 974.8171347815444 842.2288040199646 982.9857747235814 Q 792.2780697774767 991.1544146656183 742.5801698684924 984.5987489599797 Q 692.882269959508 978.043083254341 643.5248477290687 987.082606830864 Q 594.1674254986294 996.1221304073872 542.4650726656539 989.0936488554378 Q 490.76271983267844 982.0651673034885 449.7435172817825 989.3070502511223 Q 408.7243147308865 996.5489331987561 352.401977823206 992.5750782307799 Q 296.0796409155255 988.6012232628037 256.3850436560955 981.4144635200687 Q 216.6904463966655 974.2277037773337 167.80661690216095 978.4375930764866 Q 118.92278740765644 982.6474823756395 69.19951527179425 983.1091471857219 Q 19.476243135932066 983.5708119958042 20.49269509418412 984.0764409745894 Q 21.509147052436177 984.5820699533747 24.25278009780655 933.3617434573064 Q 26.99641314317692 882.141416961238 24.369373399946276 838.1371198775026 Q 21.74233365671563 794.1328227937673 12.937892128397229 738.7971415654774 Q 4.133450600078827 683.4614603371874 5.811357122888289 633.1998017194911 Q 7.4892636456977515 582.9381431017948 9.930474180287575 545.4959168118723 Q 12.3716847148774 508.05369052195 15.668848291693203 459.1139812010248 Q 18.966011868509007 410.17427188009964 16.596915520310546 352.2493148617017 Q 14.227819172112081 294.3243578433037 9.991412103214921 245.32889609715002 Q 5.755005034317762 196.33343435099636 11.263736120349776 157.08651423564385 Q 16.77246720638179 117.83959412029131 22.399150914886604 61.284628690537225 Q 28.025834623391415 4.729663260783145 26.396610029621588 6.888776229867126 Q 24.76738543585176 9.047889198951108 24.76738543585176 9.047889198951108"></path>
+            </svg>
+            <div class="sketch-content" style="padding: 1rem">
+              <div class="post-header"><span class="post-type">LINKEDIN</span><span class="post-date">2d ago</span></div>
+              <p class="post-content">Excited to announce that I am exploring the intersection of creative coding and brutalist UI design.</p>
+            </div>
+          </div>
+          <div class="sketch-box-container post-card">
+            <svg class="sketch-svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+              <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 10.567796170082591 21.5474193447817 Q 107.68430049883165 20.273288832436084 163.97739016044142 12.25728945247193 Q 220.27047982205116 4.241290072507777 263.7258594147681 14.024595950659771 Q 307.181239007485 23.807901828811765 361.1176285984776 13.57970620756525 Q 415.0540181894703 3.351510586318735 464.1026028649432 4.49472568717186 Q 513.1511875404161 5.637940788024984 553.5348526541137 5.302381044757283 Q 593.9185177678113 4.966821301489581 645.60316460014 2.7615895597022853 Q 697.2878114324687 0.5563578179149893 748.8295041167561 2.4776131661648435 Q 800.3711968010434 4.398868514414698 846.0784557381036 4.652300973289536 Q 891.7857146751637 4.905733432164375 938.0707252841537 6.883493952609856 Q 984.3557358931438 8.861254473055338 980.2971112544958 16.656313617415744 Q 976.2384866158477 24.45137276177615 987.4972561710408 64.84048416695526 Q 998.7560257262338 105.22959557213439 994.16404150743 151.86881681048567 Q 989.5720572886263 198.50803804883694 993.1803608484303 248.4187999616209 Q 996.7886644082342 298.3295618744049 994.1743242771843 349.0902821899415 Q 991.5599841461343 399.85100250547816 987.7670227901302 451.7496278885817 Q 983.9740614341262 503.6482532716852 982.3371484054155 555.1401888230145 Q 980.7002353767049 606.6321243743437 981.3794966517651 647.1582985990643 Q 982.0587579268254 687.684472823785 986.8877883927713 743.3463420190192 Q 991.7168188587173 799.0082112142534 995.4997372622387 839.7477484484641 Q 999.2826556657601 880.4872856826748 998.956295555718 925.3061885787813 Q 998.6299354456761 970.1250914748879 986.5453687678013 973.5992798229537 Q 974.4608020899265 977.0734681710195 924.9819692032568 985.1367374770923 Q 875.5031363165871 993.2000067831652 836.0630274265347 991.5110862383093 Q 796.6229185364824 989.8221656934534 743.4543912856074 985.3500825787482 Q 690.2858640347323 980.877999464043 645.7079851197166 976.9218367786617 Q 601.130106204701 972.9656740932804 553.2578019546534 972.9673433687145 Q 505.3854977046058 972.9690126441486 455.5678221207117 972.0047165492535 Q 405.75014653681757 971.0404204543584 357.08824097495824 975.3433761456556 Q 308.42633541309885 979.6463318369529 262.9107404893513 989.6824830270115 Q 217.39514556560377 999.7186342170701 161.58312801778538 998.1100523752347 Q 105.77111046996703 996.5014705333992 60.92122419145024 984.9564557472563 Q 16.071337912933462 973.4114409611135 14.555417605505795 974.376364218744 Q 13.03949729807813 975.3412874763745 9.826957985069217 928.6897898170623 Q 6.614418672060305 882.0382921577501 17.904664979970093 829.3923243301813 Q 29.194911287879883 776.7463565026126 25.36545851456779 737.2316534887864 Q 21.5360057412557 697.7169504749602 22.756067866530827 651.2875948915907 Q 23.976129991805955 604.8582393082213 22.103375005213316 546.8099795201408 Q 20.23062001862068 488.7617197320602 24.47660365515501 453.2294414006294 Q 28.722587291689344 417.6971630691986 20.64678245291355 366.48775188849 Q 12.570977614137753 315.27834070778135 7.626518616831962 256.2655081651405 Q 2.6820596195261714 197.25267562249965 7.514042876260886 151.99252473145572 Q 12.3460261329956 106.73237384041178 17.811134751148288 60.580238309696036 Q 23.276243369300975 14.428102778980293 16.922019769691783 17.987761061880995 Q 10.567796170082591 21.5474193447817 10.567796170082591 21.5474193447817"></path>
+              <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 15.603181646031453 26.68760025368399 Q 119.00241510988293 19.56586105936679 167.08753533090166 19.215698829576905 Q 215.17265555192037 18.86553659978702 267.24801254069774 23.79694444950936 Q 319.3233695294751 28.7283522992317 353.8513714469737 21.05685901407663 Q 388.3793733644723 13.385365728921556 438.72201049703926 10.83556464448951 Q 489.06464762960627 8.285763560057465 542.8420031320325 10.787373797241317 Q 596.6193586344586 13.28898403442517 645.9194051240447 12.697257627345781 Q 695.2194516136307 12.105531220266391 741.4260130684088 20.309299605164828 Q 787.6325745231868 28.513067990063263 841.6421778869785 18.250902477802704 Q 895.6517812507701 7.988736965542145 940.2270574959259 8.620928198615115 Q 984.8023337410817 9.253119431688082 990.639550287724 15.702092235619872 Q 996.4767668343663 22.151065039551664 990.7843763037387 67.93522542514266 Q 985.091985773111 113.71938581073367 985.1492025163807 164.42342810499915 Q 985.2064192596503 215.1274703992646 982.402129741833 262.6818413287041 Q 979.597840224016 310.2362122581435 986.8132442730457 353.29217050406226 Q 994.0286483220756 396.348128749981 996.2605552288576 445.38957402369545 Q 998.4924621356395 494.4310192974098 987.2142505116881 550.2502479349274 Q 975.9360388877368 606.0694765724451 986.1644867143818 648.9928588670962 Q 996.3929345410268 691.9162411617472 984.7263173178056 740.8560815064727 Q 973.0597000945845 789.7959218511982 981.9673419915941 836.4749097671782 Q 990.8749838886039 883.1538976831583 991.8788616481406 930.7562925762463 Q 992.8827394076774 978.3586874693344 990.6130542230849 984.5922213962541 Q 988.3433690384923 990.8257553231738 944.6372792433473 987.8665875944353 Q 900.9311894482023 984.9074198656966 841.6924336158608 990.2413273937036 Q 782.4536777835192 995.5752349217107 742.8042971998644 992.7812071740262 Q 703.1549166162097 989.9871794263418 652.4605284269517 990.8710977554454 Q 601.7661402376935 991.7550160845489 557.7611259422974 984.2693373539227 Q 513.7561116469013 976.7836586232964 458.13678479072155 984.0002974418768 Q 402.5174579345417 991.2169362604571 360.39749682830154 989.635131800384 Q 318.2775357220613 988.053327340311 266.3558638349541 991.1457499018857 Q 214.43419194784695 994.2381724634605 159.00910792103974 991.8837640057482 Q 103.58402389423256 989.5293555480358 56.17186866828566 992.1506035678884 Q 8.759713442338764 994.771851587741 8.661519256383711 986.7534519592182 Q 8.563325070428657 978.7350523306953 5.193558849076189 933.924421715368 Q 1.823792627723721 889.1137911000405 2.274326870637358 841.8345588979838 Q 2.724861113550995 794.5553266959271 13.138410897059465 747.3621419656654 Q 23.551960680567934 700.1689572354036 14.139254262202524 649.8010801746274 Q 4.726547843837114 599.4332031138512 6.2711700152304894 546.8121692526692 Q 7.815792186623865 494.1911353914872 6.8723015838025905 448.0582979600328 Q 5.928810980981316 401.9254605285784 8.21863124597342 354.6088412095313 Q 10.508451510965525 307.29222189048426 11.31450667859021 253.17607379387175 Q 12.120561846214894 199.05992569725927 16.30716841098034 148.06360954874074 Q 20.493774975745783 97.06729340022221 13.6732953533801 57.57017388760691 Q 6.852815731014417 18.07305437499162 11.227998688522934 22.380327314337805 Q 15.603181646031453 26.68760025368399 15.603181646031453 26.68760025368399"></path>
+            </svg>
+            <div class="sketch-content" style="padding: 1rem">
+              <div class="post-header"><span class="post-type">THOUGHT</span><span class="post-date">3d ago</span></div>
+              <p class="post-content">"Code is just structured sketching." - A reminder for today.</p>
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
+    <!--/@app-->
   </body>
 </html>

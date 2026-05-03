@@ -15,14 +15,7 @@ void main() {
   Jaspr.initializeApp(
     options: defaultClientOptions,
   );
-   final assetManager = AssetManager(
-    // The root directory where your assets are located. Usually, this is the same as your content directory.
-    directory: 'content',
-    // Optional: Configure which properties in your frontmatter contain asset paths.
-    dataProperties: {'image', 'meta.thumbnail'},
-  );
   
- 
   // Starts the app.
   //
   // [ClientApp] automatically loads and renders all components annotated with @client.

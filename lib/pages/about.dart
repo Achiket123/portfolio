@@ -12,32 +12,45 @@ class About extends StatelessComponent {
 
   @override
   Component build(BuildContext context) {
-    return const section([
-      ol([
-        li([
-          h3([.text('📖 Documentation')]),
-          .text('Jaspr\'s '),
-          a(href: 'https://docs.jaspr.site', [.text('official documentation')]),
-          .text(' provides you with all information you need to get started.'),
+    return section(classes: 'section about-section', [
+      div(classes: 'section-header', [
+        span(classes: 'section-label', [.text('Behind the Sketch_')]),
+        h2(classes: 'section-title', [.text('About Jaspr & This Portfolio')]),
+      ]),
+      div(classes: 'about-grid', [
+        div(classes: 'sketch-card', [
+          ol(classes: 'about-list', [
+            li([
+              h3([.text('DOCUMENTATION_')]),
+              p([
+                .text('Jaspr\'s '),
+                a(href: 'https://docs.jaspr.site', [.text('official documentation')]),
+                .text(' provides you with all information you need to get started.'),
+              ]),
+            ]),
+            li([
+              h3([.text('COMMUNITY_')]),
+              p([
+                .text('Got stuck? Ask your question on the official '),
+                a(href: 'https://discord.gg/XGXrGEk4c6', [.text('Discord server')]),
+                .text(' for the Jaspr community.'),
+              ]),
+            ]),
+            li([
+              h3([.text('ECOSYSTEM_')]),
+              p([
+                .text(
+                    'Get official packages and integrations for your project like jaspr_router, jaspr_tailwind or jaspr_riverpod.'),
+              ]),
+            ]),
+          ]),
         ]),
-        li([
-          h3([.text('💬 Community')]),
-          .text('Got stuck? Ask your question on the official '),
-          a(href: 'https://discord.gg/XGXrGEk4c6', [.text('Discord server')]),
-          .text(' for the Jaspr community.'),
-        ]),
-        li([
-          h3([.text('📦 Ecosystem')]),
-          .text(
-              'Get official packages and integrations for your project like jaspr_router, jaspr_tailwind or jaspr_riverpod. Find packages built for Jaspr on pub.dev using the '),
-          a(href: 'https://pub.dev/packages?q=topic%3Ajaspr', [.text('#jaspr')]),
-          .text(' topic, or publish your own.'),
-        ]),
-        li([
-          h3([.text('💙 Support Jaspr')]),
-          .text('If you like Jaspr, consider starring us on '),
-          a(href: 'https://github.com/schultek/jaspr', [.text('Github')]),
-          .text(' and tell your friends.'),
+        div(classes: 'sketch-card availability-card', [
+          h3([.text('Experimental Build')]),
+          p([
+            .text(
+                'This portfolio is a live experiment in "Sketched UI" — combining hand-drawn aesthetics with the power of Dart & Jaspr.'),
+          ]),
         ]),
       ]),
     ]);
@@ -45,6 +58,49 @@ class About extends StatelessComponent {
 
   @css
   static List<StyleRule> get styles => [
-    css('ol').styles(maxWidth: 500.px),
+    css('.about-section').styles(
+      maxWidth: 1120.px,
+      margin: .symmetric(horizontal: .auto),
+      padding: .symmetric(horizontal: 2.rem, vertical: 4.rem),
+    ),
+    css('.about-grid').styles(
+      display: .grid,
+      gap: Gap(row: 2.rem, column: 2.rem),
+      raw: {'grid-template-columns': 'repeat(auto-fit, minmax(300px, 1fr))'},
+    ),
+    css('.about-list').styles(
+      display: .flex,
+      flexDirection: .column,
+      gap: Gap(row: 1.5.rem),
+    ),
+    css('.about-list h3').styles(
+      fontSize: 1.5.rem,
+      margin: Spacing.only(bottom: 0.5.rem),
+      color: const Color('var(--accent)'),
+    ),
+    css('.about-list p').styles(
+      color: const Color('var(--text-muted)'),
+      lineHeight: 1.5.rem,
+    ),
+    css('.sketch-card').styles(
+      backgroundColor: const Color('var(--bg-card)'),
+      padding: .all(2.rem),
+      raw: {
+        'border': '1.5px solid var(--border)',
+        'clip-path': 'var(--chaos-path-3)',
+        'border-radius': 'var(--chaos-radius-1)',
+      },
+    ),
+    css('.availability-card').styles(
+      backgroundColor: const Color('var(--accent)'),
+      color: const Color('var(--bg)'),
+      raw: {
+        'border': '2px solid var(--border)',
+        'clip-path': 'var(--chaos-path-1)',
+        'border-radius': 'var(--chaos-radius-2)',
+      },
+    ),
+    css('.availability-card h3').styles(color: const Color('var(--bg)')),
+    css('.availability-card p').styles(color: const Color('var(--bg)')),
   ];
 }
