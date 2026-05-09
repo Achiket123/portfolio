@@ -1,8 +1,6 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 
-import '../constants/theme.dart';
-
 class Counter extends StatefulComponent {
   const Counter({super.key});
 
@@ -38,10 +36,10 @@ class CounterState extends State<Counter> {
   static List<StyleRule> get styles => [
     css('.counter', [
       css('&').styles(
+        alignItems: .center,
+        border: Border.all(color: const Color('var(--border)'), width: 2.px),
         display: .flex,
         padding: .symmetric(vertical: 10.px),
-        border: Border.all(color: const Color('var(--border)'), width: 2.px),
-        alignItems: .center,
         raw: {
           'border-radius': 'var(--chaos-radius-1)',
           'clip-path': 'var(--chaos-path-2)',
@@ -49,16 +47,16 @@ class CounterState extends State<Counter> {
       ),
       css('button', [
         css('&').styles(
-          display: .flex,
-          width: 2.em,
-          height: 2.em,
-          border: Border.all(color: const Color('var(--accent)'), width: 2.px),
-          cursor: .pointer,
-          justifyContent: .center,
           alignItems: .center,
-          fontSize: 2.rem,
           backgroundColor: Colors.transparent,
+          border: Border.all(color: const Color('var(--accent)'), width: 2.px),
           color: const Color('var(--text)'),
+          cursor: .pointer,
+          display: .flex,
+          fontSize: 2.rem,
+          height: 2.em,
+          justifyContent: .center,
+          width: 2.em,
           raw: {
             'border-radius': 'var(--chaos-radius-3)',
             'clip-path': 'var(--chaos-path-1)',
@@ -71,12 +69,12 @@ class CounterState extends State<Counter> {
         ),
       ]),
       css('span').styles(
-        minWidth: 2.5.em,
-        padding: .symmetric(horizontal: 2.rem),
         boxSizing: .borderBox,
         color: const Color('var(--accent)'),
-        textAlign: .center,
         fontSize: 4.rem,
+        minWidth: 2.5.em,
+        padding: .symmetric(horizontal: 2.rem),
+        textAlign: .center,
       ),
     ]),
   ];

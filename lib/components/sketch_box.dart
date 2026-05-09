@@ -107,6 +107,10 @@ class SketchBoxState extends State<SketchBox> {
       [
         svg(
           classes: 'sketch-svg',
+          attributes: {
+            'viewBox': '0 0 1000 1000',
+            'preserveAspectRatio': 'none',
+          },
           [
             path(
               d: _path1,
@@ -130,17 +134,13 @@ class SketchBoxState extends State<SketchBox> {
               [],
             ),
           ],
-          attributes: {
-            'viewBox': '0 0 1000 1000',
-            'preserveAspectRatio': 'none',
-          },
         ),
         div(
           classes: 'sketch-content',
           styles: Styles(
             raw: {'padding': component.padding},
           ),
-          component.children,
+          [...component.children],
         ),
       ],
     );
@@ -149,10 +149,10 @@ class SketchBoxState extends State<SketchBox> {
   @css
   static List<StyleRule> get styles => [
     css('.sketch-box-container').styles(
-      position: Position.relative(),
+      backgroundColor: const Color('var(--bg-card)'),
       display: .flex,
       flexDirection: .column,
-      backgroundColor: const Color('var(--bg-card)'),
+      position: Position.relative(),
       raw: {
         'overflow': 'visible',
       },

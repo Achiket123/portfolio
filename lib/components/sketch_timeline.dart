@@ -47,6 +47,10 @@ class SketchTimelineState extends State<SketchTimeline> {
     return div(classes: 'sketch-timeline-container', [
       svg(
         classes: 'sketch-timeline-svg',
+        attributes: {
+          'viewBox': '0 0 100 1000',
+          'preserveAspectRatio': 'none',
+        },
         [
           path(
             d: _path,
@@ -60,12 +64,10 @@ class SketchTimelineState extends State<SketchTimeline> {
             [],
           ),
         ],
-        attributes: {
-          'viewBox': '0 0 100 1000',
-          'preserveAspectRatio': 'none',
-        },
       ),
-      div(classes: 'sketch-timeline-content', component.children),
+      div(classes: 'sketch-timeline-content', [
+        ...component.children,
+      ]),
     ]);
   }
 

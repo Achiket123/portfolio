@@ -6,8 +6,11 @@ import 'package:http/http.dart' as http;
 
 import '../components/sketch_box.dart';
 import '../components/sketch_timeline.dart';
+import '../components/sketch_heatmap.dart';
+import '../components/twitter_feed.dart';
+import '../models/portfolio_data.dart';
+import '../constants/mock_data.dart';
 
-@client
 class Home extends StatefulComponent {
   const Home({super.key});
 
@@ -16,11 +19,9 @@ class Home extends StatefulComponent {
 }
 
 class HomeState extends State<Home> {
-  static const _githubUser = 'Achiket123';
-
-  bool _loadingRepos = true;
-  String? _repoError;
-  List<_Repo> _repos = const [];
+  bool _loading = true;
+  String? _error;
+  PortfolioData? _data;
 
   final _featured = const [
     (
@@ -104,66 +105,62 @@ class HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _loadRepos();
+    if (kIsWeb) {
+      _loadData();
+    }
   }
 
-  Future<void> _loadRepos() async {
-    final uri = Uri.parse(
-      'https://api.github.com/users/$_githubUser/repos?sort=updated&per_page=100',
-    );
-
+  Future<void> _loadData() async {
+    // Attempt to fetch from the provided API endpoint
     try {
-      final response = await http.get(
-        uri,
-        headers: const {'Accept': 'application/vnd.github+json'},
-      );
+      final response = await http
+          .get(Uri.parse('https://portfolio-api.achiket.site/api/v1/data/portfolio'))
+          .timeout(const Duration(seconds: 5));
 
-      if (response.statusCode != 200) {
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body);
         setState(() {
-          _loadingRepos = false;
-          _repoError = 'GitHub API returned ${response.statusCode}';
+          _data = PortfolioData.fromJson(decoded);
+          _loading = false;
         });
         return;
       }
+    } catch (e) {
+      print('API fetch failed: $e');
+    }
 
-      final decoded = jsonDecode(response.body);
-      if (decoded is! List) {
-        setState(() {
-          _loadingRepos = false;
-          _repoError = 'Unexpected API response format';
-        });
-        return;
-      }
-
-      final repos = decoded.map((item) => _Repo.fromJson(item)).whereType<_Repo>().where((repo) => !repo.fork).toList()
-        ..sort((a, b) => b.stars.compareTo(a.stars));
-
+    // Fallback to mock data if API fails
+    try {
+      print('Using mock data fallback.');
       setState(() {
-        _repos = repos;
-        _loadingRepos = false;
+        _data = PortfolioData.fromJson(mockPortfolioData);
+        _loading = false;
       });
-    } catch (_) {
+    } catch (e) {
+      print('Mock data processing failed: $e');
       setState(() {
-        _loadingRepos = false;
-        _repoError = 'Unable to fetch repositories right now.';
+        _loading = false;
+        _error = 'Unable to fetch portfolio data and fallback failed.';
       });
     }
   }
 
   String _resolveFeaturedUrl(String title, List<String> aliases) {
+    if (_data == null) return '#';
+
     String normalize(String value) => value.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '');
 
     final target = normalize(title);
     final aliasTargets = aliases.map(normalize).toList();
 
-    for (final repo in _repos) {
+    for (final repo in _data!.github.user?.repositories ?? []) {
       final name = normalize(repo.name);
       if (name == target || aliasTargets.contains(name)) {
         return repo.url;
       }
     }
 
-    return 'https://github.com/$_githubUser?tab=repositories&q=${Uri.encodeComponent(title)}';
+    return 'https://github.com/Achiket123?tab=repositories&q=${Uri.encodeComponent(title)}';
   }
 
   Component _sketchCard({
@@ -182,7 +179,27 @@ class HomeState extends State<Home> {
 
   @override
   Component build(BuildContext context) {
-    final topRepos = _repos.toList();
+    if (_loading) {
+      return main_([
+        section(classes: 'section loading-section', [
+          p([.text('System.booting()...')]),
+        ]),
+      ]);
+    }
+
+    if (_error != null) {
+      return main_([
+        section(classes: 'section error-section', [
+          div(classes: 'error-card', [
+            h2([.text('CRITICAL_SYSTEM_FAILURE')]),
+            p([.text(_error!)]),
+            a(href: '/', classes: 'sketch-btn sketch-btn-accent', [.text('REBOOT_')]),
+          ]),
+        ]),
+      ]);
+    }
+
+    final github = _data?.github.user;
 
     return main_([
       // hero section
@@ -239,6 +256,12 @@ class HomeState extends State<Home> {
         ]),
       ]),
 
+      // GitHub Heatmap Section
+      if (github != null)
+        section(classes: 'section heatmap-section', [
+          SketchHeatmap(calendar: github.contributionsCollection.contributionCalendar),
+        ]),
+
       // projects section
       section(id: 'projects', classes: 'section', [
         div(classes: 'section-header', [
@@ -271,7 +294,7 @@ class HomeState extends State<Home> {
                     [.text('Launch Experiment')],
                   ),
                   a(
-                    href: 'https://github.com/$_githubUser',
+                    href: 'https://github.com/Achiket123',
                     target: Target.blank,
                     classes: 'sketch-btn sketch-btn-ghost',
                     [.text('View Source')],
@@ -281,16 +304,12 @@ class HomeState extends State<Home> {
             ),
         ]),
 
-        // github repos
-        div(classes: 'repos-section', [
-          h3(classes: 'repos-title', [.text('Live GitHub Repositories')]),
-          if (_loadingRepos)
-            p(classes: 'loading-text', [.text('Fetching repositories...')])
-          else if (_repoError != null)
-            p(classes: 'error-text', [.text(_repoError!)])
-          else
+        // GitHub Pinned Repos
+        if (github != null && github.pinnedItems.isNotEmpty)
+          div(id: 'pinned-repo', classes: 'repos-section', [
+            h3(classes: 'repos-title', [.text('Pinned on GitHub')]),
             div(classes: 'repos-grid', [
-              for (final repo in topRepos)
+              for (final repo in github.pinnedItems)
                 _sketchCard(
                   extraClass: 'repo-card',
                   children: [
@@ -299,10 +318,10 @@ class HomeState extends State<Home> {
                       if (repo.description.isNotEmpty) p(classes: 'repo-desc', [.text(repo.description)]),
                       div(classes: 'repo-meta', [
                         span(classes: 'repo-stars', [
-                          .text('* ${repo.stars}'),
+                          .text('* ${repo.stargazerCount}'),
                         ]),
                         span(classes: 'repo-lang', [
-                          .text(repo.language.isEmpty ? 'Code' : repo.language),
+                          .text(repo.primaryLanguageName.isEmpty ? 'Code' : repo.primaryLanguageName),
                         ]),
                       ]),
                       a(
@@ -315,25 +334,72 @@ class HomeState extends State<Home> {
                   ],
                 ),
             ]),
-        ]),
+          ]),
 
-        div(classes: 'cta-footer', [
-          p(classes: 'cta-text', [.text('Have a weird idea for a collab?')]),
-          div(classes: 'cta-actions', [
-            a(
-              href: 'mailto:achiketkuma@gmail.com',
-              classes: 'sketch-btn sketch-btn-accent',
-              [.text('Say Hi_')],
-            ),
-            a(
-              href: 'https://drive.google.com/file/d/13KtJgodJv8Hmrm2_Bw1QdAZJoJAO53Hy/view?usp=sharing',
-              target: Target.blank,
-              classes: 'sketch-btn sketch-btn-ghost',
-              [.text('Download Logs_')],
-            ),
+        // GitHub all repos
+        if (github != null && github.repositories.isNotEmpty)
+          div(id: 'github-repo', classes: 'repos-section', [
+            h3(classes: 'repos-title', [.text('All Repositories')]),
+            div(classes: 'repos-grid', [
+              for (final repo in github.repositories)
+                _sketchCard(
+                  extraClass: 'repo-card',
+                  children: [
+                    div(classes: 'repo-card-inner', [
+                      h4(classes: 'repo-name', [.text(repo.name)]),
+                      if (repo.description.isNotEmpty) p(classes: 'repo-desc', [.text(repo.description)]),
+                      div(classes: 'repo-meta', [
+                        span(classes: 'repo-stars', [
+                          .text('* ${repo.stargazerCount}'),
+                        ]),
+                        span(classes: 'repo-lang', [
+                          .text(repo.primaryLanguageName.isEmpty ? 'Code' : repo.primaryLanguageName),
+                        ]),
+                      ]),
+                      a(
+                        href: repo.url,
+                        target: Target.blank,
+                        classes: 'repo-link',
+                        [.text('View on GitHub ->>')],
+                      ),
+                    ]),
+                  ],
+                ),
+            ]),
+          ]),
+      ]),
+
+      // Twitter Feed
+      if (_data != null && _data!.twitter.isNotEmpty) TwitterFeed(tweets: _data!.twitter),
+
+      // Pull Request Contributions
+      if (github != null && github.contributionsCollection.pullRequestContributions.isNotEmpty)
+        section(id: 'pull-request', classes: 'section pr-section', [
+          div(classes: 'section-header', [
+            span(classes: 'section-label', [.text('Code Collaborations_')]),
+            h2(classes: 'section-title', [.text('Recent Pull Requests')]),
+          ]),
+          div(classes: 'pr-list', [
+            for (final pr in github.contributionsCollection.pullRequestContributions)
+              _sketchCard(
+                extraClass: 'pr-card',
+                padding: '1.2rem',
+                children: [
+                  div(classes: 'pr-header', [
+                    span(classes: 'pr-state ${pr.state.toLowerCase()}', [.text(pr.state)]),
+                    p(classes: 'pr-repo', [.text(pr.repoName)]),
+                  ]),
+                  h4(classes: 'pr-title', [.text(pr.title)]),
+                  a(
+                    href: pr.url,
+                    target: Target.blank,
+                    classes: 'pr-link',
+                    [.text('View PR ->>')],
+                  ),
+                ],
+              ),
           ]),
         ]),
-      ]),
 
       // experience section
       section(id: 'experience', classes: 'section', [
@@ -341,31 +407,33 @@ class HomeState extends State<Home> {
           span(classes: 'section-label', [.text('Work Logs_')]),
           h2(classes: 'section-title', [.text('Experience')]),
         ]),
-        SketchTimeline(children: [
-          for (final job in _experience)
-            div(classes: 'timeline-entry', [
-              div(classes: 'timeline-dot', []),
-              _sketchCard(
-                extraClass: 'timeline-card',
-                children: [
-                  div(classes: 'timeline-header', [
-                    div(classes: 'timeline-info', [
-                      h3(classes: 'timeline-role', [.text(job.role)]),
-                      p(classes: 'timeline-company', [.text(job.company)]),
-                    ]),
-                    span(classes: 'timeline-period', [.text(job.period)]),
-                  ]),
-                  ul(classes: 'timeline-points', [
-                    for (final point in job.points)
-                      li(classes: 'timeline-point', [
-                        span(classes: 'point-marker', [.text('+')]),
-                        .text(point),
+        SketchTimeline(
+          children: [
+            for (final job in _experience)
+              div(classes: 'timeline-entry', [
+                div(classes: 'timeline-dot', []),
+                _sketchCard(
+                  extraClass: 'timeline-card',
+                  children: [
+                    div(classes: 'timeline-header', [
+                      div(classes: 'timeline-info', [
+                        h3(classes: 'timeline-role', [.text(job.role)]),
+                        p(classes: 'timeline-company', [.text(job.company)]),
                       ]),
-                  ]),
-                ],
-              ),
-            ]),
-        ]),
+                      span(classes: 'timeline-period', [.text(job.period)]),
+                    ]),
+                    ul(classes: 'timeline-points', [
+                      for (final point in job.points)
+                        li(classes: 'timeline-point', [
+                          span(classes: 'point-marker', [.text('+')]),
+                          .text(point),
+                        ]),
+                    ]),
+                  ],
+                ),
+              ]),
+          ],
+        ),
       ]),
 
       // skills section
@@ -422,6 +490,43 @@ class HomeState extends State<Home> {
       padding: .symmetric(horizontal: 2.rem, vertical: 4.rem),
     ),
 
+    css('.loading-section').styles(
+      height: 60.vh,
+      display: .flex,
+      alignItems: .center,
+      justifyContent: .center,
+      fontFamily: const .list([FontFamily('Just Another Hand'), FontFamilies.cursive]),
+      fontSize: 2.rem,
+    ),
+
+    css('.error-section').styles(
+      height: 80.vh,
+      display: .flex,
+      alignItems: .center,
+      justifyContent: .center,
+      textAlign: .center,
+    ),
+    css('.error-card').styles(
+      padding: .all(3.rem),
+      backgroundColor: const Color('var(--bg-card)'),
+      raw: {
+        'border': '3px solid #ff4444',
+        'clip-path': 'var(--chaos-path-1)',
+        'box-shadow': '10px 10px 0 #ff4444',
+      },
+    ),
+    css('.error-card h2').styles(
+      color: const Color('#ff4444'),
+      fontSize: 3.rem,
+      margin: Spacing.only(bottom: 1.5.rem),
+    ),
+    css('.error-card p').styles(
+      color: const Color('var(--text-muted)'),
+      fontSize: 1.2.rem,
+      margin: Spacing.only(bottom: 2.rem),
+      fontFamily: const .list([FontFamily('Special Elite'), FontFamilies.serif]),
+    ),
+
     // hero
     css('.hero-section').styles(
       padding: .symmetric(horizontal: 2.rem, vertical: 5.rem),
@@ -455,7 +560,6 @@ class HomeState extends State<Home> {
       flexDirection: .column,
       gap: Gap(row: 1.5.rem),
       raw: {'min-width': '220px'},
-      // backgroundColor: Colors.black,
     ),
     css('.hero-title').styles(
       fontSize: 4.5.rem,
@@ -547,7 +651,7 @@ class HomeState extends State<Home> {
       },
     ),
 
-    // sketch card (applies to project-card, repo-card, etc)
+    // sketch card
     css('.sketch-box-container').styles(
       margin: .all(1.2.rem),
       raw: {
@@ -642,6 +746,102 @@ class HomeState extends State<Home> {
       gap: Gap(column: 1.rem),
       flexWrap: .wrap,
       margin: Spacing.only(top: 0.8.rem),
+    ),
+
+    // repos
+    css('.repos-section').styles(
+      margin: Spacing.only(top: 4.rem),
+    ),
+    css('.repos-title').styles(
+      fontSize: 2.rem,
+      margin: Spacing.only(bottom: 1.5.rem),
+    ),
+    css('.repos-grid').styles(
+      display: .grid,
+      gap: Gap(row: 1.5.rem, column: 1.5.rem),
+      raw: {'grid-template-columns': 'repeat(auto-fill, minmax(280px, 1fr))'},
+    ),
+    css('.repo-card-inner').styles(
+      display: .flex,
+      flexDirection: .column,
+      gap: Gap(row: 0.8.rem),
+    ),
+    css('.repo-name').styles(
+      fontSize: 1.4.rem,
+    ),
+    css('.repo-desc').styles(
+      fontSize: 0.9.rem,
+      color: const Color('var(--text-muted)'),
+      lineHeight: 1.4.rem,
+    ),
+    css('.repo-meta').styles(
+      display: .flex,
+      gap: Gap(column: 1.rem),
+      fontSize: 0.85.rem,
+      color: const Color('var(--text-muted)'),
+    ),
+    css('.repo-link').styles(
+      fontFamily: const .list([FontFamily('Just Another Hand'), FontFamilies.cursive]),
+      fontSize: 1.2.rem,
+      color: const Color('var(--accent)'),
+      margin: Spacing.only(top: 0.5.rem),
+    ),
+
+    // PRs
+    css('.pr-list').styles(
+      display: .grid,
+      gap: Gap(row: 1.rem, column: 1.rem),
+      raw: {'grid-template-columns': 'repeat(auto-fill, minmax(300px, 1fr))'},
+    ),
+    css('.pr-card').styles(
+      display: .flex,
+      flexDirection: .column,
+      gap: Gap(row: 0.5.rem),
+    ),
+    css('.pr-header').styles(
+      display: .flex,
+      justifyContent: .spaceBetween,
+      alignItems: .center,
+    ),
+    css('.pr-state').styles(
+      fontSize: 0.7.rem,
+      padding: .symmetric(horizontal: 6.px, vertical: 2.px),
+      raw: {
+        'border': '1px solid var(--border)',
+        'text-transform': 'uppercase',
+      },
+    ),
+    css('.pr-state.merged').styles(
+      backgroundColor: const Color('rgba(163, 113, 247, 0.2)'),
+      color: const Color('#a371f7'),
+      raw: {'border-color': '#a371f7'},
+    ),
+    css('.pr-state.open').styles(
+      backgroundColor: const Color('rgba(63, 185, 80, 0.2)'),
+      color: const Color('#3fb950'),
+      raw: {'border-color': '#3fb950'},
+    ),
+    css('.pr-state.closed').styles(
+      backgroundColor: const Color('rgba(248, 81, 73, 0.2)'),
+      color: const Color('#f85149'),
+      raw: {'border-color': '#f85149'},
+    ),
+    css('.pr-repo').styles(
+      fontSize: 0.8.rem,
+      color: const Color('var(--text-muted)'),
+    ),
+    css('.pr-title').styles(
+      fontSize: 1.1.rem,
+      raw: {
+        'white-space': 'nowrap',
+        'overflow': 'hidden',
+        'text-overflow': 'ellipsis',
+      },
+    ),
+    css('.pr-link').styles(
+      fontFamily: const .list([FontFamily('Just Another Hand'), FontFamilies.cursive]),
+      fontSize: 1.1.rem,
+      color: const Color('var(--accent)'),
     ),
 
     // timeline (logs)
@@ -790,34 +990,4 @@ class HomeState extends State<Home> {
       ),
     ]),
   ];
-}
-
-class _Repo {
-  const _Repo({
-    required this.name,
-    required this.url,
-    required this.description,
-    required this.language,
-    required this.stars,
-    required this.fork,
-  });
-
-  final String name;
-  final String url;
-  final String description;
-  final String language;
-  final int stars;
-  final bool fork;
-
-  static _Repo? fromJson(dynamic raw) {
-    if (raw is! Map<String, dynamic>) return null;
-    return _Repo(
-      name: raw['name'] is String ? raw['name'] as String : 'Repository',
-      url: raw['html_url'] is String ? raw['html_url'] as String : 'https://github.com',
-      description: raw['description'] is String ? raw['description'] as String : '',
-      language: raw['language'] is String ? raw['language'] as String : '',
-      stars: raw['stargazers_count'] is int ? raw['stargazers_count'] as int : 0,
-      fork: raw['fork'] is bool ? raw['fork'] as bool : false,
-    );
-  }
 }

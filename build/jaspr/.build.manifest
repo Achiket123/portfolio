@@ -7,6 +7,8 @@ assets/favicon_io/favicon-16x16.png
 assets/favicon_io/favicon-32x32.png
 assets/favicon_io/site.webmanifest
 images/logo.svg
+main.client.dart.js
+main.client.dart.js_1.part.js
 packages/$sdk/dev_compiler/amd/require.js
 packages/$sdk/dev_compiler/ddc/ddc_module_loader.js
 packages/$sdk/dev_compiler/web/dart_stack_trace_mapper.js
@@ -287,15 +289,14 @@ packages/portfolio/app.styles.json
 packages/portfolio/clients.bundle.json
 packages/portfolio/code_context.txt
 packages/portfolio/components/counter.styles.json
-packages/portfolio/components/header.client.module.json
 packages/portfolio/components/header.styles.json
 packages/portfolio/components/right_sidebar.styles.json
 packages/portfolio/components/sidebar.styles.json
 packages/portfolio/components/sketch_box.styles.json
+packages/portfolio/components/sketch_heatmap.styles.json
 packages/portfolio/components/sketch_timeline.styles.json
-packages/portfolio/pages/about.client.module.json
+packages/portfolio/components/twitter_feed.styles.json
 packages/portfolio/pages/about.styles.json
-packages/portfolio/pages/home.client.module.json
 packages/portfolio/pages/home.styles.json
 packages/portfolio/styles.bundle.json
 packages/timezone/data/latest.tzf

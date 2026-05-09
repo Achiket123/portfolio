@@ -6,7 +6,6 @@ import 'package:jaspr/jaspr.dart';
 // - this file and any imported file must be compilable for both server and client environments.
 // - this component and any child components will be built once on the server during pre-rendering and then
 //   again on the client during normal rendering.
-@client
 class About extends StatelessComponent {
   const About({super.key});
 
@@ -59,8 +58,8 @@ class About extends StatelessComponent {
   @css
   static List<StyleRule> get styles => [
     css('.about-section').styles(
-      maxWidth: 1120.px,
       margin: .symmetric(horizontal: .auto),
+      maxWidth: 1120.px,
       padding: .symmetric(horizontal: 2.rem, vertical: 4.rem),
     ),
     css('.about-grid').styles(
@@ -74,9 +73,9 @@ class About extends StatelessComponent {
       gap: Gap(row: 1.5.rem),
     ),
     css('.about-list h3').styles(
+      color: const Color('var(--accent)'),
       fontSize: 1.5.rem,
       margin: Spacing.only(bottom: 0.5.rem),
-      color: const Color('var(--accent)'),
     ),
     css('.about-list p').styles(
       color: const Color('var(--text-muted)'),

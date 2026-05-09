@@ -92,20 +92,20 @@ class App extends StatelessComponent {
       textDecoration: TextDecoration(line: .none),
     ),
     css('.app-root').styles(
-      minHeight: 100.vh,
-      backgroundColor: const Color('var(--bg)'),
       color: const Color('var(--text)'),
       display: .flex,
+      minHeight: 100.vh,
+      backgroundColor: const Color('var(--bg)'),
       raw: {
         'transition': 'background-color 0.3s ease, color 0.3s ease',
       },
     ),
     css('.app-main').styles(
+      display: .flex,
       flex: Flex(grow: 1),
+      flexDirection: .column,
       margin: Spacing.only(left: 260.px, right: 260.px),
       minHeight: 100.vh,
-      display: .flex,
-      flexDirection: .column,
       raw: {
         'overflow-x': 'hidden',
       },

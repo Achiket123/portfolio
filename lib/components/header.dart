@@ -1,8 +1,6 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
-import 'package:universal_web/web.dart' as web;
 
-@client
 class Header extends StatefulComponent {
   const Header({super.key});
 
@@ -11,26 +9,9 @@ class Header extends StatefulComponent {
 }
 
 class HeaderState extends State<Header> {
-  bool _isDark = false;
-
   @override
   void initState() {
     super.initState();
-    if (kIsWeb) {
-      _isDark = web.document.body!.classList.contains('dark');
-    }
-  }
-
-  void _toggleTheme() {
-    setState(() => _isDark = !_isDark);
-    if (kIsWeb) {
-      final body = web.document.body;
-      if (_isDark) {
-        body?.classList.add('dark');
-      } else {
-        body?.classList.remove('dark');
-      }
-    }
   }
 
   @override
@@ -102,11 +83,11 @@ class HeaderState extends State<Header> {
   @css
   static List<StyleRule> get styles => [
     css('.site-header').styles(
+      backgroundColor: const Color('var(--bg)'),
+      padding: .symmetric(horizontal: 2.rem, vertical: 1.5.rem),
       position: .sticky(top: 0.px),
       width: 100.percent,
       zIndex: ZIndex(100),
-      padding: .symmetric(horizontal: 2.rem, vertical: 1.5.rem),
-      backgroundColor: const Color('var(--bg)'),
       raw: {
         'backdrop-filter': 'blur(8px)',
       },
@@ -122,11 +103,11 @@ class HeaderState extends State<Header> {
       ),
     ]),
     css('.header-inner').styles(
-      display: .flex,
       alignItems: .center,
+      display: .flex,
       justifyContent: .spaceBetween,
-      maxWidth: 1400.px,
       margin: .symmetric(horizontal: .auto),
+      maxWidth: 1400.px,
     ),
     css('.brand-box').styles(
       display: .inlineBlock,
@@ -145,26 +126,26 @@ class HeaderState extends State<Header> {
       },
     ),
     css('.brand-text').styles(
+      color: const Color('var(--accent)'),
       fontFamily: const .list([FontFamily('Just Another Hand'), FontFamilies.cursive]),
       fontSize: 1.8.rem,
-      color: const Color('var(--accent)'),
       fontWeight: .w700,
       letterSpacing: 1.px,
     ),
     css('.header-right').styles(
-      display: .flex,
       alignItems: .center,
+      display: .flex,
       gap: Gap(column: 2.5.rem),
     ),
     css('.header-nav').styles(
+      alignItems: .center,
       display: .flex,
       gap: Gap(column: 2.rem),
-      alignItems: .center,
     ),
     css('.nav-link').styles(
+      color: const Color('var(--text)'),
       fontFamily: const .list([FontFamily('Special Elite'), FontFamilies.serif]),
       fontSize: 0.9.rem,
-      color: const Color('var(--text)'),
       letterSpacing: 1.px,
       raw: {
         'transition': 'color 0.2s',
@@ -174,13 +155,13 @@ class HeaderState extends State<Header> {
       color: const Color('var(--accent)'),
     ),
     css('.theme-toggle').styles(
-      border: Border.all(color: const Color('var(--border)'), width: 2.px),
-      backgroundColor: Colors.transparent,
-      cursor: .pointer,
-      padding: .all(0.6.rem),
-      display: .flex,
       alignItems: .center,
+      backgroundColor: Colors.transparent,
+      border: Border.all(color: const Color('var(--border)'), width: 2.px),
+      cursor: .pointer,
+      display: .flex,
       justifyContent: .center,
+      padding: .all(0.6.rem),
       raw: {
         'transition': 'all 0.3s ease',
         'border-radius': 'var(--chaos-radius-3)',
@@ -193,15 +174,15 @@ class HeaderState extends State<Header> {
       raw: {'transform': 'rotate(-5deg) scale(1.05)'},
     ),
     css('.toggle-icon').styles(
-      width: 24.px,
-      height: 24.px,
-      display: .flex,
       alignItems: .center,
+      display: .flex,
+      height: 24.px,
       justifyContent: .center,
+      width: 24.px,
     ),
     css('.toggle-icon svg').styles(
-      width: 20.px,
       height: 20.px,
+      width: 20.px,
     ),
     css.media(MediaQuery.screen(maxWidth: 768.px), [
       css('.header-nav').styles(display: .none),
