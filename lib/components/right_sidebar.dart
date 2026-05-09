@@ -4,6 +4,8 @@ import 'dart:math' as math;
 import 'package:http/http.dart' as http;
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
+import 'package:portfolio/config.dart';
+import 'package:portfolio/models/blog_post.dart';
 
 import '../constants/mock_data.dart';
 import '../models/portfolio_data.dart';
@@ -22,19 +24,10 @@ class RightSidebarState extends State<RightSidebar> {
   final _random = math.Random();
   PortfolioData? _data;
 
-  final List<Map<String, String>> _staticPosts = [
-    {
-      'type': 'BLOG',
-      'content': 'New Blog Post: Why I prefer wobbly lines over straight ones. It is all about the human touch.',
-      'date': 'Yesterday',
-    },
-    {
-      'type': 'LINKEDIN',
-      'content': 'Excited to announce that I am exploring the intersection of creative coding and brutalist UI design.',
-      'date': '2d ago',
-    },
-    {'type': 'THOUGHT', 'content': '"Code is just structured sketching." - A reminder for today.', 'date': '3d ago'},
-  ];
+  // final List<Map<String, String>> _staticPosts = [
+
+  //   {'type': 'THOUGHT', 'content': '"Code is just structured sketching." - A reminder for today.', 'date': '3d ago'},
+  // ];
 
   @override
   void initState() {
@@ -47,9 +40,7 @@ class RightSidebarState extends State<RightSidebar> {
 
   Future<void> _loadData() async {
     try {
-      final response = await http
-          .get(Uri.parse('http://portfolio-api.achiket.site/api/v1/data/portfolio'))
-          .timeout(const Duration(seconds: 5));
+      final response = await http.get(Uri.parse(APIConfig.portfolio)).timeout(const Duration(seconds: 5));
 
       if (response.statusCode == 200) {
         final decoded = jsonDecode(response.body);
@@ -122,6 +113,15 @@ class RightSidebarState extends State<RightSidebar> {
     final List<Map<String, String>> displayPosts = [];
 
     // Add latest tweet if available
+
+    for (final BlogPostList post in _data?.blog ?? []) {
+      displayPosts.add({
+        'type': 'Blog',
+        'content': _truncate(post.description),
+        'date': post.date,
+        'slug': post.slug,
+      });
+    }
     if (_data != null && _data!.twitter.isNotEmpty) {
       // Sort tweets by date descending (latest first)
       final sortedTweets = List<Tweet>.from(_data!.twitter)
@@ -138,13 +138,6 @@ class RightSidebarState extends State<RightSidebar> {
         'type': 'TWITTER',
         'content': _truncate(latestTweet.text),
         'date': latestTweet.date,
-      });
-    }
-
-    for (final post in _staticPosts) {
-      displayPosts.add({
-        ...post,
-        'content': _truncate(post['content']!),
       });
     }
 
@@ -191,6 +184,14 @@ class RightSidebarState extends State<RightSidebar> {
                 span(classes: 'post-date', [.text(post['date']!)]),
               ]),
               p(classes: 'post-content', [.text(post['content']!)]),
+              if (post['slug'] != null)
+                a(
+                  href: '/blog/${post['slug']}',
+                  classes: 'sketch-btn',
+                  [
+                    span([.text('Read More')]),
+                  ],
+                ),
             ],
           ),
       ]),

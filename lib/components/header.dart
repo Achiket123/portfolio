@@ -21,6 +21,7 @@ class HeaderState extends State<Header> {
       (label: 'Experience', href: '/#experience'),
       (label: 'Skills', href: '/#skills'),
       (label: 'About', href: '/about'),
+      (label: 'Blog', href: '/blog'),
     ];
 
     return header(

@@ -13,6 +13,8 @@ import 'package:portfolio/components/sketch_heatmap.dart' as _sketch_heatmap;
 import 'package:portfolio/components/sketch_timeline.dart' as _sketch_timeline;
 import 'package:portfolio/components/twitter_feed.dart' as _twitter_feed;
 import 'package:portfolio/pages/about.dart' as _about;
+import 'package:portfolio/pages/blog_detail.dart' as _blog_detail;
+import 'package:portfolio/pages/blog_list.dart' as _blog_list;
 import 'package:portfolio/pages/home.dart' as _home;
 import 'package:portfolio/app.dart' as _app;
 
@@ -45,6 +47,8 @@ ServerOptions get defaultServerOptions => ServerOptions(
     ..._sketch_timeline.SketchTimelineState.styles,
     ..._twitter_feed.TwitterFeed.styles,
     ..._about.About.styles,
+    ..._blog_detail.BlogDetailState.styles,
+    ..._blog_list.BlogListState.styles,
     ..._home.HomeState.styles,
   ],
 );

@@ -1,6 +1,8 @@
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 import 'package:jaspr_router/jaspr_router.dart';
+import 'package:portfolio/pages/blog_detail.dart';
+import 'package:portfolio/pages/blog_list.dart';
 
 import 'components/header.dart';
 import 'components/sidebar.dart';
@@ -24,6 +26,8 @@ class App extends StatelessComponent {
               routes: [
                 Route(path: '/', builder: (context, state) => const Home()),
                 Route(path: '/about', builder: (context, state) => const About()),
+                Route(path: '/blog', builder: (context, state) => const BlogList()),
+                Route(path: '/blog/:slug', builder: (context, state) => const BlogDetail()),
               ],
             ),
           ]),
@@ -54,7 +58,8 @@ class App extends StatelessComponent {
         '--chaos-path-1': 'polygon(2% 2%, 98% 4%, 99% 98%, 4% 96%)',
         '--chaos-path-2': 'polygon(1% 5%, 95% 2%, 98% 94%, 5% 92%)',
         '--chaos-path-3': 'polygon(4% 1%, 99% 3%, 96% 99%, 1% 97%)',
-        '--messy-lines': '1.5px 2px 0px 0px var(--border), -1.5px -1.5px 0px 0px var(--border), 2px -1px 0px 0px var(--border)',
+        '--messy-lines':
+            '1.5px 2px 0px 0px var(--border), -1.5px -1.5px 0px 0px var(--border), 2px -1px 0px 0px var(--border)',
       },
     ),
     css('body.dark').styles(
@@ -124,7 +129,9 @@ class App extends StatelessComponent {
       },
     ),
     css.media(MediaQuery.screen(maxWidth: 1024.px), [
-      css('.app-main').styles(margin: Spacing.only(left: .zero, right: .zero)),
+      css('.app-main').styles(
+        margin: Spacing.only(left: .zero, right: .zero),
+      ),
     ]),
   ];
 }

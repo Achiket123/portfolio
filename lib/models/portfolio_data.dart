@@ -1,6 +1,7 @@
+import 'package:portfolio/models/blog_post.dart';
 
 class PortfolioData {
-  final List<BlogPost> blog;
+  final List<BlogPostList> blog;
   final GithubData github;
   final LinkedinData linkedin;
   final List<Tweet> twitter;
@@ -14,18 +15,12 @@ class PortfolioData {
 
   factory PortfolioData.fromJson(Map json) {
     return PortfolioData(
-      blog: (json['blog'] as List? ?? []).map((e) => BlogPost.fromJson(e as Map)).toList(),
+      blog: (json['blog'] as List? ?? []).map((e) => BlogPostList.fromJson(e)).toList(),
       github: GithubData.fromJson(json['github'] as Map? ?? {}),
       linkedin: LinkedinData.fromJson(json['linkedin'] as Map? ?? {}),
       twitter: (json['twitter'] as List? ?? []).map((e) => Tweet.fromJson(e as Map)).toList(),
     );
   }
-}
-
-class BlogPost {
-  // Empty for now as per data
-  BlogPost();
-  factory BlogPost.fromJson(Map json) => BlogPost();
 }
 
 class LinkedinData {
@@ -89,9 +84,7 @@ class GithubUser {
       pinnedItems: (json['pinnedItems']?['nodes'] as List? ?? [])
           .map((e) => GithubPinnedItem.fromJson(e as Map))
           .toList(),
-      repositories: (json['repositories']?['nodes'] as List? ?? [])
-          .map((e) => GithubRepo.fromJson(e as Map))
-          .toList(),
+      repositories: (json['repositories']?['nodes'] as List? ?? []).map((e) => GithubRepo.fromJson(e as Map)).toList(),
     );
   }
 }
@@ -133,9 +126,7 @@ class CommitContributionByRepo {
 
   factory CommitContributionByRepo.fromJson(Map json) {
     return CommitContributionByRepo(
-      occurredAt: (json['contributions']?['nodes'] as List? ?? [])
-          .map((e) => DateTime.parse(e['occurredAt']))
-          .toList(),
+      occurredAt: (json['contributions']?['nodes'] as List? ?? []).map((e) => DateTime.parse(e['occurredAt'])).toList(),
       repoName: json['repository']?['nameWithOwner'] ?? '',
       repoUrl: json['repository']?['url'] ?? '',
     );
@@ -154,9 +145,7 @@ class ContributionCalendar {
   factory ContributionCalendar.fromJson(Map json) {
     return ContributionCalendar(
       totalContributions: json['totalContributions'] ?? 0,
-      weeks: (json['weeks'] as List? ?? [])
-          .map((e) => ContributionWeek.fromJson(e as Map))
-          .toList(),
+      weeks: (json['weeks'] as List? ?? []).map((e) => ContributionWeek.fromJson(e as Map)).toList(),
     );
   }
 }

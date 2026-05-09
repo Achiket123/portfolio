@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:jaspr/dom.dart';
 import 'package:jaspr/jaspr.dart';
 import 'package:http/http.dart' as http;
+import 'package:portfolio/config.dart';
 
 import '../components/sketch_box.dart';
 import '../components/sketch_timeline.dart';
@@ -113,9 +114,7 @@ class HomeState extends State<Home> {
   Future<void> _loadData() async {
     // Attempt to fetch from the provided API endpoint
     try {
-      final response = await http
-          .get(Uri.parse('https://portfolio-api.achiket.site/api/v1/data/portfolio'))
-          .timeout(const Duration(seconds: 5));
+      final response = await http.get(Uri.parse(APIConfig.portfolio)).timeout(const Duration(seconds: 5));
 
       if (response.statusCode == 200) {
         final decoded = jsonDecode(response.body);
