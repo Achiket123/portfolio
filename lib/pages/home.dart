@@ -228,7 +228,7 @@ class HomeState extends State<Home> {
                 [.text('View the Lab')],
               ),
               a(
-                href: 'https://drive.google.com/file/d/13KtJgodJv8Hmrm2_Bw1QdAZJoJAO53Hy/view?usp=sharing',
+                href: 'https://drive.google.com/file/d/1fKkeiFQGd2Gv7OfEZX_tSgtY8XFo25mn/view?usp=drivesdk',
                 target: Target.blank,
                 classes: 'sketch-btn sketch-btn-ghost',
                 [.text('Download Journal_')],
