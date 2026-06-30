@@ -62,7 +62,7 @@ class BlogListState extends State<BlogList> {
 
   List<BlogPostList> get _filtered {
     if (_activeTag == 'all') return _posts;
-    return _posts.where((p) => p.tags.contains(_activeTag)).toList();
+    return _posts.where((post) => post.tags.contains(_activeTag)).toList();
   }
 
   @override
@@ -116,14 +116,14 @@ class BlogListState extends State<BlogList> {
           span(classes: 'blog-card-date', [.text(post.date)]),
           span(classes: 'blog-card-read', [.text('${post.readingTimeMinutes} min read')]),
         ]),
-        a(href: '/blog/${post.slug}', classes: 'blog-card-title-link', [
+        a(href: '/blog-detail?slug=${post.slug}', classes: 'blog-card-title-link', [
           h2(classes: 'blog-card-title', [.text(post.title)]),
         ]),
         p(classes: 'blog-card-desc', [.text(post.description)]),
         div(classes: 'blog-card-tags', [
           for (final tag in post.tags) span(classes: 'blog-tag', [.text(tag)]),
         ]),
-        a(href: '/blog/${post.slug}', classes: 'blog-card-link sketch-btn', [
+        a(href: '/blog-detail?slug=${post.slug}', classes: 'blog-card-link sketch-btn', [
           .text('Read post'),
         ]),
       ],

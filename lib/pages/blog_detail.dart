@@ -26,7 +26,7 @@ class BlogDetailState extends State<BlogDetail> {
   void initState() {
     super.initState();
     if (kIsWeb) {
-      final slug = RouteState.of(context).params['slug'] ?? '';
+      final slug = RouteState.of(context).queryParams['slug'] ?? '';
       _loadPost(slug);
     }
   }
@@ -108,7 +108,7 @@ class BlogDetailState extends State<BlogDetail> {
         // raw() injects the HTML string directly into the DOM without escaping.
         // The markdown package produces safe, sanitized HTML so this is fine.
         div(classes: 'blog-md-body', [
-          raw(renderedHtml),
+          RawText(renderedHtml),
         ]),
         div(classes: 'blog-detail-footer', [
           a(href: '/blog', classes: 'sketch-btn', [.text('Back to writings')]),

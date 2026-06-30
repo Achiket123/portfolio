@@ -27,7 +27,7 @@ class App extends StatelessComponent {
                 Route(path: '/', builder: (context, state) => const Home()),
                 Route(path: '/about', builder: (context, state) => const About()),
                 Route(path: '/blog', builder: (context, state) => const BlogList()),
-                Route(path: '/blog/:slug', builder: (context, state) => const BlogDetail()),
+                Route(path: '/blog-detail', builder: (context, state) => const BlogDetail()),
               ],
             ),
           ]),

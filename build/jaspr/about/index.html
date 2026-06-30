@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base href="/"/>
+    <meta charset="utf-8"/>
+    <style>
+      @import url(https://fonts.googleapis.com/css2?family=Just+Another+Hand&family=Special+Elite&display=swap);
+      html, body {
+        width: 100%;
+        min-height: 100vh;
+        padding: 0;
+        margin: 0;
+        color: var(--text);
+        font-family: 'Special Elite', serif;
+        background-color: var(--bg);
+        background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+        background-size: 40px 40px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      *, *::before, *::after {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: #FFFFFF;
+        --bg-card: #FFFFFF;
+        --text: #000000;
+        --text-muted: #333333;
+        --accent: #000000;
+        --accent-dim: rgba(0,0,0,0.05);
+        --border: #000000;
+        --grid-color: rgba(0,0,0,0.05);
+        --chaos-radius-1: 255px 15px 225px 15px / 15px 225px 15px 255px;
+        --chaos-radius-2: 15px 225px 15px 255px / 255px 15px 225px 15px;
+        --chaos-radius-3: 4% 95% 6% 95% / 95% 4% 92% 5%;
+        --chaos-path-1: polygon(2% 2%, 98% 4%, 99% 98%, 4% 96%);
+        --chaos-path-2: polygon(1% 5%, 95% 2%, 98% 94%, 5% 92%);
+        --chaos-path-3: polygon(4% 1%, 99% 3%, 96% 99%, 1% 97%);
+        --messy-lines: 1.5px 2px 0px 0px var(--border), -1.5px -1.5px 0px 0px var(--border), 2px -1px 0px 0px var(--border);
+      }
+      body.dark {
+        --bg: #0D0D0D;
+        --bg-card: #141414;
+        --text: #F0F0F0;
+        --text-muted: #888888;
+        --accent: #39FF14;
+        --accent-dim: rgba(57,255,20,0.15);
+        --border: rgba(255,255,255,0.4);
+        --grid-color: rgba(57,255,20,0.03);
+      }
+      h1, h2, h3, h4, h5 {
+        margin: 0;
+        font-family: 'Just Another Hand', cursive;
+        font-weight: 400;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+      }
+      img {
+        display: block;
+      }
+    </style>
+    <link sizes="180x180" href="/assets/favicon_io/apple-touch-icon.png" rel="apple-touch-icon"/>
+    <link sizes="32x32" href="/assets/favicon_io/favicon-32x32.png" rel="icon" type="image/png"/>
+    <link sizes="16x16" href="/assets/favicon_io/favicon-16x16.png" rel="icon" type="image/png"/>
+    <link href="/assets/favicon_io/site.webmanifest" rel="manifest"/>
+    <!--$-->
+    <title>Achiket Kumar | Full Stack Developer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Full-stack engineer building digital blueprints from messy thoughts."/>
+    <!--/-->
+    <script src="main.client.dart.js" defer></script>
+    <style>
+      @import url(https://fonts.googleapis.com/css2?family=Just+Another+Hand&family=Special+Elite&display=swap);
+      :root {
+        --bg: #FFFFFF;
+        --bg-card: #FFFFFF;
+        --text: #000000;
+        --text-muted: #333333;
+        --accent: #000000;
+        --accent-dim: rgba(0,0,0,0.05);
+        --border: #000000;
+        --grid-color: rgba(0,0,0,0.05);
+        --chaos-radius-1: 255px 15px 225px 15px / 15px 225px 15px 255px;
+        --chaos-radius-2: 15px 225px 15px 255px / 255px 15px 225px 15px;
+        --chaos-radius-3: 4% 95% 6% 95% / 95% 4% 92% 5%;
+        --chaos-path-1: polygon(2% 2%, 98% 4%, 99% 98%, 4% 96%);
+        --chaos-path-2: polygon(1% 5%, 95% 2%, 98% 94%, 5% 92%);
+        --chaos-path-3: polygon(4% 1%, 99% 3%, 96% 99%, 1% 97%);
+        --messy-lines: 1.5px 2px 0px 0px var(--border), -1.5px -1.5px 0px 0px var(--border), 2px -1px 0px 0px var(--border);
+      }
+      body.dark {
+        --bg: #0D0D0D;
+        --bg-card: #141414;
+        --text: #F0F0F0;
+        --text-muted: #888888;
+        --accent: #39FF14;
+        --accent-dim: rgba(57,255,20,0.15);
+        --border: rgba(255,255,255,0.4);
+        --grid-color: rgba(57,255,20,0.03);
+      }
+      html, body {
+        color: var(--text);
+        font-family: 'Special Elite', serif;
+        background-color: var(--bg);
+        transition: background-color 0.3s ease, color 0.3s ease;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      body::-webkit-scrollbar {
+        display: none;
+      }
+      h1, h2, h3, h4, h5 {
+        font-family: 'Just Another Hand', cursive;
+        font-weight: 400;
+        line-height: 1.1rem;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .app-root {
+        display: flex;
+        min-height: 100vh;
+        color: var(--text);
+        background-color: var(--bg);
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .app-main {
+        display: flex;
+        min-height: 100vh;
+        margin-left: 260px;
+        margin-right: 260px;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow-x: hidden;
+      }
+      .app-content-layout {
+        display: flex;
+        position: relative;
+        flex-grow: 1;
+      }
+      .app-page-area {
+        min-width: 0px;
+        flex-grow: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      @media screen and (max-width: 1024px) {
+        .app-main {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+      .site-header {
+        position: sticky;
+        top: 0px;
+        z-index: 100;
+        width: 100%;
+        padding: 1.5rem 2rem;
+        background-color: var(--bg);
+        backdrop-filter: blur(8px);
+      }
+      @media screen and (min-width: 1025px) {
+        .site-header {
+          width: 100%;
+        }
+      }
+      @media screen and (min-width: 1401px) {
+        .site-header {
+          width: 100%;
+        }
+      }
+      .header-inner {
+        display: flex;
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .brand-box {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border: 2px solid var(--accent);
+        box-shadow: 4px 4px 0 var(--accent);
+        clip-path: var(--chaos-path-1);
+        transition: all 0.2s;
+      }
+      .brand-box:hover {
+        box-shadow: 2px 2px 0 var(--accent);
+        transform: translate(2px, 2px);
+      }
+      .brand-text {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        column-gap: 2.5rem;
+      }
+      .header-nav {
+        display: flex;
+        align-items: center;
+        column-gap: 2rem;
+      }
+      .nav-link {
+        color: var(--text);
+        font-family: 'Special Elite', serif;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        transition: color 0.2s;
+      }
+      .nav-link:hover {
+        color: var(--accent);
+      }
+      .theme-toggle {
+        display: flex;
+        padding: 0.6rem;
+        border: solid var(--border) 2px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        transition: all 0.3s ease;
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-2);
+        color: var(--text);
+      }
+      .theme-toggle:hover {
+        background-color: var(--accent-dim);
+        transform: rotate(-5deg) scale(1.05);
+      }
+      .toggle-icon {
+        display: flex;
+        width: 24px;
+        height: 24px;
+        justify-content: center;
+        align-items: center;
+      }
+      .toggle-icon svg {
+        width: 20px;
+        height: 20px;
+      }
+      @media screen and (max-width: 768px) {
+        .header-nav {
+          display: none;
+        }
+        .brand-text {
+          font-size: 1.4rem;
+        }
+      }
+      .right-sidebar {
+        display: flex;
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        z-index: 101;
+        width: 260px;
+        height: 100vh;
+        padding: 2rem 1.5rem;
+        flex-direction: column;
+        background-color: var(--bg);
+        overflow: visible;
+      }
+      .sidebar-left-border-svg {
+        position: absolute;
+        top: 0;
+        left: -30px;
+        width: 60px;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+        z-index: 110;
+      }
+      .sidebar-title {
+        margin-bottom: 2rem;
+        color: var(--accent);
+        text-align: center;
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+      }
+      .posts-feed {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1.5rem;
+        flex-grow: 1;
+        -ms-overflow-style: none;
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+      .posts-feed::-webkit-scrollbar {
+        display: none;
+      }
+      .post-card {
+        background: var(--bg-card);
+      }
+      .post-header {
+        display: flex;
+        margin-bottom: 0.5rem;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .post-type {
+        padding: 0.1rem 0.4rem;
+        color: var(--bg);
+        font-family: 'Special Elite';
+        font-size: 0.7rem;
+        font-weight: 700;
+        background-color: var(--accent);
+      }
+      .post-date {
+        color: var(--text-muted);
+        font-size: 0.65rem;
+      }
+      .post-content {
+        margin: 0;
+        font-size: 0.85rem;
+        line-height: 1.3rem;
+      }
+      @media screen and (max-width: 1024px) {
+        .right-sidebar {
+          display: none;
+        }
+      }
+      .sidebar {
+        display: flex;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        z-index: 101;
+        width: 260px;
+        height: 100vh;
+        margin-right: 200rem;
+        flex-direction: column;
+        background-color: var(--bg);
+        overflow: visible;
+      }
+      .sidebar-content {
+        display: flex;
+        height: 100%;
+        padding: 2rem 2.5rem;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .sidebar-content::-webkit-scrollbar {
+        display: none;
+      }
+      .sidebar-border-svg {
+        position: absolute;
+        top: 0;
+        right: -30px;
+        width: 60px;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+        z-index: 110;
+      }
+      .sidebar-profile {
+        margin-bottom: 3rem;
+        text-align: center;
+      }
+      .profile-img-box {
+        width: 90px;
+        height: 90px;
+        padding: 5px;
+        margin: 0 auto;
+        background: var(--accent-dim);
+        border: 2px solid var(--accent);
+        border-radius: var(--chaos-radius-1);
+        clip-path: var(--chaos-path-2);
+      }
+      .profile-img-box img {
+        width: 100%;
+        height: 100%;
+        border-radius: var(--chaos-radius-2);
+        clip-path: var(--chaos-path-3);
+        filter: grayscale(100%) contrast(1.1);
+        object-fit: cover;
+      }
+      .profile-name {
+        margin-top: 1.2rem;
+        margin-bottom: 0.3rem;
+        color: var(--accent);
+        font-size: 1.3rem;
+      }
+      .profile-sub {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.8rem;
+        flex-grow: 1;
+      }
+      .nav-item {
+        display: flex;
+        padding: 0.8rem 1rem;
+        align-items: center;
+        column-gap: 1rem;
+        color: var(--text);
+        border: 1px solid transparent;
+        transition: all 0.2s;
+      }
+      .nav-item:hover {
+        color: var(--accent);
+        background-color: var(--accent-dim);
+        border: 1.5px solid var(--accent);
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-1);
+      }
+      .nav-icon {
+        display: flex;
+        width: 24px;
+        height: 24px;
+        justify-content: center;
+        align-items: center;
+      }
+      .nav-icon svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+      }
+      .nav-label {
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+      .sidebar-footer {
+        padding: 1.2rem;
+        margin-top: auto;
+        border: 2px solid var(--border);
+        border-radius: var(--chaos-radius-2);
+        clip-path: var(--chaos-path-3);
+      }
+      .footer-quote {
+        color: var(--text-muted);
+        text-align: center;
+        font-size: 0.85rem;
+        font-style: italic;
+        line-height: 1.3rem;
+      }
+      @media screen and (max-width: 1024px) {
+        .sidebar {
+          display: none;
+        }
+      }
+      .sketch-box-container {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        background-color: var(--bg-card);
+        overflow: visible;
+      }
+      .sketch-svg {
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        width: calc(100% + 30px);
+        height: calc(100% + 30px);
+        pointer-events: none;
+        overflow: visible;
+        z-index: 10;
+      }
+      .sketch-content {
+        position: relative;
+        z-index: 2;
+      }
+      .sketch-heatmap-container {
+        padding: 1.5rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        background-color: var(--bg-card);
+        border: 2px solid var(--border);
+        border-radius: var(--chaos-radius-2);
+      }
+      .heatmap-header {
+        display: flex;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+      .heatmap-total {
+        color: var(--text-muted);
+        font-family: 'Special Elite', serif;
+        font-size: 0.9rem;
+      }
+      .heatmap-title {
+        font-size: 1.8rem;
+      }
+      .heatmap-grid-wrapper {
+        overflow-x: auto;
+        padding-bottom: 1rem;
+      }
+      .heatmap-grid {
+        display: flex;
+        column-gap: 4px;
+      }
+      .heatmap-column {
+        display: flex;
+        flex-direction: column;
+        row-gap: 4px;
+      }
+      .heatmap-legend {
+        display: flex;
+        margin-top: 1rem;
+        justify-content: end;
+        align-items: center;
+        column-gap: 8px;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 0.8rem;
+      }
+      .heatmap-day {
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+      }
+      .heatmap-day:hover path {
+        stroke: var(--accent);
+        stroke-width: 4;
+      }
+      .legend-box {
+        width: 12px;
+        height: 12px;
+      }
+      .sketch-timeline-container {
+        position: relative;
+        padding-left: 2.5rem;
+        margin-left: 2.5rem;
+        overflow: visible;
+      }
+      .sketch-timeline-svg {
+        position: absolute;
+        top: 0px;
+        left: -15px;
+        width: 30px;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+        z-index: 1;
+      }
+      .twitter-grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+      .tweet-card {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+      }
+      .tweet-date {
+        color: var(--text-muted);
+        font-family: 'Special Elite', serif;
+        font-size: 0.8rem;
+      }
+      .tweet-text {
+        font-size: 1rem;
+        line-height: 1.5rem;
+        white-space: pre-wrap;
+      }
+      .tweet-images {
+        display: flex;
+        margin-top: 0.5rem;
+        flex-direction: column;
+        row-gap: 0.5rem;
+      }
+      .tweet-image {
+        width: 100%;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        clip-path: var(--chaos-path-1);
+      }
+      .tweet-footer {
+        margin-top: auto;
+      }
+      .tweet-link {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+      }
+      .about-section {
+        max-width: 1120px;
+        padding: 4rem 2rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .about-grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+      .about-list {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1.5rem;
+      }
+      .about-list h3 {
+        margin-bottom: 0.5rem;
+        color: var(--accent);
+        font-size: 1.5rem;
+      }
+      .about-list p {
+        color: var(--text-muted);
+        line-height: 1.5rem;
+      }
+      .sketch-card {
+        padding: 2rem;
+        background-color: var(--bg-card);
+        border: 1.5px solid var(--border);
+        clip-path: var(--chaos-path-3);
+        border-radius: var(--chaos-radius-1);
+      }
+      .availability-card {
+        color: var(--bg);
+        background-color: var(--accent);
+        border: 2px solid var(--border);
+        clip-path: var(--chaos-path-1);
+        border-radius: var(--chaos-radius-2);
+      }
+      .availability-card h3 {
+        color: var(--bg);
+      }
+      .availability-card p {
+        color: var(--bg);
+      }
+      .blog-detail-section {
+        max-width: 780px;
+        padding: 3rem 2rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .blog-detail-back {
+        margin-bottom: 2rem;
+      }
+      .back-link {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        transition: color 0.2s;
+      }
+      .back-link:hover {
+        color: var(--accent);
+      }
+      .blog-detail-header {
+        margin-bottom: 3rem;
+      }
+      .blog-detail-meta {
+        display: flex;
+        margin-bottom: 1rem;
+        align-items: center;
+        column-gap: 0.6rem;
+        color: var(--text-muted);
+        font-size: 0.82rem;
+      }
+      .blog-detail-sep {
+        color: var(--accent);
+      }
+      .blog-detail-title {
+        margin-bottom: 1rem;
+        color: var(--text);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 3rem;
+        line-height: 1.1rem;
+      }
+      .blog-detail-desc {
+        margin-bottom: 1.2rem;
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.6rem;
+      }
+      .blog-detail-tags {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 0.5rem;
+      }
+      .blog-tag {
+        padding: 0.2rem 0.5rem;
+        border: solid var(--border) 1px;
+        color: var(--accent);
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+        border-radius: var(--chaos-radius-3);
+      }
+      .blog-md-body {
+        margin-bottom: 3rem;
+        color: var(--text);
+        font-size: 1rem;
+        line-height: 1.8rem;
+      }
+      .blog-md-body h1, .blog-md-body h2, .blog-md-body h3 {
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+        font-family: 'Just Another Hand', cursive;
+      }
+      .blog-md-body h1 {
+        font-size: 2.4rem;
+      }
+      .blog-md-body h2 {
+        color: var(--accent);
+        font-size: 2rem;
+      }
+      .blog-md-body h3 {
+        font-size: 1.6rem;
+      }
+      .blog-md-body p {
+        margin-bottom: 1.5rem;
+      }
+      .blog-md-body a {
+        color: var(--accent);
+        text-decoration: underline;
+      }
+      .blog-md-body code {
+        padding: 0.1rem 0.4rem;
+        border: solid var(--border) 1px;
+        color: var(--accent);
+        font-family: 'monospace';
+        font-size: 0.88rem;
+        background-color: var(--bg-card);
+      }
+      .blog-md-body pre {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: solid var(--border) 1.5px;
+        overflow: hidden;
+        font-size: 0.88rem;
+        background-color: var(--bg-card);
+        overflow-x: auto;
+      }
+      .blog-md-body pre code {
+        padding: 0px;
+        border: none;
+        color: var(--text);
+        background-color: transparent;
+      }
+      .blog-md-body blockquote {
+        padding-left: 1.2rem;
+        margin-bottom: 1.2rem;
+        border-left-style: solid;
+        border-left-color: var(--accent);
+        border-left-width: 3px;
+        color: var(--text-muted);
+        font-style: italic;
+      }
+      .blog-md-body ul, .blog-md-body ol {
+        padding-left: 1.5rem;
+        margin-bottom: 1.2rem;
+      }
+      .blog-md-body li {
+        margin-bottom: 0.4rem;
+      }
+      .blog-md-body img {
+        max-width: 100%;
+        border: solid var(--border) 1.5px;
+      }
+      .blog-md-body hr {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        border-top-style: solid;
+        border-top-color: var(--border);
+        border-top-width: 1px;
+      }
+      .blog-detail-footer {
+        margin-top: 2rem;
+      }
+      .sketch-btn {
+        padding: 0.4rem 1rem;
+        border: solid var(--accent) 1.5px;
+        cursor: pointer;
+        color: var(--accent);
+        font-family: 'Special Elite', serif;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-2);
+        transition: all 0.2s;
+        display: inline-block;
+      }
+      .sketch-btn:hover {
+        background-color: var(--accent-dim);
+      }
+      .blog-not-found {
+        margin-bottom: 1.5rem;
+        color: var(--text-muted);
+      }
+      .blog-list-section {
+        max-width: 900px;
+        padding: 3rem 2rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .blog-header {
+        margin-bottom: 2rem;
+      }
+      .blog-heading {
+        margin-bottom: 0.5rem;
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 3.5rem;
+      }
+      .blog-subheading {
+        color: var(--text-muted);
+        font-size: 1rem;
+      }
+      .blog-tag-filter {
+        display: flex;
+        margin-bottom: 2.5rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .tag-btn {
+        padding: 0.35rem 0.75rem;
+        border: solid var(--border) 1.5px;
+        cursor: pointer;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        background-color: transparent;
+        border-radius: var(--chaos-radius-3);
+        transition: all 0.2s;
+      }
+      .tag-btn:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      .tag-btn-active {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-dim);
+      }
+      .blog-grid {
+        display: flex;
+        flex-direction: column;
+        column-gap: 2rem;
+      }
+      .blog-card {
+        width: 100%;
+      }
+      .blog-card-meta {
+        display: flex;
+        margin-bottom: 0.75rem;
+        align-items: center;
+        column-gap: 1rem;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+      }
+      .blog-card-title-link {
+        color: var(--text);
+      }
+      .blog-card-title {
+        margin-bottom: 0.5rem;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.8rem;
+        transition: color 0.2s;
+      }
+      .blog-card-title-link:hover .blog-card-title {
+        color: var(--accent);
+      }
+      .blog-card-desc {
+        margin-bottom: 1.5rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        line-height: 1.6rem;
+      }
+      .blog-card-tags {
+        display: flex;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+        column-gap: 0.5rem;
+      }
+      .blog-tag {
+        padding: 0.2rem 0.5rem;
+        border: solid var(--border) 1px;
+        color: var(--accent);
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+        border-radius: var(--chaos-radius-3);
+      }
+      .blog-card-link {
+        display: inline-block;
+        font-size: 0.85rem;
+      }
+      .sketch-btn {
+        padding: 0.4rem 1rem;
+        border: solid var(--accent) 1.5px;
+        cursor: pointer;
+        color: var(--accent);
+        font-family: 'Special Elite', serif;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-2);
+        transition: all 0.2s;
+      }
+      .sketch-btn:hover {
+        background-color: var(--accent-dim);
+        transform: translate(-1px, -1px);
+      }
+      .blog-empty {
+        color: var(--text-muted);
+      }
+      main {
+        width: 100%;
+      }
+      .section {
+        width: 100%;
+        max-width: 1120px;
+        padding: 4rem 2rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .loading-section {
+        display: flex;
+        height: 60vh;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 2rem;
+      }
+      .error-section {
+        display: flex;
+        height: 80vh;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .error-card {
+        padding: 3rem;
+        background-color: var(--bg-card);
+        border: 3px solid #ff4444;
+        clip-path: var(--chaos-path-1);
+        box-shadow: 10px 10px 0 #ff4444;
+      }
+      .error-card h2 {
+        margin-bottom: 1.5rem;
+        color: #ff4444;
+        font-size: 3rem;
+      }
+      .error-card p {
+        margin-bottom: 2rem;
+        color: var(--text-muted);
+        font-family: 'Special Elite', serif;
+        font-size: 1.2rem;
+      }
+      .hero-section {
+        padding: 5rem 2rem;
+      }
+      .hero-eyebrow {
+        margin-bottom: 2rem;
+      }
+      .eyebrow-tag {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+        border: 1.5px solid var(--accent);
+        padding: 2px 12px;
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-2);
+      }
+      .hero-content {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        column-gap: 4rem;
+      }
+      .hero-left {
+        flex-grow: 1;
+        min-width: 280px;
+      }
+      .hero-right {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1.5rem;
+        min-width: 220px;
+      }
+      .hero-title {
+        margin-bottom: 1.5rem;
+        font-size: 4.5rem;
+        line-height: 1.25em;
+      }
+      .accent-text {
+        color: var(--accent);
+      }
+      .hero-desc {
+        margin-bottom: 2.5rem;
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6rem;
+        max-width: 580px;
+      }
+      .hero-cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 1.5rem;
+      }
+      .availability-card {
+        margin: 12px;
+        background-color: var(--text);
+        position: relative;
+        overflow: visible;
+      }
+      .availability-card .availability-label {
+        color: var(--bg);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+      }
+      .availability-card .availability-status {
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        color: var(--bg);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 3.2rem;
+        line-height: 1.25em;
+      }
+      .availability-card .availability-desc {
+        color: var(--bg);
+        font-size: 0.95rem;
+        line-height: 1.4rem;
+      }
+      .quote-strip {
+        padding: 2rem 0rem;
+        margin-top: 5rem;
+        border-top: 2px dashed var(--border);
+        border-bottom: 2px dashed var(--border);
+      }
+      .quote-text {
+        color: var(--text-muted);
+        text-align: center;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 2rem;
+        background-image: linear-gradient(var(--accent-dim) 1px, transparent 1px);
+        background-size: 100% 1.2em;
+      }
+      .section-header {
+        margin-bottom: 3rem;
+      }
+      .section-label {
+        display: block;
+        margin-bottom: 0.8rem;
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+      }
+      .section-title {
+        font-size: 2.8rem;
+        line-height: 2rem;
+        max-width: 850px;
+      }
+      .underline-sketch {
+        background-color: var(--accent-dim);
+        padding: 0 4px;
+        border-bottom: 2px solid var(--accent);
+      }
+      .sketch-box-container {
+        margin: 1.2rem;
+        transition: transform 0.2s ease;
+      }
+      .sketch-box-container:hover {
+        transform: translateY(-5px) rotate(-1deg);
+      }
+      .sketch-btn {
+        display: inline-block;
+        padding: 0.6rem 1.5rem;
+        cursor: pointer;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.4rem;
+        border-radius: var(--chaos-radius-2);
+        transition: opacity 0.2s, transform 0.2s;
+      }
+      .sketch-btn:hover {
+        opacity: 0.9;
+        transform: scale(1.02) rotate(-1deg);
+      }
+      .sketch-btn-accent {
+        color: var(--bg);
+        background-color: var(--accent);
+        border: none;
+      }
+      .sketch-btn-ghost {
+        color: var(--text);
+        background-color: transparent;
+        border: 2.5px solid var(--border);
+      }
+      .projects-grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      }
+      .project-card {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+      }
+      .project-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .project-subtitle {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+      }
+      .project-icon {
+        color: var(--text-muted);
+        font-size: 1.2rem;
+      }
+      .project-title {
+        font-size: 2.2rem;
+      }
+      .project-desc {
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.6rem;
+        flex: 1;
+      }
+      .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .tech-tag {
+        padding: 0.25rem 0.8rem;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+        border: 1px solid var(--border);
+        border-radius: 3px;
+      }
+      .project-actions {
+        display: flex;
+        margin-top: 0.8rem;
+        flex-wrap: wrap;
+        column-gap: 1rem;
+      }
+      .repos-section {
+        margin-top: 4rem;
+      }
+      .repos-title {
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+      }
+      .repos-grid {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+      .repo-card-inner {
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.8rem;
+      }
+      .repo-name {
+        font-size: 1.4rem;
+      }
+      .repo-desc {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        line-height: 1.4rem;
+      }
+      .repo-meta {
+        display: flex;
+        column-gap: 1rem;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      .repo-link {
+        margin-top: 0.5rem;
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+      }
+      .pr-list {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+      .pr-card {
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.5rem;
+      }
+      .pr-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .pr-state {
+        padding: 2px 6px;
+        font-size: 0.7rem;
+        border: 1px solid var(--border);
+        text-transform: uppercase;
+      }
+      .pr-state.merged {
+        color: #a371f7;
+        background-color: rgba(163, 113, 247, 0.2);
+        border-color: #a371f7;
+      }
+      .pr-state.open {
+        color: #3fb950;
+        background-color: rgba(63, 185, 80, 0.2);
+        border-color: #3fb950;
+      }
+      .pr-state.closed {
+        color: #f85149;
+        background-color: rgba(248, 81, 73, 0.2);
+        border-color: #f85149;
+      }
+      .pr-repo {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+      }
+      .pr-title {
+        font-size: 1.1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .pr-link {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+      }
+      .timeline-entry {
+        position: relative;
+      }
+      .timeline-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 7px;
+        background-color: var(--bg);
+        position: absolute;
+        left: -3.15rem;
+        top: 2rem;
+        border: 2px solid var(--accent);
+        box-shadow: 0 0 8px var(--accent);
+        z-index: 5;
+      }
+      .timeline-card {
+        display: flex;
+        margin: 12px;
+        flex-direction: column;
+        row-gap: 1rem;
+        position: relative;
+      }
+      .timeline-card::before {
+        display: none;
+      }
+      .timeline-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .timeline-role {
+        font-size: 1.6rem;
+      }
+      .timeline-company {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+      }
+      .timeline-period {
+        color: var(--text-muted);
+        font-family: 'Special Elite', serif;
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+      .timeline-point {
+        margin-bottom: 0.4rem;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.5rem;
+      }
+      .skills-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
+      .skill-chip {
+        padding: 0.4rem 1.2rem;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+        border: 1.5px solid var(--border);
+        border-radius: var(--chaos-radius-2);
+        transition: all 0.2s;
+      }
+      .skill-chip:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        transform: rotate(-2deg) scale(1.05);
+      }
+      .contact-section {
+        padding: 6rem 2rem;
+        text-align: center;
+      }
+      .contact-title {
+        margin-bottom: 1rem;
+        font-size: 3.5rem;
+      }
+      .contact-sub {
+        margin-bottom: 2.5rem;
+        color: var(--text-muted);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.4rem;
+      }
+      .contact-links {
+        display: flex;
+        margin-bottom: 4rem;
+        justify-content: center;
+        column-gap: 2rem;
+      }
+      .contact-icon-link {
+        display: flex;
+        width: 60px;
+        height: 60px;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-muted);
+        font-size: 1.8rem;
+        border: 2px solid var(--border);
+        border-radius: var(--chaos-radius-3);
+        transition: all 0.2s;
+      }
+      .contact-icon-link:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        transform: scale(1.1) rotate(15deg);
+      }
+      .footer-credit {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+      }
+      @media screen and (max-width: 760px) {
+        .section {
+          padding: 3rem 1.5rem;
+        }
+        .hero-title {
+          font-size: 3.2rem;
+        }
+        .section-title {
+          font-size: 2.2rem;
+        }
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
+        .contact-title {
+          font-size: 2.6rem;
+        }
+        .timeline {
+          padding-left: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!--@app-->
+    <div class="app-root">
+      <aside class="sidebar">
+        <div class="sidebar-content">
+          <div class="sidebar-profile">
+            <div class="profile-img-box"><img alt="Achiket Kumar" src="/assets/achiket.png"/></div>
+            <h3 class="profile-name">Achiket Kumar</h3>
+            <p class="profile-sub">Dev Lab Journal v1.0</p>
+          </div>
+          <nav class="sidebar-nav">
+            <a class="nav-item" href="/">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span>
+              <span class="nav-label">Home</span>
+            </a>
+            <a class="nav-item" href="#projects">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg></span>
+              <span class="nav-label">Projects</span>
+            </a>
+            <a class="nav-item" href="#experience">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              <span class="nav-label">Experience</span>
+            </a>
+            <a class="nav-item" href="#skills">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg></span>
+              <span class="nav-label">Skills</span>
+            </a>
+            <a class="nav-item" href="#pinned-repo">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14 2l8 8-3 3-2-2-5 5v3l-2 2v-3l-5-5-2 2-3-3 8-8 3 3 5-5z"></path></svg></span>
+              <span class="nav-label">Pinned Repo</span>
+            </a>
+            <a class="nav-item" href="#github-repo">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z M8 8h8v2H8z M8 12h8v2H8z"></path></svg></span>
+              <span class="nav-label">Github Repo</span>
+            </a>
+            <a class="nav-item" href="#pull-request">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M6 3a2 2 0 110 4 2 2 0 010-4zm0 14a2 2 0 110 4 2 2 0 010-4zm12-7a2 2 0 11-4 0 2 2 0 014 0zM6 7v10m0-10c6 0 6-4 8-4m-8 10c6 0 6 4 8 4"></path></svg></span>
+              <span class="nav-label">Pull Request</span>
+            </a>
+            <a class="nav-item" href="#twitter">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 5.8c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.2 1.7-2.1-.8.5-1.6.8-2.5 1-1.5-1.6-4-1.7-5.6-.2-1 .9-1.4 2.3-1 3.6-3.3-.2-6.4-1.7-8.4-4.2-1.1 1.9-.6 4.3 1.2 5.6-.6 0-1.2-.2-1.7-.5 0 2 1.4 3.8 3.4 4.2-.6.2-1.2.2-1.8.1.5 1.7 2.1 3 3.9 3-1.5 1.2-3.4 1.8-5.3 1.8H2c1.9 1.2 4.1 1.9 6.4 1.9 7.7 0 11.9-6.4 11.9-11.9v-.5c.8-.6 1.5-1.3 2-2.1z"></path></svg></span>
+              <span class="nav-label">Twitter</span>
+            </a>
+          </nav>
+          <div class="sidebar-footer"><p class="footer-quote">"Code is just structured sketching."</p></div>
+        </div>
+        <svg class="sidebar-border-svg" viewBox="0 0 100 1000" preserveAspectRatio="none">
+          <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 62.16458940111967 -15.533832993340328 Q 42.91250601529569 21.097211382373757 53.66742546031976 42.94215283064215 Q 64.42234490534383 64.78709427891054 56.29009804530539 85.84896670615515 Q 48.15785118526695 106.91083913339978 47.55533174383534 126.35359795798593 Q 46.952812302403736 145.79635678257208 44.08911187204086 168.44755934941327 Q 41.22541144167798 191.09876191625446 42.237416920873954 210.15745352705943 Q 43.24942240006993 229.21614513786437 41.11506510980709 251.2514234186013 Q 38.98070781954426 273.2867016993382 42.2344617942868 291.982722425288 Q 45.48821576902935 310.6787431512377 47.78457594126692 332.6466821330105 Q 50.080936113504485 354.6146211147833 53.04938939827207 375.9423319509322 Q 56.017842683039646 397.27004278708114 58.03512019950757 416.76819320166834 Q 60.05239771597549 436.26634361625554 49.732020700622876 459.32318939312114 Q 39.41164368527026 482.38003516998674 39.542507713164554 502.83515285355924 Q 39.67337174105884 523.2902705371317 43.49021687607015 541.1250584354491 Q 47.30706201108147 558.9598463337666 53.890137232148774 583.6951669252126 Q 60.47321245321607 608.4304875166584 52.50741012528362 628.5359449205837 Q 44.54160779735117 648.6414023245089 50.2051628500096 670.4130034558154 Q 55.86871790266803 692.1846045871221 50.41245528706957 708.0288376915566 Q 44.95619267147111 723.8730707959912 47.06619906249007 745.9966268823156 Q 49.176205453509034 768.1201829686399 53.56449280972884 788.3960665172461 Q 57.952780165948646 808.6719500658523 51.28473205261099 833.5447754675963 Q 44.616683939273344 858.4176008693404 46.61798753258622 874.8376898193942 Q 48.619291125899096 891.2577787694481 54.128695472456954 914.977276075582 Q 59.63809981901481 938.6967733817158 48.076399130220054 957.4747825239842 Q 36.514698441425296 976.2527916662526 40.17518071401086 999.2206596168575 L 43.83566298659642 1022.1885275674623"></path>
+          <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 43.40412835144893 -17.391434016686908 Q 44.28095291552971 23.455488862492818 45.856566906062326 42.204216376910864 Q 47.43218089659494 60.95294389132891 44.20571022178187 81.99525086783221 Q 40.97923954696879 103.03755784433551 41.373523067013366 126.08542514448928 Q 41.76780658705793 149.13329244464305 47.0009042644011 166.99571760109228 Q 52.23400194174427 184.8581427575415 49.85792119061716 207.39609874071346 Q 47.481840439490064 229.9340547238854 54.12429069641115 252.34462868254877 Q 60.766740953332246 274.7552026412122 58.855413416322804 296.2028439578115 Q 56.94408587931336 317.6504852744108 49.85068693385784 336.640624501153 Q 42.75728798840231 355.6307637278952 43.59322604071646 377.9070501709368 Q 44.429164093030614 400.18333661397844 40.791940900627125 419.51034431560515 Q 37.15471770822364 438.8373520172319 50.94718859376174 457.85545706779095 Q 64.73965947929983 476.87356211835 53.520997716422954 499.2668203452041 Q 42.30233595354608 521.6600785720582 45.8048647336595 543.7786221339563 Q 49.30739351377293 565.8971656958544 48.305054664520526 582.6350666940364 Q 47.30271581526813 599.3729676922184 46.204769778769695 622.1839554509676 Q 45.10682374227126 644.9949432097168 54.8917660880649 668.4138902165455 Q 64.67670843385854 691.8328372233742 63.10787663576784 711.6095258616577 Q 61.53904483767714 731.3862144999413 59.48289682081787 748.7117122556958 Q 57.4267488039586 766.0372100114505 48.718674904799144 789.3913676825875 Q 40.01060100563968 812.7455253537247 47.091508585153164 832.507755792153 Q 54.17241616466665 852.2699862305814 52.23585811001696 873.0991479401187 Q 50.29930005536728 893.928309649656 56.934491210362424 916.7664679972621 Q 63.569682365357565 939.6046263448683 52.621275440063634 957.0574940792039 Q 41.6728685147697 974.5103618135396 39.99392931997658 995.4667322591608 L 38.314990125183456 1016.4231027047821"></path>
+        </svg>
+      </aside>
+      <div class="app-main">
+        <header class="site-header">
+          <div class="header-inner">
+            <div class="header-left"><a class="brand-box" href="/"><span class="brand-text">ACHIKET KUMAR</span></a></div>
+            <div class="header-right">
+              <nav class="header-nav">
+                <a class="nav-link" href="/#projects">PROJECTS</a>
+                <a class="nav-link" href="/#experience">EXPERIENCE</a>
+                <a class="nav-link" href="/#skills">SKILLS</a>
+                <a class="nav-link" href="/about">ABOUT</a>
+                <a class="nav-link" href="/blog">BLOG</a>
+              </nav>
+            </div>
+          </div>
+        </header>
+        <div class="app-content-layout">
+          <div class="app-page-area">
+            <section class="section about-section">
+              <div class="section-header">
+                <span class="section-label">Behind the Sketch_</span>
+                <h2 class="section-title">About Jaspr &amp; This Portfolio</h2>
+              </div>
+              <div class="about-grid">
+                <div class="sketch-card">
+                  <ol class="about-list">
+                    <li>
+                      <h3>DOCUMENTATION_</h3><p>Jaspr's <a href="https://docs.jaspr.site">official documentation</a> provides you with all information you need to get started.</p>
+                    </li>
+                    <li>
+                      <h3>COMMUNITY_</h3><p>Got stuck? Ask your question on the official <a href="https://discord.gg/XGXrGEk4c6">Discord server</a>
+                         for the Jaspr community.</p>
+                    </li>
+                    <li>
+                      <h3>ECOSYSTEM_</h3><p>Get official packages and integrations for your project like jaspr_router, jaspr_tailwind or jaspr_riverpod.</p>
+                    </li>
+                  </ol>
+                </div>
+                <div class="sketch-card availability-card">
+                  <h3>Experimental Build</h3>
+                  <p>
+                    This portfolio is a live experiment in "Sketched UI" — combining hand-drawn aesthetics with the power of Dart &amp; Jaspr.
+                  </p>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <aside class="right-sidebar">
+        <svg class="sidebar-left-border-svg" viewBox="0 0 100 1000" preserveAspectRatio="none">
+          <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 57.287268239290206 -16.840824476519803 Q 41.78979606047789 20.829878005775317 48.298440261743934 42.13753276303803 Q 54.80708446300997 63.44518752030074 48.45605724345836 81.82793368788556 Q 42.10503002390675 100.21067985547039 50.2143887712664 124.64843904634003 Q 58.32374751862604 149.0861982372097 55.84968767237487 167.45286835374588 Q 53.37562782612369 185.8195384702821 56.1467569943764 208.93906626729128 Q 58.917886162629124 232.05859406430045 52.16044063201615 251.4414387852417 Q 45.40299510140318 270.82428350618295 51.66781161072467 292.79015223993633 Q 57.93262812004617 314.7560209736898 60.56201519434909 332.9786511200666 Q 63.19140226865201 351.2012812664435 62.39155037029947 372.0157055375917 Q 61.59169847194692 392.8301298087399 61.71596116941667 415.86700410332537 Q 61.84022386688642 438.9038783979108 62.21716901652161 456.7666502693395 Q 62.5941141661568 474.62942214076816 49.44945352284012 498.45434661021085 Q 36.30479287952345 522.2792710796535 38.21689500902542 539.988639505619 Q 40.1289971385274 557.6980079315844 47.82835566603957 580.9729126530544 Q 55.527714193551745 604.2478173745245 48.703711690450305 624.3284881732075 Q 41.87970918734886 644.4091589718905 48.344809098488014 663.3947888388174 Q 54.80990900962718 682.3804187057442 46.14760886681176 705.4968767972648 Q 37.48530872399634 728.6133348887854 46.453771562865015 750.025794866448 Q 55.42223440173369 771.4382548441105 47.506455213087015 790.6029403474877 Q 39.59067602444034 809.767625850865 38.30822529911906 829.2345364528351 Q 37.02577457379777 848.7014470548053 38.13608260218549 873.9006829089283 Q 39.24639063057321 899.0999187630513 39.85620076495867 918.5400402496318 Q 40.46601089934414 937.9801617362123 46.043710574696604 957.5576955271997 Q 51.62141025004907 977.1352293181873 57.157036624172115 999.8436321845784 L 62.69266299829516 1022.5520350509695"></path>
+          <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 46.43411909751069 -17.40911341343822 Q 45.326152237431344 17.891241979688886 49.61472268817235 40.9063832243959 Q 53.90329313891336 63.92152446910292 51.002785539638566 85.78376064600006 Q 48.10227794036376 107.6459968228972 52.680866674935515 126.52846980418272 Q 57.25945540950727 145.41094278546825 58.31854564688971 165.29639842000933 Q 59.37763588427215 185.18185405455037 55.62457283950036 209.23876680284692 Q 51.87150979472857 233.29567955114348 51.8759004652638 249.95184044211635 Q 51.880291135799034 266.6080013330892 54.42936951532789 289.403497059101 Q 56.97844789485676 312.1989927851128 52.37565315266293 332.1816639504162 Q 47.7728584104691 352.16433511571955 47.799566731046724 375.6702599192871 Q 47.82627505162436 399.17618472285466 56.39197336668575 417.4000725423769 Q 64.95767168174713 435.62396036189915 59.660356424212765 457.29850008380237 Q 54.3630411666784 478.9730398057056 47.09385119890273 500.8371465727986 Q 39.82466123112707 522.7012533398915 38.86903509745683 544.1202289058759 Q 37.9134089637866 565.5392044718603 49.93303558449668 585.7212234322867 Q 61.95266220520676 605.9032423927131 55.3366803751731 625.7119308034589 Q 48.72069854513945 645.5206192142048 44.27128974205375 668.6921289213687 Q 39.82188093896806 691.8636386285327 48.779571855594355 709.8190236767605 Q 57.737262772220646 727.7744087249882 61.180656770720525 749.1874376954486 Q 64.6240507692204 770.6004666659089 59.466180806502834 792.0101891152282 Q 54.308310843785264 813.4199115645474 51.67297917921586 835.5243875183021 Q 49.037647514646444 857.6288634720569 54.27303891672092 875.0618823143111 Q 59.508430318795405 892.4949011565654 56.56094638867804 914.250735325915 Q 53.613462458560676 936.0065694952644 44.96425039044243 957.8821574639569 Q 36.315038322324185 979.7577454326495 46.310715435088305 1001.1970821118814 L 56.306392547852425 1022.6364187911134"></path>
+        </svg>
+        <h3 class="sidebar-title">LOGBOOK_</h3>
+        <div class="posts-feed"></div>
+      </aside>
+    </div>
+    <!--/@app-->
+  </body>
+</html>

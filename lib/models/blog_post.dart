@@ -35,6 +35,7 @@ class BlogPost extends BlogPostList {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() => {
     'slug': slug,
     'title': title,

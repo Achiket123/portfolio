@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base href="/"/>
+    <meta charset="utf-8"/>
+    <style>
+      @import url(https://fonts.googleapis.com/css2?family=Just+Another+Hand&family=Special+Elite&display=swap);
+      html, body {
+        width: 100%;
+        min-height: 100vh;
+        padding: 0;
+        margin: 0;
+        color: var(--text);
+        font-family: 'Special Elite', serif;
+        background-color: var(--bg);
+        background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+        background-size: 40px 40px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      *, *::before, *::after {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: #FFFFFF;
+        --bg-card: #FFFFFF;
+        --text: #000000;
+        --text-muted: #333333;
+        --accent: #000000;
+        --accent-dim: rgba(0,0,0,0.05);
+        --border: #000000;
+        --grid-color: rgba(0,0,0,0.05);
+        --chaos-radius-1: 255px 15px 225px 15px / 15px 225px 15px 255px;
+        --chaos-radius-2: 15px 225px 15px 255px / 255px 15px 225px 15px;
+        --chaos-radius-3: 4% 95% 6% 95% / 95% 4% 92% 5%;
+        --chaos-path-1: polygon(2% 2%, 98% 4%, 99% 98%, 4% 96%);
+        --chaos-path-2: polygon(1% 5%, 95% 2%, 98% 94%, 5% 92%);
+        --chaos-path-3: polygon(4% 1%, 99% 3%, 96% 99%, 1% 97%);
+        --messy-lines: 1.5px 2px 0px 0px var(--border), -1.5px -1.5px 0px 0px var(--border), 2px -1px 0px 0px var(--border);
+      }
+      body.dark {
+        --bg: #0D0D0D;
+        --bg-card: #141414;
+        --text: #F0F0F0;
+        --text-muted: #888888;
+        --accent: #39FF14;
+        --accent-dim: rgba(57,255,20,0.15);
+        --border: rgba(255,255,255,0.4);
+        --grid-color: rgba(57,255,20,0.03);
+      }
+      h1, h2, h3, h4, h5 {
+        margin: 0;
+        font-family: 'Just Another Hand', cursive;
+        font-weight: 400;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+      }
+      img {
+        display: block;
+      }
+    </style>
+    <link sizes="180x180" href="/assets/favicon_io/apple-touch-icon.png" rel="apple-touch-icon"/>
+    <link sizes="32x32" href="/assets/favicon_io/favicon-32x32.png" rel="icon" type="image/png"/>
+    <link sizes="16x16" href="/assets/favicon_io/favicon-16x16.png" rel="icon" type="image/png"/>
+    <link href="/assets/favicon_io/site.webmanifest" rel="manifest"/>
+    <!--$-->
+    <title>Achiket Kumar | Full Stack Developer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Full-stack engineer building digital blueprints from messy thoughts."/>
+    <!--/-->
+    <script src="main.client.dart.js" defer></script>
+    <style>
+      @import url(https://fonts.googleapis.com/css2?family=Just+Another+Hand&family=Special+Elite&display=swap);
+      :root {
+        --bg: #FFFFFF;
+        --bg-card: #FFFFFF;
+        --text: #000000;
+        --text-muted: #333333;
+        --accent: #000000;
+        --accent-dim: rgba(0,0,0,0.05);
+        --border: #000000;
+        --grid-color: rgba(0,0,0,0.05);
+        --chaos-radius-1: 255px 15px 225px 15px / 15px 225px 15px 255px;
+        --chaos-radius-2: 15px 225px 15px 255px / 255px 15px 225px 15px;
+        --chaos-radius-3: 4% 95% 6% 95% / 95% 4% 92% 5%;
+        --chaos-path-1: polygon(2% 2%, 98% 4%, 99% 98%, 4% 96%);
+        --chaos-path-2: polygon(1% 5%, 95% 2%, 98% 94%, 5% 92%);
+        --chaos-path-3: polygon(4% 1%, 99% 3%, 96% 99%, 1% 97%);
+        --messy-lines: 1.5px 2px 0px 0px var(--border), -1.5px -1.5px 0px 0px var(--border), 2px -1px 0px 0px var(--border);
+      }
+      body.dark {
+        --bg: #0D0D0D;
+        --bg-card: #141414;
+        --text: #F0F0F0;
+        --text-muted: #888888;
+        --accent: #39FF14;
+        --accent-dim: rgba(57,255,20,0.15);
+        --border: rgba(255,255,255,0.4);
+        --grid-color: rgba(57,255,20,0.03);
+      }
+      html, body {
+        color: var(--text);
+        font-family: 'Special Elite', serif;
+        background-color: var(--bg);
+        transition: background-color 0.3s ease, color 0.3s ease;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      body::-webkit-scrollbar {
+        display: none;
+      }
+      h1, h2, h3, h4, h5 {
+        font-family: 'Just Another Hand', cursive;
+        font-weight: 400;
+        line-height: 1.1rem;
+      }
+      a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .app-root {
+        display: flex;
+        min-height: 100vh;
+        color: var(--text);
+        background-color: var(--bg);
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .app-main {
+        display: flex;
+        min-height: 100vh;
+        margin-left: 260px;
+        margin-right: 260px;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow-x: hidden;
+      }
+      .app-content-layout {
+        display: flex;
+        position: relative;
+        flex-grow: 1;
+      }
+      .app-page-area {
+        min-width: 0px;
+        flex-grow: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      @media screen and (max-width: 1024px) {
+        .app-main {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+      .site-header {
+        position: sticky;
+        top: 0px;
+        z-index: 100;
+        width: 100%;
+        padding: 1.5rem 2rem;
+        background-color: var(--bg);
+        backdrop-filter: blur(8px);
+      }
+      @media screen and (min-width: 1025px) {
+        .site-header {
+          width: 100%;
+        }
+      }
+      @media screen and (min-width: 1401px) {
+        .site-header {
+          width: 100%;
+        }
+      }
+      .header-inner {
+        display: flex;
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .brand-box {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border: 2px solid var(--accent);
+        box-shadow: 4px 4px 0 var(--accent);
+        clip-path: var(--chaos-path-1);
+        transition: all 0.2s;
+      }
+      .brand-box:hover {
+        box-shadow: 2px 2px 0 var(--accent);
+        transform: translate(2px, 2px);
+      }
+      .brand-text {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      .header-right {
+        display: flex;
+        align-items: center;
+        column-gap: 2.5rem;
+      }
+      .header-nav {
+        display: flex;
+        align-items: center;
+        column-gap: 2rem;
+      }
+      .nav-link {
+        color: var(--text);
+        font-family: 'Special Elite', serif;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        transition: color 0.2s;
+      }
+      .nav-link:hover {
+        color: var(--accent);
+      }
+      .theme-toggle {
+        display: flex;
+        padding: 0.6rem;
+        border: solid var(--border) 2px;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        transition: all 0.3s ease;
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-2);
+        color: var(--text);
+      }
+      .theme-toggle:hover {
+        background-color: var(--accent-dim);
+        transform: rotate(-5deg) scale(1.05);
+      }
+      .toggle-icon {
+        display: flex;
+        width: 24px;
+        height: 24px;
+        justify-content: center;
+        align-items: center;
+      }
+      .toggle-icon svg {
+        width: 20px;
+        height: 20px;
+      }
+      @media screen and (max-width: 768px) {
+        .header-nav {
+          display: none;
+        }
+        .brand-text {
+          font-size: 1.4rem;
+        }
+      }
+      .right-sidebar {
+        display: flex;
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        z-index: 101;
+        width: 260px;
+        height: 100vh;
+        padding: 2rem 1.5rem;
+        flex-direction: column;
+        background-color: var(--bg);
+        overflow: visible;
+      }
+      .sidebar-left-border-svg {
+        position: absolute;
+        top: 0;
+        left: -30px;
+        width: 60px;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+        z-index: 110;
+      }
+      .sidebar-title {
+        margin-bottom: 2rem;
+        color: var(--accent);
+        text-align: center;
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+      }
+      .posts-feed {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1.5rem;
+        flex-grow: 1;
+        -ms-overflow-style: none;
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+      .posts-feed::-webkit-scrollbar {
+        display: none;
+      }
+      .post-card {
+        background: var(--bg-card);
+      }
+      .post-header {
+        display: flex;
+        margin-bottom: 0.5rem;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .post-type {
+        padding: 0.1rem 0.4rem;
+        color: var(--bg);
+        font-family: 'Special Elite';
+        font-size: 0.7rem;
+        font-weight: 700;
+        background-color: var(--accent);
+      }
+      .post-date {
+        color: var(--text-muted);
+        font-size: 0.65rem;
+      }
+      .post-content {
+        margin: 0;
+        font-size: 0.85rem;
+        line-height: 1.3rem;
+      }
+      @media screen and (max-width: 1024px) {
+        .right-sidebar {
+          display: none;
+        }
+      }
+      .sidebar {
+        display: flex;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        z-index: 101;
+        width: 260px;
+        height: 100vh;
+        margin-right: 200rem;
+        flex-direction: column;
+        background-color: var(--bg);
+        overflow: visible;
+      }
+      .sidebar-content {
+        display: flex;
+        height: 100%;
+        padding: 2rem 2.5rem;
+        flex-direction: column;
+        flex-grow: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .sidebar-content::-webkit-scrollbar {
+        display: none;
+      }
+      .sidebar-border-svg {
+        position: absolute;
+        top: 0;
+        right: -30px;
+        width: 60px;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+        z-index: 110;
+      }
+      .sidebar-profile {
+        margin-bottom: 3rem;
+        text-align: center;
+      }
+      .profile-img-box {
+        width: 90px;
+        height: 90px;
+        padding: 5px;
+        margin: 0 auto;
+        background: var(--accent-dim);
+        border: 2px solid var(--accent);
+        border-radius: var(--chaos-radius-1);
+        clip-path: var(--chaos-path-2);
+      }
+      .profile-img-box img {
+        width: 100%;
+        height: 100%;
+        border-radius: var(--chaos-radius-2);
+        clip-path: var(--chaos-path-3);
+        filter: grayscale(100%) contrast(1.1);
+        object-fit: cover;
+      }
+      .profile-name {
+        margin-top: 1.2rem;
+        margin-bottom: 0.3rem;
+        color: var(--accent);
+        font-size: 1.3rem;
+      }
+      .profile-sub {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.8rem;
+        flex-grow: 1;
+      }
+      .nav-item {
+        display: flex;
+        padding: 0.8rem 1rem;
+        align-items: center;
+        column-gap: 1rem;
+        color: var(--text);
+        border: 1px solid transparent;
+        transition: all 0.2s;
+      }
+      .nav-item:hover {
+        color: var(--accent);
+        background-color: var(--accent-dim);
+        border: 1.5px solid var(--accent);
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-1);
+      }
+      .nav-icon {
+        display: flex;
+        width: 24px;
+        height: 24px;
+        justify-content: center;
+        align-items: center;
+      }
+      .nav-icon svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+      }
+      .nav-label {
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+      }
+      .sidebar-footer {
+        padding: 1.2rem;
+        margin-top: auto;
+        border: 2px solid var(--border);
+        border-radius: var(--chaos-radius-2);
+        clip-path: var(--chaos-path-3);
+      }
+      .footer-quote {
+        color: var(--text-muted);
+        text-align: center;
+        font-size: 0.85rem;
+        font-style: italic;
+        line-height: 1.3rem;
+      }
+      @media screen and (max-width: 1024px) {
+        .sidebar {
+          display: none;
+        }
+      }
+      .sketch-box-container {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        background-color: var(--bg-card);
+        overflow: visible;
+      }
+      .sketch-svg {
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        width: calc(100% + 30px);
+        height: calc(100% + 30px);
+        pointer-events: none;
+        overflow: visible;
+        z-index: 10;
+      }
+      .sketch-content {
+        position: relative;
+        z-index: 2;
+      }
+      .sketch-heatmap-container {
+        padding: 1.5rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        background-color: var(--bg-card);
+        border: 2px solid var(--border);
+        border-radius: var(--chaos-radius-2);
+      }
+      .heatmap-header {
+        display: flex;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: baseline;
+      }
+      .heatmap-total {
+        color: var(--text-muted);
+        font-family: 'Special Elite', serif;
+        font-size: 0.9rem;
+      }
+      .heatmap-title {
+        font-size: 1.8rem;
+      }
+      .heatmap-grid-wrapper {
+        overflow-x: auto;
+        padding-bottom: 1rem;
+      }
+      .heatmap-grid {
+        display: flex;
+        column-gap: 4px;
+      }
+      .heatmap-column {
+        display: flex;
+        flex-direction: column;
+        row-gap: 4px;
+      }
+      .heatmap-legend {
+        display: flex;
+        margin-top: 1rem;
+        justify-content: end;
+        align-items: center;
+        column-gap: 8px;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 0.8rem;
+      }
+      .heatmap-day {
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+      }
+      .heatmap-day:hover path {
+        stroke: var(--accent);
+        stroke-width: 4;
+      }
+      .legend-box {
+        width: 12px;
+        height: 12px;
+      }
+      .sketch-timeline-container {
+        position: relative;
+        padding-left: 2.5rem;
+        margin-left: 2.5rem;
+        overflow: visible;
+      }
+      .sketch-timeline-svg {
+        position: absolute;
+        top: 0px;
+        left: -15px;
+        width: 30px;
+        height: 100%;
+        pointer-events: none;
+        overflow: visible;
+        z-index: 1;
+      }
+      .twitter-grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+      .tweet-card {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+      }
+      .tweet-date {
+        color: var(--text-muted);
+        font-family: 'Special Elite', serif;
+        font-size: 0.8rem;
+      }
+      .tweet-text {
+        font-size: 1rem;
+        line-height: 1.5rem;
+        white-space: pre-wrap;
+      }
+      .tweet-images {
+        display: flex;
+        margin-top: 0.5rem;
+        flex-direction: column;
+        row-gap: 0.5rem;
+      }
+      .tweet-image {
+        width: 100%;
+        border-radius: 4px;
+        border: 1px solid var(--border);
+        clip-path: var(--chaos-path-1);
+      }
+      .tweet-footer {
+        margin-top: auto;
+      }
+      .tweet-link {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+      }
+      .about-section {
+        max-width: 1120px;
+        padding: 4rem 2rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .about-grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      }
+      .about-list {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1.5rem;
+      }
+      .about-list h3 {
+        margin-bottom: 0.5rem;
+        color: var(--accent);
+        font-size: 1.5rem;
+      }
+      .about-list p {
+        color: var(--text-muted);
+        line-height: 1.5rem;
+      }
+      .sketch-card {
+        padding: 2rem;
+        background-color: var(--bg-card);
+        border: 1.5px solid var(--border);
+        clip-path: var(--chaos-path-3);
+        border-radius: var(--chaos-radius-1);
+      }
+      .availability-card {
+        color: var(--bg);
+        background-color: var(--accent);
+        border: 2px solid var(--border);
+        clip-path: var(--chaos-path-1);
+        border-radius: var(--chaos-radius-2);
+      }
+      .availability-card h3 {
+        color: var(--bg);
+      }
+      .availability-card p {
+        color: var(--bg);
+      }
+      .blog-detail-section {
+        max-width: 780px;
+        padding: 3rem 2rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .blog-detail-back {
+        margin-bottom: 2rem;
+      }
+      .back-link {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        transition: color 0.2s;
+      }
+      .back-link:hover {
+        color: var(--accent);
+      }
+      .blog-detail-header {
+        margin-bottom: 3rem;
+      }
+      .blog-detail-meta {
+        display: flex;
+        margin-bottom: 1rem;
+        align-items: center;
+        column-gap: 0.6rem;
+        color: var(--text-muted);
+        font-size: 0.82rem;
+      }
+      .blog-detail-sep {
+        color: var(--accent);
+      }
+      .blog-detail-title {
+        margin-bottom: 1rem;
+        color: var(--text);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 3rem;
+        line-height: 1.1rem;
+      }
+      .blog-detail-desc {
+        margin-bottom: 1.2rem;
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.6rem;
+      }
+      .blog-detail-tags {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 0.5rem;
+      }
+      .blog-tag {
+        padding: 0.2rem 0.5rem;
+        border: solid var(--border) 1px;
+        color: var(--accent);
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+        border-radius: var(--chaos-radius-3);
+      }
+      .blog-md-body {
+        margin-bottom: 3rem;
+        color: var(--text);
+        font-size: 1rem;
+        line-height: 1.8rem;
+      }
+      .blog-md-body h1, .blog-md-body h2, .blog-md-body h3 {
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
+        font-family: 'Just Another Hand', cursive;
+      }
+      .blog-md-body h1 {
+        font-size: 2.4rem;
+      }
+      .blog-md-body h2 {
+        color: var(--accent);
+        font-size: 2rem;
+      }
+      .blog-md-body h3 {
+        font-size: 1.6rem;
+      }
+      .blog-md-body p {
+        margin-bottom: 1.5rem;
+      }
+      .blog-md-body a {
+        color: var(--accent);
+        text-decoration: underline;
+      }
+      .blog-md-body code {
+        padding: 0.1rem 0.4rem;
+        border: solid var(--border) 1px;
+        color: var(--accent);
+        font-family: 'monospace';
+        font-size: 0.88rem;
+        background-color: var(--bg-card);
+      }
+      .blog-md-body pre {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border: solid var(--border) 1.5px;
+        overflow: hidden;
+        font-size: 0.88rem;
+        background-color: var(--bg-card);
+        overflow-x: auto;
+      }
+      .blog-md-body pre code {
+        padding: 0px;
+        border: none;
+        color: var(--text);
+        background-color: transparent;
+      }
+      .blog-md-body blockquote {
+        padding-left: 1.2rem;
+        margin-bottom: 1.2rem;
+        border-left-style: solid;
+        border-left-color: var(--accent);
+        border-left-width: 3px;
+        color: var(--text-muted);
+        font-style: italic;
+      }
+      .blog-md-body ul, .blog-md-body ol {
+        padding-left: 1.5rem;
+        margin-bottom: 1.2rem;
+      }
+      .blog-md-body li {
+        margin-bottom: 0.4rem;
+      }
+      .blog-md-body img {
+        max-width: 100%;
+        border: solid var(--border) 1.5px;
+      }
+      .blog-md-body hr {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        border-top-style: solid;
+        border-top-color: var(--border);
+        border-top-width: 1px;
+      }
+      .blog-detail-footer {
+        margin-top: 2rem;
+      }
+      .sketch-btn {
+        padding: 0.4rem 1rem;
+        border: solid var(--accent) 1.5px;
+        cursor: pointer;
+        color: var(--accent);
+        font-family: 'Special Elite', serif;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-2);
+        transition: all 0.2s;
+        display: inline-block;
+      }
+      .sketch-btn:hover {
+        background-color: var(--accent-dim);
+      }
+      .blog-not-found {
+        margin-bottom: 1.5rem;
+        color: var(--text-muted);
+      }
+      .blog-list-section {
+        max-width: 900px;
+        padding: 3rem 2rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .blog-header {
+        margin-bottom: 2rem;
+      }
+      .blog-heading {
+        margin-bottom: 0.5rem;
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 3.5rem;
+      }
+      .blog-subheading {
+        color: var(--text-muted);
+        font-size: 1rem;
+      }
+      .blog-tag-filter {
+        display: flex;
+        margin-bottom: 2.5rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .tag-btn {
+        padding: 0.35rem 0.75rem;
+        border: solid var(--border) 1.5px;
+        cursor: pointer;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        background-color: transparent;
+        border-radius: var(--chaos-radius-3);
+        transition: all 0.2s;
+      }
+      .tag-btn:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      .tag-btn-active {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: var(--accent-dim);
+      }
+      .blog-grid {
+        display: flex;
+        flex-direction: column;
+        column-gap: 2rem;
+      }
+      .blog-card {
+        width: 100%;
+      }
+      .blog-card-meta {
+        display: flex;
+        margin-bottom: 0.75rem;
+        align-items: center;
+        column-gap: 1rem;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+      }
+      .blog-card-title-link {
+        color: var(--text);
+      }
+      .blog-card-title {
+        margin-bottom: 0.5rem;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.8rem;
+        transition: color 0.2s;
+      }
+      .blog-card-title-link:hover .blog-card-title {
+        color: var(--accent);
+      }
+      .blog-card-desc {
+        margin-bottom: 1.5rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        line-height: 1.6rem;
+      }
+      .blog-card-tags {
+        display: flex;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+        column-gap: 0.5rem;
+      }
+      .blog-tag {
+        padding: 0.2rem 0.5rem;
+        border: solid var(--border) 1px;
+        color: var(--accent);
+        font-size: 0.72rem;
+        letter-spacing: 0.5px;
+        border-radius: var(--chaos-radius-3);
+      }
+      .blog-card-link {
+        display: inline-block;
+        font-size: 0.85rem;
+      }
+      .sketch-btn {
+        padding: 0.4rem 1rem;
+        border: solid var(--accent) 1.5px;
+        cursor: pointer;
+        color: var(--accent);
+        font-family: 'Special Elite', serif;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-2);
+        transition: all 0.2s;
+      }
+      .sketch-btn:hover {
+        background-color: var(--accent-dim);
+        transform: translate(-1px, -1px);
+      }
+      .blog-empty {
+        color: var(--text-muted);
+      }
+      main {
+        width: 100%;
+      }
+      .section {
+        width: 100%;
+        max-width: 1120px;
+        padding: 4rem 2rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .loading-section {
+        display: flex;
+        height: 60vh;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 2rem;
+      }
+      .error-section {
+        display: flex;
+        height: 80vh;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .error-card {
+        padding: 3rem;
+        background-color: var(--bg-card);
+        border: 3px solid #ff4444;
+        clip-path: var(--chaos-path-1);
+        box-shadow: 10px 10px 0 #ff4444;
+      }
+      .error-card h2 {
+        margin-bottom: 1.5rem;
+        color: #ff4444;
+        font-size: 3rem;
+      }
+      .error-card p {
+        margin-bottom: 2rem;
+        color: var(--text-muted);
+        font-family: 'Special Elite', serif;
+        font-size: 1.2rem;
+      }
+      .hero-section {
+        padding: 5rem 2rem;
+      }
+      .hero-eyebrow {
+        margin-bottom: 2rem;
+      }
+      .eyebrow-tag {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+        border: 1.5px solid var(--accent);
+        padding: 2px 12px;
+        border-radius: var(--chaos-radius-3);
+        clip-path: var(--chaos-path-2);
+      }
+      .hero-content {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        column-gap: 4rem;
+      }
+      .hero-left {
+        flex-grow: 1;
+        min-width: 280px;
+      }
+      .hero-right {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1.5rem;
+        min-width: 220px;
+      }
+      .hero-title {
+        margin-bottom: 1.5rem;
+        font-size: 4.5rem;
+        line-height: 1.25em;
+      }
+      .accent-text {
+        color: var(--accent);
+      }
+      .hero-desc {
+        margin-bottom: 2.5rem;
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        line-height: 1.6rem;
+        max-width: 580px;
+      }
+      .hero-cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 1.5rem;
+      }
+      .availability-card {
+        margin: 12px;
+        background-color: var(--text);
+        position: relative;
+        overflow: visible;
+      }
+      .availability-card .availability-label {
+        color: var(--bg);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+      }
+      .availability-card .availability-status {
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+        color: var(--bg);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 3.2rem;
+        line-height: 1.25em;
+      }
+      .availability-card .availability-desc {
+        color: var(--bg);
+        font-size: 0.95rem;
+        line-height: 1.4rem;
+      }
+      .quote-strip {
+        padding: 2rem 0rem;
+        margin-top: 5rem;
+        border-top: 2px dashed var(--border);
+        border-bottom: 2px dashed var(--border);
+      }
+      .quote-text {
+        color: var(--text-muted);
+        text-align: center;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 2rem;
+        background-image: linear-gradient(var(--accent-dim) 1px, transparent 1px);
+        background-size: 100% 1.2em;
+      }
+      .section-header {
+        margin-bottom: 3rem;
+      }
+      .section-label {
+        display: block;
+        margin-bottom: 0.8rem;
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+      }
+      .section-title {
+        font-size: 2.8rem;
+        line-height: 2rem;
+        max-width: 850px;
+      }
+      .underline-sketch {
+        background-color: var(--accent-dim);
+        padding: 0 4px;
+        border-bottom: 2px solid var(--accent);
+      }
+      .sketch-box-container {
+        margin: 1.2rem;
+        transition: transform 0.2s ease;
+      }
+      .sketch-box-container:hover {
+        transform: translateY(-5px) rotate(-1deg);
+      }
+      .sketch-btn {
+        display: inline-block;
+        padding: 0.6rem 1.5rem;
+        cursor: pointer;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.4rem;
+        border-radius: var(--chaos-radius-2);
+        transition: opacity 0.2s, transform 0.2s;
+      }
+      .sketch-btn:hover {
+        opacity: 0.9;
+        transform: scale(1.02) rotate(-1deg);
+      }
+      .sketch-btn-accent {
+        color: var(--bg);
+        background-color: var(--accent);
+        border: none;
+      }
+      .sketch-btn-ghost {
+        color: var(--text);
+        background-color: transparent;
+        border: 2.5px solid var(--border);
+      }
+      .projects-grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      }
+      .project-card {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+      }
+      .project-card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .project-subtitle {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+      }
+      .project-icon {
+        color: var(--text-muted);
+        font-size: 1.2rem;
+      }
+      .project-title {
+        font-size: 2.2rem;
+      }
+      .project-desc {
+        color: var(--text-muted);
+        font-size: 1rem;
+        line-height: 1.6rem;
+        flex: 1;
+      }
+      .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .tech-tag {
+        padding: 0.25rem 0.8rem;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+        border: 1px solid var(--border);
+        border-radius: 3px;
+      }
+      .project-actions {
+        display: flex;
+        margin-top: 0.8rem;
+        flex-wrap: wrap;
+        column-gap: 1rem;
+      }
+      .repos-section {
+        margin-top: 4rem;
+      }
+      .repos-title {
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+      }
+      .repos-grid {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+      .repo-card-inner {
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.8rem;
+      }
+      .repo-name {
+        font-size: 1.4rem;
+      }
+      .repo-desc {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        line-height: 1.4rem;
+      }
+      .repo-meta {
+        display: flex;
+        column-gap: 1rem;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      .repo-link {
+        margin-top: 0.5rem;
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+      }
+      .pr-list {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+      .pr-card {
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.5rem;
+      }
+      .pr-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .pr-state {
+        padding: 2px 6px;
+        font-size: 0.7rem;
+        border: 1px solid var(--border);
+        text-transform: uppercase;
+      }
+      .pr-state.merged {
+        color: #a371f7;
+        background-color: rgba(163, 113, 247, 0.2);
+        border-color: #a371f7;
+      }
+      .pr-state.open {
+        color: #3fb950;
+        background-color: rgba(63, 185, 80, 0.2);
+        border-color: #3fb950;
+      }
+      .pr-state.closed {
+        color: #f85149;
+        background-color: rgba(248, 81, 73, 0.2);
+        border-color: #f85149;
+      }
+      .pr-repo {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+      }
+      .pr-title {
+        font-size: 1.1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .pr-link {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.1rem;
+      }
+      .timeline-entry {
+        position: relative;
+      }
+      .timeline-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 7px;
+        background-color: var(--bg);
+        position: absolute;
+        left: -3.15rem;
+        top: 2rem;
+        border: 2px solid var(--accent);
+        box-shadow: 0 0 8px var(--accent);
+        z-index: 5;
+      }
+      .timeline-card {
+        display: flex;
+        margin: 12px;
+        flex-direction: column;
+        row-gap: 1rem;
+        position: relative;
+      }
+      .timeline-card::before {
+        display: none;
+      }
+      .timeline-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .timeline-role {
+        font-size: 1.6rem;
+      }
+      .timeline-company {
+        color: var(--accent);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+      }
+      .timeline-period {
+        color: var(--text-muted);
+        font-family: 'Special Elite', serif;
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+      .timeline-point {
+        margin-bottom: 0.4rem;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.5rem;
+      }
+      .skills-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+      }
+      .skill-chip {
+        padding: 0.4rem 1.2rem;
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.2rem;
+        border: 1.5px solid var(--border);
+        border-radius: var(--chaos-radius-2);
+        transition: all 0.2s;
+      }
+      .skill-chip:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        transform: rotate(-2deg) scale(1.05);
+      }
+      .contact-section {
+        padding: 6rem 2rem;
+        text-align: center;
+      }
+      .contact-title {
+        margin-bottom: 1rem;
+        font-size: 3.5rem;
+      }
+      .contact-sub {
+        margin-bottom: 2.5rem;
+        color: var(--text-muted);
+        font-family: 'Just Another Hand', cursive;
+        font-size: 1.4rem;
+      }
+      .contact-links {
+        display: flex;
+        margin-bottom: 4rem;
+        justify-content: center;
+        column-gap: 2rem;
+      }
+      .contact-icon-link {
+        display: flex;
+        width: 60px;
+        height: 60px;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-muted);
+        font-size: 1.8rem;
+        border: 2px solid var(--border);
+        border-radius: var(--chaos-radius-3);
+        transition: all 0.2s;
+      }
+      .contact-icon-link:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        transform: scale(1.1) rotate(15deg);
+      }
+      .footer-credit {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+      }
+      @media screen and (max-width: 760px) {
+        .section {
+          padding: 3rem 1.5rem;
+        }
+        .hero-title {
+          font-size: 3.2rem;
+        }
+        .section-title {
+          font-size: 2.2rem;
+        }
+        .projects-grid {
+          grid-template-columns: 1fr;
+        }
+        .contact-title {
+          font-size: 2.6rem;
+        }
+        .timeline {
+          padding-left: 2rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!--@app-->
+    <div class="app-root">
+      <aside class="sidebar">
+        <div class="sidebar-content">
+          <div class="sidebar-profile">
+            <div class="profile-img-box"><img alt="Achiket Kumar" src="/assets/achiket.png"/></div>
+            <h3 class="profile-name">Achiket Kumar</h3>
+            <p class="profile-sub">Dev Lab Journal v1.0</p>
+          </div>
+          <nav class="sidebar-nav">
+            <a class="nav-item" href="/">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span>
+              <span class="nav-label">Home</span>
+            </a>
+            <a class="nav-item" href="#projects">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg></span>
+              <span class="nav-label">Projects</span>
+            </a>
+            <a class="nav-item" href="#experience">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+              <span class="nav-label">Experience</span>
+            </a>
+            <a class="nav-item" href="#skills">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg></span>
+              <span class="nav-label">Skills</span>
+            </a>
+            <a class="nav-item" href="#pinned-repo">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14 2l8 8-3 3-2-2-5 5v3l-2 2v-3l-5-5-2 2-3-3 8-8 3 3 5-5z"></path></svg></span>
+              <span class="nav-label">Pinned Repo</span>
+            </a>
+            <a class="nav-item" href="#github-repo">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z M8 8h8v2H8z M8 12h8v2H8z"></path></svg></span>
+              <span class="nav-label">Github Repo</span>
+            </a>
+            <a class="nav-item" href="#pull-request">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M6 3a2 2 0 110 4 2 2 0 010-4zm0 14a2 2 0 110 4 2 2 0 010-4zm12-7a2 2 0 11-4 0 2 2 0 014 0zM6 7v10m0-10c6 0 6-4 8-4m-8 10c6 0 6 4 8 4"></path></svg></span>
+              <span class="nav-label">Pull Request</span>
+            </a>
+            <a class="nav-item" href="#twitter">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 5.8c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.2 1.7-2.1-.8.5-1.6.8-2.5 1-1.5-1.6-4-1.7-5.6-.2-1 .9-1.4 2.3-1 3.6-3.3-.2-6.4-1.7-8.4-4.2-1.1 1.9-.6 4.3 1.2 5.6-.6 0-1.2-.2-1.7-.5 0 2 1.4 3.8 3.4 4.2-.6.2-1.2.2-1.8.1.5 1.7 2.1 3 3.9 3-1.5 1.2-3.4 1.8-5.3 1.8H2c1.9 1.2 4.1 1.9 6.4 1.9 7.7 0 11.9-6.4 11.9-11.9v-.5c.8-.6 1.5-1.3 2-2.1z"></path></svg></span>
+              <span class="nav-label">Twitter</span>
+            </a>
+          </nav>
+          <div class="sidebar-footer"><p class="footer-quote">"Code is just structured sketching."</p></div>
+        </div>
+        <svg class="sidebar-border-svg" viewBox="0 0 100 1000" preserveAspectRatio="none">
+          <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 39.7460210464836 -17.185840762161867 Q 63.11917574418654 16.82717795711021 56.84371114373839 40.35981036623524 Q 50.56824654329023 63.89244277536026 42.95962601038734 83.14028841627635 Q 35.35100547748445 102.38813405719245 36.07321550961944 125.73802945432934 Q 36.795425541754426 149.08792485146623 46.700546564971276 168.23365810172606 Q 56.605667588188126 187.37939135198593 59.377338719959575 208.4845262936342 Q 62.14900985173102 229.58966123528245 61.625519523682634 249.65396173589244 Q 61.102029195634245 269.7182622365024 54.04025767633546 288.82833682674755 Q 46.97848615703668 307.9384114169926 46.666496021239965 330.0292989744669 Q 46.354505885443245 352.12018653194116 45.077788448158216 373.2555005028894 Q 43.80107101087319 394.3908144738376 47.45725665512397 415.28277714720525 Q 51.113442299374746 436.1747398205729 55.931532315136266 460.0384309821098 Q 60.74962233089779 483.9021221436467 53.637322006082094 503.3459359942169 Q 46.525021681266395 522.7897498447871 48.795071811926206 544.4132467047818 Q 51.06512194258601 566.0367435647764 53.151033896583556 583.2150137063411 Q 55.236945850581094 600.3932838479059 49.41171297769483 622.1009644341691 Q 43.58648010480857 643.8086450204322 41.93607441601409 663.4163361886036 Q 40.2856687272196 683.024027356775 44.72101266147475 705.3905931459741 Q 49.1563565957299 727.7571589351732 43.57451558646258 746.8261053618089 Q 37.99267457719526 765.8950517884447 46.527919891905285 790.8767149049384 Q 55.06316520661531 815.8583780214319 54.593564394983176 834.7180084752489 Q 54.12396358335104 853.5776389290659 46.00767362560578 873.7335673581376 Q 37.891383667860524 893.8894957872094 40.58382080536749 915.5113917053084 Q 43.27625794287445 937.1332876234075 41.162966630467736 956.3894895900257 Q 39.04967531806102 975.6456915566441 38.66845494708268 999.700773699123 L 38.287234576104346 1023.7558558416019"></path>
+          <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 56.11149466378823 -20.25600296718496 Q 39.11465042791915 25.976367629964194 41.28498557699596 45.10483292370951 Q 43.45532072607276 64.23329821745482 52.86468479142157 85.08043355786377 Q 62.274048856770364 105.92756889827272 62.606040450923615 126.00908253137356 Q 62.938032045076866 146.09059616447442 51.236997956393694 165.41167867683913 Q 39.535963867710514 184.73276118920387 51.83532449754547 208.76515653018174 Q 64.13468512738044 232.79755187115958 54.67123022168334 249.64699075275854 Q 45.20777531598624 266.4964296343575 52.127640155807704 291.286231499482 Q 59.04750499562917 316.07603336460653 54.17455595341531 334.3175917975507 Q 49.301606911201446 352.5591502304948 54.90152430171667 374.29754042892915 Q 60.50144169223189 396.0359306273635 58.98375747878873 417.5298798593051 Q 57.46607326534557 439.0238290912466 47.45915543406754 457.493164109609 Q 37.452237602789516 475.9624991279713 46.52392375810737 495.9114241120251 Q 55.595609913425236 515.860349096079 51.40047157360558 540.7465557523133 Q 47.20533323378592 565.6327624085477 53.66866814611434 582.5914736447457 Q 60.13200305844276 599.5501848809439 51.4100515492438 621.185154783788 Q 42.688100040044844 642.8201246866321 43.741926107831084 667.123930719013 Q 44.795752175617324 691.4277367513938 50.755990207683816 708.4173928457844 Q 56.71622823975031 725.407048940175 47.51737638178174 746.905148494317 Q 38.31852452381317 768.403248048459 37.56888180920178 790.0027113134524 Q 36.81923909459039 811.6021745784458 40.904531379446205 833.2887180803257 Q 44.98982366430202 854.9752615822055 50.58963162735502 875.6225109223826 Q 56.18943959040802 896.2697602625597 59.92542615976153 914.964808579238 Q 63.66141272911503 933.6598568959164 57.38631617851205 957.9474051584605 Q 51.11121962790907 982.2349534210044 57.935209454520546 1000.9751283208711 L 64.75919928113201 1019.7153032207377"></path>
+        </svg>
+      </aside>
+      <div class="app-main">
+        <header class="site-header">
+          <div class="header-inner">
+            <div class="header-left"><a class="brand-box" href="/"><span class="brand-text">ACHIKET KUMAR</span></a></div>
+            <div class="header-right">
+              <nav class="header-nav">
+                <a class="nav-link" href="/#projects">PROJECTS</a>
+                <a class="nav-link" href="/#experience">EXPERIENCE</a>
+                <a class="nav-link" href="/#skills">SKILLS</a>
+                <a class="nav-link" href="/about">ABOUT</a>
+                <a class="nav-link" href="/blog">BLOG</a>
+              </nav>
+            </div>
+          </div>
+        </header>
+        <div class="app-content-layout">
+          <div class="app-page-area"><main><section class="section loading-section"><p>Loading...</p></section></main></div>
+        </div>
+      </div>
+      <aside class="right-sidebar">
+        <svg class="sidebar-left-border-svg" viewBox="0 0 100 1000" preserveAspectRatio="none">
+          <path stroke="var(--text)" fill="none" stroke-width="2.5" vector-effect="non-scaling-stroke" d="M 50.87006099476231 -22.010471240960864 Q 43.77871644250167 17.401404989450935 45.770554362769644 38.4121326330379 Q 47.76239228303761 59.42286027662486 55.10125601385039 82.66420038636427 Q 62.440119744663164 105.90554049610368 54.49995579800543 126.68518278629458 Q 46.5597918513477 147.46482507648545 54.82596468372041 168.13682395319677 Q 63.09213751609312 188.80882282990808 51.531171246560994 207.92020463700067 Q 39.97020497702887 227.03158644409322 41.09054705323631 247.30627115436494 Q 42.21088912944374 267.5809558646366 44.80646609365267 288.8999760046439 Q 47.402043057861604 310.21899614465116 41.97892441431404 331.7973960906435 Q 36.55580577076647 353.37579603663585 46.05060140091015 376.46732049229706 Q 55.54539703105384 399.5588449479582 51.47210976841109 416.5270453347806 Q 47.39882250576833 433.49524572160306 42.34527429658634 456.62037952939454 Q 37.29172608740434 479.7455133371861 50.69815156832592 498.70248804815833 Q 64.1045770492475 517.6594627591306 51.70919772259707 539.9869938294494 Q 39.31381839594664 562.314524899768 47.6924622693063 584.3568085721176 Q 56.071106142665954 606.3990922444673 53.61779355907288 623.5833199039375 Q 51.164480975479805 640.7675475634079 57.54880352232213 662.1256307384266 Q 63.93312606916446 683.4837139134453 49.79837536127657 704.2501451835963 Q 35.66362465338868 725.0165764537471 48.07420183717204 749.6027788199767 Q 60.4847790209554 774.1889811862064 48.1537078868578 793.8176738612324 Q 35.822636752760204 813.4463665362582 47.78278826820979 831.7777311068749 Q 59.74293978365938 850.1090956774914 55.21366501205846 873.2103033388053 Q 50.684390240457546 896.3115110001191 51.51150021044454 914.9812145130984 Q 52.33861018043154 933.6509180260775 44.48827775779783 956.2338991896245 Q 36.63794533516412 978.8168803531715 37.40643071161607 997.3064749815146 L 38.17491608806802 1015.7960696098577"></path>
+          <path stroke="var(--text)" fill="none" stroke-width="1.5" opacity="0.5" vector-effect="non-scaling-stroke" d="M 40.89739691664151 -18.10277585246275 Q 60.320180245579095 16.803102099102663 48.614353876437704 38.19840229760648 Q 36.90852750729631 59.593702496110296 48.847315488367485 79.95763422504689 Q 60.78610346943866 100.32156595398347 52.36723352963992 121.31151653465213 Q 43.94836358984118 142.3014671153208 44.82345844370928 165.52346899665116 Q 45.69855329757738 188.74547087798152 50.72940542191988 210.56100295748152 Q 55.76025754626239 232.37653503698152 48.3157273686806 252.36047765516182 Q 40.8711971910988 272.3444202733421 42.73009878718202 290.1816125539453 Q 44.589000383265244 308.01880483454846 42.318466499068045 331.0126990284465 Q 40.047932614870845 354.0065932223446 39.30727707185511 375.1423320557964 Q 38.56662152883938 396.27807088924817 45.477733854928644 415.73450360244635 Q 52.38884618101791 435.19093631564454 48.17308573422649 457.7947683894479 Q 43.95732528743507 480.39860046325117 48.859794931630965 501.0130940127924 Q 53.76226457582686 521.6275875623337 49.82724308045974 540.9708520053209 Q 45.892221585092614 560.3141164483083 45.96465890187118 582.2457253231694 Q 46.03709621864975 604.1773341980304 50.20400627089958 622.7669609014611 Q 54.370916323149416 641.3565876048917 59.5501164466457 662.8374032882659 Q 64.72931657014199 684.3182189716401 53.791635062356825 704.4097905789752 Q 42.85395355457166 724.5013621863102 40.35775650175698 746.9121355854227 Q 37.86155944894231 769.3229089845352 39.85207818405736 788.9330208315739 Q 41.842596919172415 808.5431326786127 48.16004056796497 830.229729944047 Q 54.47748421675753 851.9163272094812 47.8246207856255 872.8226576821488 Q 41.171757354493465 893.7289881548164 39.012317067621204 915.5069632707587 Q 36.85287678074894 937.2849383867009 44.980843593446544 956.6203584989325 Q 53.108810406144144 975.9557786111641 44.63155648779937 997.9909953436957 L 36.15430256945459 1020.0262120762271"></path>
+        </svg>
+        <h3 class="sidebar-title">LOGBOOK_</h3>
+        <div class="posts-feed"></div>
+      </aside>
+    </div>
+    <!--/@app-->
+  </body>
+</html>
